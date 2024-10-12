@@ -19,7 +19,7 @@ jobs:
       - name: Install JDK
         uses: actions/setup-java@v2
         with:
-          java-version: "11"
+          java-version: "17"
           distribution: "adopt"
 
       - name: Install Ballerina
@@ -34,4 +34,4 @@ jobs:
       - name: Build the Ballerina project
         run: |
           cd Backend
-          bal build
+          bal build main.bal
