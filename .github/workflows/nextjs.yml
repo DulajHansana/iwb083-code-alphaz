@@ -24,28 +24,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Since you're using npm, we only check for package-lock.json
       - name: Detect package manager
         id: detect-package-manager
         run: |
-          if [ -f "${{ github.workspace }}/Frontend/yarn.lock" ]; then
-            echo "manager=yarn" >> $GITHUB_OUTPUT
-            echo "command=install" >> $GITHUB_OUTPUT
-            echo "runner=yarn" >> $GITHUB_OUTPUT
-          elif [ -f "${{ github.workspace }}/Frontend/package-lock.json" ]; then
+          if [ -f "${{ github.workspace }}/Frontend/package-lock.json" ]; then
             echo "manager=npm" >> $GITHUB_OUTPUT
             echo "command=ci" >> $GITHUB_OUTPUT
             echo "runner=npx --no-install" >> $GITHUB_OUTPUT
           else
             echo "Unable to determine package manager"
             exit 1
-          fi
-        shell: bash
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: ${{ steps.detect-package-manager.outputs.manager }}
+          # Use npm as the cache manager and point to the correct lock file
+          cache: npm
+          cache-dependency-path: Frontend/package-lock.json
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -57,17 +54,17 @@ jobs:
         with:
           path: |
             Frontend/.next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('Frontend/package-lock.json', 'Frontend/yarn.lock') }}-${{ hashFiles('Frontend/**/*.[jt]s', 'Frontend/**/*.[jt]sx') }}
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('Frontend/package-lock.json') }}-${{ hashFiles('Frontend/**/*.[jt]s', 'Frontend/**/*.[jt]sx') }}
           restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('Frontend/package-lock.json', 'Frontend/yarn.lock') }}-
+            ${{ runner.os }}-nextjs-${{ hashFiles('Frontend/package-lock.json') }}-
 
       - name: Install dependencies
         working-directory: Frontend
-        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+        run: npm ${{ steps.detect-package-manager.outputs.command }}
 
       - name: Build with Next.js
         working-directory: Frontend
-        run: ${{ steps.detect-package-manager.outputs.runner }} next build
+        run: npx --no-install next build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
