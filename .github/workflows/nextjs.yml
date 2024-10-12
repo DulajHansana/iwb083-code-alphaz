@@ -65,7 +65,7 @@ jobs:
 
       - name: Build with Next.js
         working-directory: Frontend
-        run: npx --no-install next build && npx --no-install next export
+        run: npx --no-install next build
         
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
