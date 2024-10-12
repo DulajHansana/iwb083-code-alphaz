@@ -29,7 +29,7 @@ jobs:
           echo "$HOME/ballerina-2201.10.0-swan-lake/bin" >> $GITHUB_PATH
 
       - name: Add Ballerina to PATH
-        run: echo "$HOME/ballerina-2201.10.0-swan-lake/bin" >> $GITHUB_ENV
+        run: echo "PATH=$HOME/ballerina-2201.10.0-swan-lake/bin:$PATH" >> $GITHUB_ENV
 
       - name: Verify Ballerina Installation
         run: |
