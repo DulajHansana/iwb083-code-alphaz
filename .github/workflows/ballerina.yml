@@ -24,9 +24,9 @@ jobs:
 
       - name: Install Ballerina
         run: |
-          curl -L https://ballerina.io/downloads/ballerina-2201.1.0.zip -o ballerina.zip
+          curl -L https://dist.ballerina.io/downloads/2201.10.0/ballerina-2201.10.0-swan-lake.zip -o ballerina.zip
           unzip ballerina.zip -d $HOME
-          echo "$HOME/ballerina-2201.1.0/bin" >> $GITHUB_PATH
+          echo "$HOME/ballerina-2201.10.0-swan-lake/bin" >> $GITHUB_PATH
 
       - name: Build the Ballerina project
         run: |
