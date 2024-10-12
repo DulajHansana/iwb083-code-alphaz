@@ -34,9 +34,4 @@ jobs:
       - name: Build the Ballerina project
         run: |
           cd Backend
-          ballerina build main.bal
-
-      - name: Build the Ballerina project
-        run: |
-          cd Backend
-          ballerina build main.bal
+          bal build
