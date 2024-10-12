@@ -31,11 +31,6 @@ jobs:
       - name: Add Ballerina to PATH
         run: echo "PATH=$HOME/ballerina-2201.10.0-swan-lake/bin:$PATH" >> $GITHUB_ENV
 
-      - name: Verify Ballerina Installation
-        run: |
-          ls -la $HOME/ballerina-2201.10.0-swan-lake/bin  # List contents of Ballerina bin directory
-          ballerina version  # Check if ballerina command works
-
       - name: Build the Ballerina project
         run: |
           cd Backend
