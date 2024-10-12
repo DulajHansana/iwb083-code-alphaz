@@ -9,3 +9,13 @@ A modern web-based chat application that enables instant communication through a
 - **Scalable Architecture**: Designed to handle multiple users and high traffic efficiently.
 
 Perfect for teams, communities, or casual conversations, this application showcases modern web development practices while providing a robust communication tool.
+
+## Contributing
+
+<a href="https://github.com/nivindulakshitha/iwb083-code-alphaz/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=nivindulakshitha/iwb083-code-alphaz" />
+</a>
+
+## License
+
+This project is licensed under the Creative Common License - see the [LICENSE](LICENSE) file for details.
