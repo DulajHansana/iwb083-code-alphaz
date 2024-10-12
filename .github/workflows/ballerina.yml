@@ -2,16 +2,16 @@ name: Ballerina CI
 
 on:
   push:
-  	paths:
+    paths:
       - "Backend/**"
-	branches: ["Master"]
+    branches: 
+       - "Master"
 
   pull_request:
-	paths:
-	  - "Backend/**"
-	branches: ["Master"]
-
-  workflow_dispatch:
+     paths:
+        - "Backend/**"
+     branches: 
+        - "Master"
 
 jobs:
   build:
@@ -40,3 +40,8 @@ jobs:
         run: |
           cd Backend
           bal build
+
+      - name: Run the Ballerina JAR
+        run: |
+          cd Backend
+          java -jar target/bin/Backend.jar
