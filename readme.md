@@ -18,4 +18,4 @@ Perfect for teams, communities, or casual conversations, this application showca
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Creative Common License - see the [LICENSE](LICENSE) file for details.
