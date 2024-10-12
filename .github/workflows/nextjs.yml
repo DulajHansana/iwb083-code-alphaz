@@ -2,6 +2,8 @@ name: Next CI
 
 on:
   push:
+    paths:
+      - "Frontend/**"
     branches: ["Master"]
 
   workflow_dispatch:

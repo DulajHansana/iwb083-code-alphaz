@@ -2,11 +2,16 @@ name: Ballerina CI
 
 on:
   push:
-    branches:
-      - Master
+  	paths:
+      - "Backend/**"
+	branches: ["Master"]
+
   pull_request:
-    branches:
-      - Master
+	paths:
+	  - "Backend/**"
+	branches: ["Master"]
+
+  workflow_dispatch:
 
 jobs:
   build:
