@@ -1,6 +1,15 @@
+"use client"; // Add this at the top to make this a Client Component
+
 import Image from 'next/image';
+import { useRouter } from 'next/navigation'; // Use useRouter from next/navigation in the app directory
 
 export default function Home() {
+  const router = useRouter(); // Initialize useRouter hook
+
+  const handleNavigate = () => {
+    router.push('/sign-in'); // Navigate to the /sign-in route
+  };
+
   return (
     <div
       className="flex justify-center items-center h-screen bg-cover bg-center"
@@ -35,6 +44,7 @@ export default function Home() {
           <button
             className="text-white py-2 px-6 rounded-lg transition-all duration-300 ease-in-out"
             style={{ backgroundColor: '#433878' }} // Custom background color
+            onClick={handleNavigate} // Handle button click
           >
             Get Started
           </button>
