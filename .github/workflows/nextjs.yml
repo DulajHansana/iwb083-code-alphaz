@@ -1,11 +1,9 @@
-name: Deploy Next.js site to Pages
+name: Next CI
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ["Master"]
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 permissions:
@@ -24,7 +22,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Since you're using npm, we only check for package-lock.json
       - name: Detect package manager
         id: detect-package-manager
         run: |
@@ -41,7 +38,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          # Use npm as the cache manager and point to the correct lock file
           cache: npm
           cache-dependency-path: Frontend/package-lock.json
 
@@ -66,7 +62,7 @@ jobs:
       - name: Build with Next.js
         working-directory: Frontend
         run: npx --no-install next build
-        
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
