@@ -1,7 +1,7 @@
 import ballerina/websocket;
 import ballerina/io;
 
-public service class WsService {
+public isolated service class WsService {
     *websocket:Service;
 
     remote isolated function onMessage(websocket:Caller caller, string data) returns websocket:Error? {

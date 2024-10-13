@@ -1,8 +1,9 @@
-import Backend.ws_provider;
+import Backend.ws_provider as WSP;
 import ballerina/http;
 import ballerina/io;
 import ballerina/jwt;
 import ballerina/websocket;
+import Backend.jsonwebtoken as JWT;
 
 boolean isWebSocketEnabled = false;
 configurable string jwtSecret = ?;
@@ -12,26 +13,17 @@ service / on new http:Listener(8080) {
         return http:ACCEPTED;
     }
 
-    resource function get authorize(http:Request req) returns http:Accepted|http:Forbidden|error {
+    isolated resource function get authorize(http:Request req) returns http:Accepted|http:Forbidden|error {
         string authHeader = check req.getHeader("Authorization");
 
         if authHeader.startsWith("Bearer ") {
-            string jwtToken = authHeader.substring(7);
-            jwt:ValidatorSignatureConfig signatureConfig = {
-                secret: jwtSecret
-            };
-
-            jwt:ValidatorConfig validator = {
-                signatureConfig: signatureConfig
-            };
-
-            jwt:Error|jwt:Payload validationResult =jwt:validate(jwtToken, validator);
+            jwt:Payload|jwt:Error validationResult = JWT:verifyToken(authHeader, jwtSecret);
 
             if validationResult is jwt:Payload {
-                io:println("JWT validation succeeded: ", req.userAgent);
+                io:println("[success] JWT: ", req.getHeader("Authorization"));
                 return http:ACCEPTED;
             } else {
-                io:println("JWT validation failed: ", validationResult.message());
+                io:println("[fail] JWT: ", validationResult.message());
                 return http:FORBIDDEN;
             }
         } else {
@@ -52,7 +44,7 @@ service /ws on new websocket:Listener(21003) {
             io:println("Valid WebSocket handshake request received.");
             io:println(req.getHeader("Sec-WebSocket-Key"), req.getHeader("Sec-WebSocket-Version"));
 
-            return new ws_provider:WsService();
+            return new WSP:WsService();
         } else {
             io:println("Invalid WebSocket handshake request. Request will be rejected.");
             return error("Invalid WebSocket handshake request.");

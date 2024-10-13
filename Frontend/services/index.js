@@ -19,17 +19,23 @@ socket.addEventListener("error", (error) => {
 });
 
 export const connect = async () => {
-	await fetch("http://localhost:8080/authorize", {
+	let readyState = false;
+		
+	const response = await fetch("http://localhost:8080/authorize", {
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json",
 			"Authorization": "Bearer " + jwtTokenGenerator()
 		}
-	}).then((response) => {
-		if (response.Accepted) {
-			socket.send("Hello, server!");
-		}
-	})
+	});
+	
+	return {
+		severHandshake: {
+			code: response.status,
+			accepted: response.statusText == "Accepted",
+		},
+		serverResponse: response
+	};
 }
 
 function jwtTokenGenerator() {
@@ -43,3 +49,5 @@ function jwtTokenGenerator() {
 
 	return jwToken;
 }
+
+console.log(await connect());
