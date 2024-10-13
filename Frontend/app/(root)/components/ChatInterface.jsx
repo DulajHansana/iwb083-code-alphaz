@@ -3,16 +3,17 @@ import { useState } from 'react';
 
 export default function ChatInterface() {
   const [messages, setMessages] = useState([
-    { text: 'Hi, Welcome!', sender: 'other' },
-    { text: 'How are you? All OK??', sender: 'other' },
-    { text: 'Hi, All OK!!!!!!!', sender: 'self' }
+    { text: 'Hi, Welcome!', sender: 'other', time: new Date().toLocaleTimeString() },
+    { text: 'How are you? All OK??', sender: 'other', time: new Date().toLocaleTimeString() },
+    { text: 'Hi, All OK!!!!!!!', sender: 'self', time: new Date().toLocaleTimeString() }
   ]);
   const [input, setInput] = useState('');
 
   const handleSendMessage = () => {
     if (input.trim() !== '') {
-      // Add new message to the messages array
-      setMessages([...messages, { text: input, sender: 'self' }]);
+      // Add new message to the messages array with current time
+      const currentTime = new Date().toLocaleTimeString(); // Get current time
+      setMessages([...messages, { text: input, sender: 'self', time: currentTime }]);
       // Clear the input field after sending
       setInput('');
     }
@@ -42,9 +43,9 @@ export default function ChatInterface() {
               className={`p-4 rounded-lg w-max ${message.sender === 'self' ? 'bg-purple-400 text-white self-end' : 'bg-purple-100'}`}
             >
               {message.text}
-              {message.sender === 'self' && (
-                <p className="text-xs text-gray-300 mt-1 text-right">sent a few seconds ago</p>
-              )}
+              <p className="text-xs text-gray-500 mt-1 text-right">
+                {message.time}
+              </p>
             </div>
           ))}
         </div>

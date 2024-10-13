@@ -7,7 +7,7 @@ export default function ChatList() {
   ];
 
   return (
-    <div className="w-64 bg-gray-100 h-screen p-4 relative">
+    <div className="w-80 bg-gray-100 h-screen p-4 relative"> {/* Changed width to w-80 */}
       {/* Chat header */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold text-purple-700">Chat</h2>
