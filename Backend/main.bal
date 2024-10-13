@@ -1,71 +1,68 @@
+import Backend.ws_provider;
 import ballerina/http;
 import ballerina/io;
+import ballerina/jwt;
 import ballerina/websocket;
 
+boolean isWebSocketEnabled = false;
+configurable string jwtSecret = ?;
+
+service / on new http:Listener(8080) {
+    resource function get .(http:Request req) returns http:Accepted & readonly {
+        return http:ACCEPTED;
+    }
+
+    resource function get authorize(http:Request req) returns http:Accepted|http:Forbidden|error {
+        string authHeader = check req.getHeader("Authorization");
+
+        if authHeader.startsWith("Bearer ") {
+            string jwtToken = authHeader.substring(7);
+            io:println(jwtToken);
+            jwt:ValidatorSignatureConfig signatureConfig = {
+                secret: jwtSecret
+            };
+
+            jwt:ValidatorConfig validator = {
+                signatureConfig: signatureConfig
+            };
+
+            // Validate the token
+            jwt:Error|jwt:Payload validationResult =jwt:validate(jwtToken, validator);
+
+            if validationResult is jwt:Payload {
+                return http:ACCEPTED;
+            } else {
+                io:println("JWT validation failed: ", validationResult.message());
+                return http:FORBIDDEN;
+            }
+        } else {
+            // Missing or incorrect Authorization header
+            io:println("Authorization header missing or not a Bearer token");
+            return http:FORBIDDEN;
+        }
+    }
+};
+
 service /ws on new websocket:Listener(21003) {
+
     resource function get .(http:Request req) returns websocket:Service|websocket:UpgradeError {
         if req.method == "GET" &&
             req.httpVersion == "1.1" &&
             req.getHeader("Upgrade") == "websocket" &&
             req.getHeader("Connection") == "Upgrade" {
-            
+
             io:println("Valid WebSocket handshake request received.");
             io:println(req.getHeader("Sec-WebSocket-Key"), req.getHeader("Sec-WebSocket-Version"));
-            
-            return new WsService();
+
+            return new ws_provider:WsService();
         } else {
             io:println("Invalid WebSocket handshake request. Request will be rejected.");
             return error("Invalid WebSocket handshake request.");
         }
     }
-}
 
-service class WsService {
-    *websocket:Service;
-
-    remote isolated function onMessage(websocket:Caller caller, string data) returns websocket:Error? {
-        check caller->writeTextMessage(data);
-        io:println("Received message: " + data);
-    }
-}
-
-type Handshake record {
-    string requestMethod;
-    string httpVersion;
-    string|error Host;
-    string|error Upgrade;
-    string|error Connection;
-    string|error SecWebSocketKey;
-    string|error SecWebSocketVersion;
-};
-
-service / on new http:Listener(8080) {
-    resource function get hsrequest(http:Request req) returns http:Response {
-        Handshake handshakeRequest = {
-            requestMethod: req.method,
-            httpVersion: req.httpVersion,
-            Host: req.getHeader("Host"),
-            Upgrade: req.getHeader("Upgrade"),
-            Connection: req.getHeader("Connection"),
-            SecWebSocketKey: req.getHeader("Sec-WebSocket-Key"),
-            SecWebSocketVersion: req.getHeader("Sec-WebSocket-Version")
-        };
-
-        if handshakeRequest.requestMethod == "GET" &&
-                handshakeRequest.httpVersion == "1.1" &&
-                handshakeRequest.Host == "localhost:8080" &&
-                handshakeRequest.Upgrade == "websocket" &&
-                handshakeRequest.Connection == "Upgrade" {
-
-            // The handshakeRequest has the given values
-            io:println("Handshake request matches the expected values.");
-        } else {
-            // The handshakeRequest does not match the expected values
-            io:println("Handshake request does not match the expected values.");
-        }
-
-        http:Response res = new;
-        res.statusCode = 200;
-        return res;
+    function init() {
+        isWebSocketEnabled = true;
+        io:println("WebSocket server started.");
     }
 }
