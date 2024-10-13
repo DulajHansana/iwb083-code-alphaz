@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function ChatInterface() {
   const [messages, setMessages] = useState([
@@ -8,29 +8,48 @@ export default function ChatInterface() {
     { text: 'Hi, All OK!!!!!!!', sender: 'self', time: new Date().toLocaleTimeString() }
   ]);
   const [input, setInput] = useState('');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleSendMessage = () => {
     if (input.trim() !== '') {
-      // Add new message to the messages array with current time
-      const currentTime = new Date().toLocaleTimeString(); // Get current time
+      const currentTime = new Date().toLocaleTimeString(); 
       setMessages([...messages, { text: input, sender: 'self', time: currentTime }]);
-      // Clear the input field after sending
       setInput('');
     }
+  };
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
 
   return (
     <div className="w-3/4 p-4 bg-white h-screen flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 bg-white shadow-sm">
+      <div className="flex items-center justify-between p-4 bg-white shadow-sm relative">
         <div className="flex items-center space-x-2">
           <img src="/Images/avatar4.png" alt="Avatar" className="w-8 h-8 rounded-full" />
           <h2 className="text-purple-700 font-bold">SparkChat 3</h2>
         </div>
-        <div>
-          <button className="p-2">
+        <div className="relative">
+          <button onClick={toggleMenu} className="p-2">
             <img src="/Images/menu-icon.png" alt="Menu" className="w-5 h-5" />
           </button>
+
+          {/* Dropdown Menu */}
+          {isMenuOpen && (
+            <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg z-10">
+              <ul className="py-2">
+                <li className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                  <img src="/Images/archive.png" alt="Archive" className="w-4 h-4 mr-2" />
+                  <span className="text-customPurple">Archive</span>
+                </li>
+                <li className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                  <img src="/Images/delete.png" alt="Delete" className="w-4 h-4 mr-2" />
+                  <span className="text-customPurple">Delete</span>
+                </li>
+              </ul>
+            </div>
+          )}
         </div>
       </div>
 
@@ -58,7 +77,7 @@ export default function ChatInterface() {
           type="text"
           placeholder="Type your message here..."
           value={input}
-          onChange={(e) => setInput(e.target.value)} // Update input state
+          onChange={(e) => setInput(e.target.value)}
         />
         <button className="ml-2 p-2 bg-purple-600 text-white rounded-full" onClick={handleSendMessage}>
           <img src="/Images/send.png" alt="Send" className="w-6 h-6" />

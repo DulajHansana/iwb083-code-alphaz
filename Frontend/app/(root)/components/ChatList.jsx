@@ -10,7 +10,7 @@ export default function ChatList() {
     <div className="w-80 bg-gray-100 h-screen p-4 relative"> {/* Changed width to w-80 */}
       {/* Chat header */}
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold text-purple-700">Chat</h2>
+        <h2 className="text-xl font-bold text-customPurple">Chat</h2>
         {/* Edit icon */}
         <button className="p-2">
           <img src="/Images/editing.png" alt="Edit" className="w-5 h-5" />
@@ -41,8 +41,8 @@ export default function ChatList() {
             />
             {/* Chat details */}
             <div>
-              <p className="text-white font-semibold">{chat.name}</p>
-              <p className="text-gray-200 text-sm">{chat.message}</p>
+              <p className="text-customPurple font-semibold">{chat.name}</p>
+              <p className="text-customPurple1 text-sm">{chat.message}</p>
             </div>
           </li>
         ))}
