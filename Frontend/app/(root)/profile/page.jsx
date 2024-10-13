@@ -1,7 +1,17 @@
+"use client"; // Mark this component as a client component
+
 import React from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation'; // Import useRouter for navigation
 
 const Profile = () => {
+  const router = useRouter(); // Initialize useRouter
+
+  // Function to handle logout and navigate back to sign-in page
+  const handleLogout = () => {
+    router.push('/sign-in'); // Navigate to the sign-in page (adjust the route if needed)
+  };
+
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
@@ -15,16 +25,18 @@ const Profile = () => {
             height={100}
           />
         </div>
-        <div className="text-xl mb-8 ">Profile</div>
+        <div className="text-xl mb-8">Profile</div>
 
-        {/* Logout Icon */}
+        {/* Logout Button */}
         <div className="mt-auto mb-6">
-          <Image
-            src="/images/logout.png" // Adjust this image path to your logout icon
-            alt="Logout Icon"
-            width={45}
-            height={45}
-          />
+          <button onClick={handleLogout} className="focus:outline-none">
+            <Image
+              src="/images/logout.png" // Adjust this image path to your logout icon
+              alt="Logout Icon"
+              width={45}
+              height={45}
+            />
+          </button>
         </div>
         <div className="text-xl">Logout</div>
       </div>
@@ -34,6 +46,7 @@ const Profile = () => {
         {/* Left Section: Profile Form */}
         <div className="w-1/2 p-10">
           <h1 className="text-3xl font-bold text-customPurple mb-6">Profile</h1>
+
           {/* Profile Picture */}
           <div className="relative w-24 h-24 mb-6">
             <div className="bg-gray-200 w-full h-full rounded-full flex justify-center items-center text-4xl text-blue-500">
@@ -52,39 +65,43 @@ const Profile = () => {
 
           {/* Display Name Input */}
           <div className="mb-4">
-            <label className="block text-lg text-gray-700">Display name</label>
-            <input
-              type="text"
-              placeholder="Enter Name Here"
-              className="mt-2 w-full p-2 border border-gray-300 rounded-md"
-            />
+            <label className="block text-lg text-customPurple">Display name</label>
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Enter Name Here"
+                className="mt-2 w-full p-4 border border-gray-300 rounded-full text-gray-700 placeholder-gray-400 focus:outline-none focus:border-purple-500"
+              />
+            </div>
           </div>
 
           {/* Email Input */}
-          <div className="mb-4 relative">
-            <label className="block text-lg text-gray-700">Email</label>
-            <input
-              type="email"
-              placeholder="Enter Email Here"
-              className="mt-2 w-full p-2 border border-gray-300 rounded-md"
-            />
-            {/* Edit Email Icon */}
-            <div className="absolute right-3 top-10">
-              <Image
-                src="/images/editing.png" // Adjust this image path to your edit icon
-                alt="Edit Email"
-                width={20}
-                height={20}
+          <div className="mb-4">
+            <label className="block text-lg text-customPurple">Email</label>
+            <div className="relative">
+              <input
+                type="email"
+                placeholder="Enter Email Here"
+                className="mt-2 w-full p-4 border border-gray-300 rounded-full text-gray-700 placeholder-gray-400 focus:outline-none focus:border-purple-500"
               />
+              {/* Edit Email Icon */}
+              <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                <Image
+                  src="/images/editing.png" // Adjust this image path to your edit icon
+                  alt="Edit Email"
+                  width={20}
+                  height={20}
+                />
+              </div>
             </div>
           </div>
 
           {/* Buttons */}
           <div className="flex gap-4 mt-6">
-            <button className="bg-customPurple text-white px-6 py-2 rounded-md">
+            <button className="bg-customPurple text-white px-6 py-2 rounded-full">
               Save Changes
             </button>
-            <button className="border border-customPurple text-customPurple px-6 py-2 rounded-md">
+            <button className="border border-customPurple text-customPurple px-6 py-2 rounded-full">
               Reset Changes
             </button>
           </div>
