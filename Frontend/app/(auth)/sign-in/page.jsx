@@ -10,6 +10,10 @@ export default function Home() {
     router.push('/sign-up'); // Navigate to the signup page
   };
 
+  const handleLogin = () => {
+    router.push('/chat'); // Navigate to the chat page
+  };
+
   // Function to handle demo login routing
   const handleDemoLogin = () => {
     router.push('/profile'); // Navigate to the profile page for demo login
@@ -68,7 +72,10 @@ export default function Home() {
               </a>
             </div>
 
-            <button className="mt-6 w-full rounded-md bg-customPurple py-2 text-white hover:bg-purple-700">
+            <button 
+              className="mt-6 w-full rounded-md bg-customPurple py-2 text-white hover:bg-purple-700"
+              onClick={handleLogin}
+            >
               Login
             </button>
 
