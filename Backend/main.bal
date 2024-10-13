@@ -17,7 +17,6 @@ service / on new http:Listener(8080) {
 
         if authHeader.startsWith("Bearer ") {
             string jwtToken = authHeader.substring(7);
-            io:println(jwtToken);
             jwt:ValidatorSignatureConfig signatureConfig = {
                 secret: jwtSecret
             };
@@ -26,17 +25,16 @@ service / on new http:Listener(8080) {
                 signatureConfig: signatureConfig
             };
 
-            // Validate the token
             jwt:Error|jwt:Payload validationResult =jwt:validate(jwtToken, validator);
 
             if validationResult is jwt:Payload {
+                io:println("JWT validation succeeded: ", req.userAgent);
                 return http:ACCEPTED;
             } else {
                 io:println("JWT validation failed: ", validationResult.message());
                 return http:FORBIDDEN;
             }
         } else {
-            // Missing or incorrect Authorization header
             io:println("Authorization header missing or not a Bearer token");
             return http:FORBIDDEN;
         }
