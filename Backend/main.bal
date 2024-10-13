@@ -13,7 +13,7 @@ service / on new http:Listener(8080) {
         return http:ACCEPTED;
     }
 
-    resource function get authorize(http:Request req) returns http:Accepted|http:Forbidden|error {
+    isolated resource function get authorize(http:Request req) returns http:Accepted|http:Forbidden|error {
         string authHeader = check req.getHeader("Authorization");
 
         if authHeader.startsWith("Bearer ") {
