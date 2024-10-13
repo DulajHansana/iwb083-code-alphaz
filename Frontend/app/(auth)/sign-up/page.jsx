@@ -13,7 +13,7 @@ export default function Home() {
     router.push('/profile'); // Navigate to the profile page
   };
 
-  return (//sss
+  return (
     <div
       className="flex h-screen items-center justify-center bg-cover bg-center"
       style={{
