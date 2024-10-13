@@ -12,6 +12,16 @@ const Profile = () => {
     router.push('/sign-in'); // Navigate to the sign-in page (adjust the route if needed)
   };
 
+  // Function to handle edit action (e.g., open edit dialog)
+  const handleEdit = () => {
+    console.log("Edit action triggered");
+  };
+
+  // Function to handle camera/upload action (e.g., open file input)
+  const handleUpload = () => {
+    console.log("Upload action triggered");
+  };
+
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
@@ -52,15 +62,15 @@ const Profile = () => {
             <div className="bg-gray-200 w-full h-full rounded-full flex justify-center items-center text-4xl text-blue-500">
               E
             </div>
-            {/* Camera Icon for Upload */}
-            <div className="absolute right-0 bottom-0 bg-white p-1 rounded-full">
+            {/* Camera Icon for Upload as Button */}
+            <button onClick={handleUpload} className="absolute right-0 bottom-0 bg-white p-1 rounded-full focus:outline-none">
               <Image
                 src="/images/camera.png" // Adjust this image path to your camera icon
                 alt="Upload Profile"
                 width={20}
                 height={20}
               />
-            </div>
+            </button>
           </div>
 
           {/* Display Name Input */}
@@ -84,15 +94,15 @@ const Profile = () => {
                 placeholder="Enter Email Here"
                 className="mt-2 w-full p-4 border border-gray-300 rounded-full text-gray-700 placeholder-gray-400 focus:outline-none focus:border-purple-500"
               />
-              {/* Edit Email Icon */}
-              <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+              {/* Edit Email Icon as Button */}
+              <button onClick={handleEdit} className="absolute right-4 top-1/2 transform -translate-y-1/2 focus:outline-none">
                 <Image
                   src="/images/editing.png" // Adjust this image path to your edit icon
                   alt="Edit Email"
                   width={20}
                   height={20}
                 />
-              </div>
+              </button>
             </div>
           </div>
 
