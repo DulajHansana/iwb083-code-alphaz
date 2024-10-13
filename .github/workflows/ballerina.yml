@@ -1,4 +1,4 @@
-name: Ballerina CI
+name: Ballerina CI/CD
 
 on:
   push:

@@ -5,8 +5,18 @@ import { useRouter } from 'next/navigation'; // Import useRouter for navigation
 export default function Home() {
   const router = useRouter(); // Initialize useRouter
 
+  // Function to handle signup routing
   const handleSignup = () => {
     router.push('/sign-up'); // Navigate to the signup page
+  };
+
+  const handleLogin = () => {
+    router.push('/chat'); // Navigate to the chat page
+  };
+
+  // Function to handle demo login routing
+  const handleDemoLogin = () => {
+    router.push('/profile'); // Navigate to the profile page for demo login
   };
 
   return (
@@ -14,7 +24,7 @@ export default function Home() {
       className="flex h-screen items-center justify-center bg-cover bg-center"
       style={{
         backgroundImage: 'url(/Images/bgimage.jpg)', // Replace with your actual image path
-        backgroundSize: 'cover', 
+        backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
       }}
@@ -62,11 +72,17 @@ export default function Home() {
               </a>
             </div>
 
-            <button className="mt-6 w-full rounded-md bg-customPurple py-2 text-white hover:bg-purple-700">
+            <button 
+              className="mt-6 w-full rounded-md bg-customPurple py-2 text-white hover:bg-purple-700"
+              onClick={handleLogin}
+            >
               Login
             </button>
 
-            <button className="mt-4 w-full rounded-md border border-customPurple py-2 text-customPurple hover:bg-purple-100">
+            <button
+              className="mt-4 w-full rounded-md border border-customPurple py-2 text-customPurple hover:bg-purple-100"
+              onClick={handleDemoLogin} // Handle Demo Login routing
+            >
               Demo Login
             </button>
 
