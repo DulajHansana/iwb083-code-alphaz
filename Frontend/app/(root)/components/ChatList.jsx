@@ -42,7 +42,7 @@ export default function ChatList() {
             {/* Chat details */}
             <div>
               <p className="text-customPurple font-semibold">{chat.name}</p>
-              <p className="text-customPurple1 text-sm">{chat.message}</p>
+              <p className="text-gray-200 text-sm">{chat.message}</p>
             </div>
           </li>
         ))}

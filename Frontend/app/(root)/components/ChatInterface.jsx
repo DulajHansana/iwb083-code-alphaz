@@ -45,7 +45,7 @@ export default function ChatInterface() {
                 </li>
                 <li className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer">
                   <img src="/Images/delete.png" alt="Delete" className="w-4 h-4 mr-2" />
-                  <span className="text-customPurple">Delete</span>
+                  <span className="text-gray-700">Delete</span>
                 </li>
               </ul>
             </div>
