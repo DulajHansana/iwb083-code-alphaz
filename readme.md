@@ -10,13 +10,6 @@ A modern web-based chat application that enables instant communication through a
 
 Perfect for teams, communities, or casual conversations, this application showcases modern web development practices while providing a robust communication tool.
 
-## Contributing
-
-
-</a><a href="https://github.com/dulajhansana/iwb083-code-alphaz/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=dulajhansana/iwb083-code-alphaz" />
-</a>
-
 ## License
 
 This project is licensed under the Creative Common License - see the [LICENSE](LICENSE) file for details.
