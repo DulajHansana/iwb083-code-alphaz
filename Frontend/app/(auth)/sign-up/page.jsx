@@ -9,7 +9,7 @@ export default function Signup() {
     router.push('/sign-in'); // Navigate to the login page
   };
 
-  return (
+  return (//sss
     <div
       className="flex h-screen items-center justify-center bg-cover bg-center"
       style={{
