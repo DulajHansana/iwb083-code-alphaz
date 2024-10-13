@@ -12,8 +12,7 @@ Perfect for teams, communities, or casual conversations, this application showca
 
 ## Contributing
 
-<a href="https://github.com/nivindulakshitha/iwb083-code-alphaz/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=nivindulakshitha/iwb083-code-alphaz" />
+
 </a><a href="https://github.com/dulajhansana/iwb083-code-alphaz/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=dulajhansana/iwb083-code-alphaz" />
 </a>
