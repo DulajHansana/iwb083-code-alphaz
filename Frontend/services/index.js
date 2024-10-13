@@ -1,25 +1,17 @@
-// Use the native WebSocket API to connect to the Ballerina WebSocket server
-const socket = new WebSocket('ws://localhost:21003/ws');
+export const socket = new WebSocket(null);
 
-// Log connection status
-socket.onopen = () => {
-	console.log("Connected to WebSocket servear");
-	socket.send(socket.protocol);
-};
+socket.addEventListener("open", () => {
+	console.log("WebSocket connection opened");
+})
 
-// Handle messages received from the server
-socket.onmessage = (event) => {
-	console.log("Message from server: ", event.data);
-};
+socket.addEventListener("message", (event) => {
+	console.log("Received message:", event.data);
+});
 
-// Handle connection close
-socket.onclose = () => {
-	console.log("Connection closed");
-};
+socket.addEventListener("close", () => {
+	console.log("WebSocket connection closed");
+});
 
-// Handle any errors
-socket.onerror = (error) => {
-	console.error("WebSocket error: ", error);
-};
-
-export default socket;
+socket.addEventListener("error", (error) => {
+	console.error("WebSocket error:", error);
+});
