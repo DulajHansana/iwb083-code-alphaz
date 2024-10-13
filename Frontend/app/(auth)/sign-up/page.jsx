@@ -2,15 +2,11 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation'; // Import useRouter for navigation
 
-export default function Home() {
-  const router = useRouter(); // Initialize useRouter
+export default function Signup() {
+  const router = useRouter(); // Initialize the router
 
-  const handleSignup = () => {
-    router.push('/sign-up'); // Navigate to the signup page
-  };
-
-  const handleDemoLogin = () => {
-    router.push('/profile'); // Navigate to the profile page
+  const handleLogin = () => {
+    router.push('/sign-in'); // Navigate to the login page
   };
 
   return (
@@ -18,19 +14,30 @@ export default function Home() {
       className="flex h-screen items-center justify-center bg-cover bg-center"
       style={{
         backgroundImage: 'url(/Images/bgimage.jpg)', // Replace with your actual image path
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover', // Ensures the image covers the whole area
+        backgroundPosition: 'center', // Centers the image
+        backgroundRepeat: 'no-repeat', // Prevents repeating of the image
       }}
     >
       <div className="flex w-full max-w-4xl rounded-lg bg-white shadow-lg overflow-hidden">
-        {/* Left Side: Login Form */}
+        {/* Left Side: Signup Form */}
         <div className="w-1/2 p-8">
-          <h1 className="text-4xl font-bold text-customPurple">Welcome Back</h1>
-          <p className="mt-2 text-gray-600">Ignite your conversations.</p>
+          <h1 className="text-4xl font-bold text-customPurple">Create an Account</h1>
+          <p className="mt-2 text-gray-600">Join us and ignite your conversations.</p>
 
           {/* Form */}
           <div className="mt-8 space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-customPurple">
+                Full Name
+              </label>
+              <input
+                type="text"
+                placeholder="Enter Full Name"
+                className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50"
+              />
+            </div>
+
             <div>
               <label className="block text-sm font-medium text-customPurple">
                 Email
@@ -53,35 +60,26 @@ export default function Home() {
               />
             </div>
 
-            <div className="flex items-center justify-between">
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
-                />
-                <span className="ml-2 text-sm text-gray-700">Remember me?</span>
+            <div>
+              <label className="block text-sm font-medium text-customPurple">
+                Confirm Password
               </label>
-              <a href="#" className="text-sm text-purple-600 hover:underline">
-                Forgot Password?
-              </a>
+              <input
+                type="password"
+                placeholder="Confirm Password Here"
+                className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50"
+              />
             </div>
 
             <button className="mt-6 w-full rounded-md bg-customPurple py-2 text-white hover:bg-purple-700">
-              Login
-            </button>
-
-            <button
-              className="mt-4 w-full rounded-md border border-customPurple py-2 text-customPurple hover:bg-purple-100"
-              onClick={handleDemoLogin}
-            >
-              Demo Login
+              Sign Up
             </button>
 
             <div className="mt-4 text-center">
-              <span className="text-gray-600">Don’t have an account? </span>
-              {/* Updated Signup button */}
-              <a className="text-purple-600 hover:underline cursor-pointer" onClick={handleSignup}>
-                Signup
+              <span className="text-gray-600">Already have an account? </span>
+              {/* Updated Login button with click handler */}
+              <a className="text-purple-600 hover:underline cursor-pointer" onClick={handleLogin}>
+                Login
               </a>
             </div>
           </div>
