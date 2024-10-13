@@ -1,23 +1,23 @@
-"use client"; // Mark this component as a client component
+"use client"; 
 
 import React from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation'; // Import useRouter for navigation
+import { useRouter } from 'next/navigation'; 
 
 const Profile = () => {
   const router = useRouter(); // Initialize useRouter
 
   // Function to handle logout and navigate back to sign-in page
   const handleLogout = () => {
-    router.push('/sign-in'); // Navigate to the sign-in page (adjust the route if needed)
+    router.push('/sign-in'); 
   };
 
-  // Function to handle edit action (e.g., open edit dialog)
+ 
   const handleEdit = () => {
     console.log("Edit action triggered");
   };
 
-  // Function to handle camera/upload action (e.g., open file input)
+  // Function to handle camera/upload action 
   const handleUpload = () => {
     console.log("Upload action triggered");
   };
@@ -29,7 +29,7 @@ const Profile = () => {
         {/* Profile Icon */}
         <div className="mb-6">
           <Image
-            src="/images/App Logo.png" // Adjust this image path to your profile icon
+            src="/images/App Logo.png" 
             alt="Profile Icon"
             width={100}
             height={100}
@@ -41,7 +41,7 @@ const Profile = () => {
         <div className="mt-auto mb-6">
           <button onClick={handleLogout} className="focus:outline-none">
             <Image
-              src="/images/logout.png" // Adjust this image path to your logout icon
+              src="/images/logout.png" 
               alt="Logout Icon"
               width={45}
               height={45}
@@ -65,7 +65,7 @@ const Profile = () => {
             {/* Camera Icon for Upload as Button */}
             <button onClick={handleUpload} className="absolute right-0 bottom-0 bg-white p-1 rounded-full focus:outline-none">
               <Image
-                src="/images/camera.png" // Adjust this image path to your camera icon
+                src="/images/camera.png"
                 alt="Upload Profile"
                 width={20}
                 height={20}
@@ -97,7 +97,7 @@ const Profile = () => {
               {/* Edit Email Icon as Button */}
               <button onClick={handleEdit} className="absolute right-4 top-1/2 transform -translate-y-1/2 focus:outline-none">
                 <Image
-                  src="/images/editing.png" // Adjust this image path to your edit icon
+                  src="/images/editing.png" 
                   alt="Edit Email"
                   width={20}
                   height={20}
@@ -120,7 +120,7 @@ const Profile = () => {
         {/* Right Section: SparkChat Information */}
         <div className="w-1/2 bg-gray-100 flex flex-col justify-center items-center p-10">
           <Image
-            src="/images/App Logo.png" // Adjust this image path to your app logo
+            src="/images/App Logo.png" 
             alt="SparkChat Logo"
             width={200}
             height={200}
