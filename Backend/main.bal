@@ -60,8 +60,12 @@ service / on new http:Listener(8080) {
         }
 
         //count documents
-        int countResult = DB:count(databaseName = "chatdb", collectionName = "users", query = {tagname: "2kRriU1F"});
+        int countResult = DB:count(databaseName = "chatdb", collectionName = "users", query = {tagname: "2juj5stC"});
         LW:loggerWrite("info", "User count: " + countResult.toString());
+
+        // find many documents
+        Types:User[]|() users = DB:find(databaseName = "chatdb", collectionName = "users", query = {email: "nivindulakshitha@nu.edu.pk"});
+        LW:loggerWrite("info", "Users found: " + users.toJsonString());
 
     }
 

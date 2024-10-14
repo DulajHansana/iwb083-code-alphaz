@@ -80,6 +80,40 @@ public isolated function findOne(string databaseName, string collectionName, jso
     }
 }
 
+isolated Types:User[] users = [];
+public isolated function find(string databaseName, string collectionName, json query) returns ()|Types:User[] {
+    mongodb:Collection|error collectionResult = collectionAccessor(databaseName, collectionName);
+    if collectionResult is error {
+        LW:loggerWrite("error", "Collection not found: " + collectionResult.message() + ".");
+        return ();
+    }
+
+    mongodb:Collection collection = collectionResult;
+
+    stream<Types:User, error?>|error findStream = collection->find(<map<json>>query, targetType = Types:User);
+    if findStream is error {
+        LW:loggerWrite("error", "Document retrieval failed: " + findStream.message());
+        return [];
+    }
+
+    error? e = findStream.forEach(isolated function(Types:User user) {
+        lock {
+            users.push(user.clone());
+        }
+    });
+
+    if e is error {
+        LW:loggerWrite("error", "Error occurred while processing the stream: " + e.message());
+        return [];
+    } else {
+        lock {
+	        LW:loggerWrite("info", "Document retrieved successfully. " + users.toJsonString());
+            return users.clone();
+        }
+    }
+}
+
+
 public isolated function removeOne(string databaseName, string collectionName, json query) returns boolean {
     mongodb:Collection|error collectionResult = collectionAccessor(databaseName, collectionName);
 
@@ -143,6 +177,9 @@ public isolated function count(string databaseName, string collectionName, json 
         return countResult;
     }
 }
+
+// delete docuemnt
+
 
 isolated function collectionAccessor(string databaseName, string collectionName) returns mongodb:Collection|error {
     lock {

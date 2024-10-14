@@ -1,9 +1,8 @@
 import ballerina/random;
-import ballerina/uuid;
 
 public type User record {
-    string id = uuid:createRandomUuid();
-    string tagname = getRandomId();
+    string id = getRandomId(20);
+    string tagname = getRandomId(10);
     string fullname;
     string email;
     string password;
@@ -11,14 +10,13 @@ public type User record {
     string|() jwtoken = ();
 };
 
-public isolated function getRandomId() returns string {
-    string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    int length = 10;
+isolated function getRandomId(int length) returns string {
+    string fulltext = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     string randomId = "";
 
     foreach int i in 0...length {
-        int|error index = random:createIntInRange(0, alphabet.length() - 1);
-        randomId += string:substring(alphabet, index is error? 0 : index, index is error? 0 : index + 1);
+        int|error index = random:createIntInRange(0, fulltext.length() - 1);
+        randomId += string:substring(fulltext, index is error? 0 : index, index is error? 0 : index + 1);
     }
 
     return randomId;
