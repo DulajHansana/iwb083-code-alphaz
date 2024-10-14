@@ -85,7 +85,7 @@ export const serverAuthorization = async (credentials) => {
 
 const jwTokensGenerator = (credentials) => {
 	const { username, id, email } = credentials;
-	
+
 	const payload = {
 		username: username,
 		id: id,
@@ -103,4 +103,4 @@ console.log(await serverAuthorization(
 		id: "123",
 		email: "admin@localhost",
 	}
-));
+).catch(error => console.log(error)));
