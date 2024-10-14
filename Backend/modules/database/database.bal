@@ -20,7 +20,6 @@ public function initialize(string connectionString) returns boolean {
     }
 }
 
-// create collection
 public function createCollection(string databaseName, string collectionName) returns boolean {
     mongodb:Database|error databaseResult = databaseAccessor(databaseName);
     if databaseResult is error {
