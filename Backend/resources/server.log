@@ -1,0 +1,2 @@
+{"time":"2024-10-14T10:38:12.659+05:30", "level":"INFO", "module":"nivindu_lakshitha/Backend.logger_writter", "message":"Server started."}
+{"time":"2024-10-14T10:38:13.118+05:30", "level":"INFO", "module":"nivindu_lakshitha/Backend.logger_writter", "message":"WebSocket server started."}
