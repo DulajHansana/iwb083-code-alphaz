@@ -26,18 +26,22 @@ public isolated function loggerWrite(string log_level, string message) returns (
     match log_level {
         "info" => {
             io:println(`[info] ${stringResult}`);
+            io:println();
             log:printInfo(stringResult);
         }
         "error" => {
             io:println(`[error] ${stringResult}`);
+            io:println();
             log:printError(stringResult);
         }
         "warn" => {
             io:println(`[warn] ${stringResult}`);
+            io:println();
             log:printWarn(stringResult);
         }
         "debug" => {
             io:println(`[debug] ${stringResult}`);
+            io:println();
             log:printDebug(stringResult);
         }
     }
