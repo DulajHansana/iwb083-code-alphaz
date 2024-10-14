@@ -28,7 +28,7 @@ export const connect = async () => {
 			"Authorization": "Bearer " + jwtTokenGenerator()
 		}
 	});
-	
+
 	return {
 		severHandshake: {
 			code: response.status,
@@ -49,5 +49,3 @@ function jwtTokenGenerator() {
 
 	return jwToken;
 }
-
-console.log(await connect());
