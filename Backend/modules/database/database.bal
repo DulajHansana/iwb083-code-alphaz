@@ -100,6 +100,29 @@ public isolated function removeOne(string databaseName, string collectionName, j
     }
 }
 
+public isolated function updateOne(string databaseName, string collectionName, json query, json update) returns boolean {
+    mongodb:Collection|error collectionResult = collectionAccessor(databaseName, collectionName);
+
+    if collectionResult is error {
+        LW:loggerWrite("error", "Collection not found: " + collectionResult.message() + ".");
+        return false;
+    }
+
+    mongodb:Collection collection = collectionResult;
+
+    mongodb:Update updateMap = { "set": <map<json>>update };
+
+    var updateResult = collection->updateOne(<map<json>>query, updateMap);
+
+    if updateResult is error {
+        LW:loggerWrite("error", "Document update failed: " + updateResult.message());
+        return false;
+    } else {
+        LW:loggerWrite("info", "Document updated successfully. Query: " + query.toJsonString());
+        return true;
+    }
+}
+
 isolated function collectionAccessor(string databaseName, string collectionName) returns mongodb:Collection|error {
     lock {
         if mongoAdmin is () {

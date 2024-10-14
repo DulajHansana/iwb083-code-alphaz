@@ -48,10 +48,15 @@ service / on new http:Listener(8080) {
             LW:loggerWrite("error", "User not found.");
         }
 
-        // Delete document
         boolean removeResult = DB:removeOne(databaseName = "chatdb", collectionName = "users", query = {email: "nivindulakshitha@nu.edu.pk"});
         if removeResult == false {
             LW:loggerWrite("info", "User removed successfully.");
+        }
+
+        // update one
+        boolean updateResult = DB:updateOne(databaseName = "chatdb", collectionName = "users", query = {email: "nivindulakshitha@nu.edu.pk"}, update = {fullname: "Nivindu"});
+        if updateResult == false {
+            LW:loggerWrite("info", "User updated successfully.");
         }
 
     }
