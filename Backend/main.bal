@@ -1,8 +1,7 @@
-import Backend.jsonwebtoken as JWT;
-import Backend.ws_provider as WSP;
-import Backend.logger_writter as LW;
 import Backend.database as DB;
-import Backend.types as Types;
+import Backend.jsonwebtoken as JWT;
+import Backend.logger_writter as LW;
+import Backend.ws_provider as WSP;
 
 import ballerina/http;
 import ballerina/io;
@@ -29,44 +28,6 @@ service / on new http:Listener(8080) {
     function init() {
         isDatabaseInitialized = DB:initialize(DB_URI);
         LW:loggerWrite("info", "Server started.");
-        Types:User user = {
-            fullname: "Nivindu Lakshitha",
-            email: "nivindulakshitha@nu.edu.pk",
-            password: "password",
-            websocketId: "1234"
-        };
-        boolean|string result = DB:insert(databaseName = "chatdb", collectionName = "users", document = user);
-
-        if result == false {
-            LW:loggerWrite("info", "User inserted successfully.");
-        }
-
-        Types:User?? findOne = DB:findOne(databaseName = "chatdb", collectionName = "users", query = {email: "nivindulakshitha@nu.edu.pk"});
-        if findOne is Types:User {
-            LW:loggerWrite("info", "User found: " + findOne.toJsonString());
-        } else {
-            LW:loggerWrite("error", "User not found.");
-        }
-
-        boolean removeResult = DB:removeOne(databaseName = "chatdb", collectionName = "users", query = {email: "nivindulakshitha@nu.edu.pk"});
-        if removeResult == false {
-            LW:loggerWrite("info", "User removed successfully.");
-        }
-
-        // update one
-        boolean updateResult = DB:updateOne(databaseName = "chatdb", collectionName = "users", query = {email: "nivindulakshitha@nu.edu.pk"}, update = {fullname: "Nivindu"});
-        if updateResult == false {
-            LW:loggerWrite("info", "User updated successfully.");
-        }
-
-        //count documents
-        int countResult = DB:count(databaseName = "chatdb", collectionName = "users", query = {tagname: "2juj5stC"});
-        LW:loggerWrite("info", "User count: " + countResult.toString());
-
-        // find many documents
-        Types:User[]|() users = DB:find(databaseName = "chatdb", collectionName = "users", query = {email: "nivindulakshitha@nu.edu.pk"});
-        LW:loggerWrite("info", "Users found: " + users.toJsonString());
-
     }
 
     resource function get .(http:Request req) returns http:Accepted & readonly {

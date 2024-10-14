@@ -20,6 +20,27 @@ public function initialize(string connectionString) returns boolean {
     }
 }
 
+// create collection
+public function createCollection(string databaseName, string collectionName) returns boolean {
+    mongodb:Database|error databaseResult = databaseAccessor(databaseName);
+    if databaseResult is error {
+        LW:loggerWrite("error", "Database not found: " + databaseResult.message() + ".");
+        return false;
+    }
+
+    mongodb:Database database = databaseResult;
+
+    var createResult = database->createCollection(collectionName);
+
+    if createResult is error {
+        LW:loggerWrite("error", "Collection creation failed: " + createResult.message());
+        return false;
+    } else {
+        LW:loggerWrite("info", "Collection created successfully. " + collectionName);
+        return true;
+    }
+}
+
 public function insert(string databaseName, string collectionName, map<anydata> document) returns boolean {
     mongodb:Collection|error collectionResult = collectionAccessor(databaseName, collectionName);
     if collectionResult is error {
@@ -80,7 +101,7 @@ public isolated function findOne(string databaseName, string collectionName, jso
     }
 }
 
-isolated Types:User[] users = [];
+isolated Types:User[] documents = [];
 public isolated function find(string databaseName, string collectionName, json query) returns ()|Types:User[] {
     mongodb:Collection|error collectionResult = collectionAccessor(databaseName, collectionName);
     if collectionResult is error {
@@ -96,9 +117,12 @@ public isolated function find(string databaseName, string collectionName, json q
         return [];
     }
 
-    error? e = findStream.forEach(isolated function(Types:User user) {
+    lock {
+	    documents = [];
+    }
+    error? e = findStream.forEach(isolated function(Types:User document) {
         lock {
-            users.push(user.clone());
+            documents.push(document.clone());
         }
     });
 
@@ -107,8 +131,8 @@ public isolated function find(string databaseName, string collectionName, json q
         return [];
     } else {
         lock {
-	        LW:loggerWrite("info", "Document retrieved successfully. " + users.toJsonString());
-            return users.clone();
+	        LW:loggerWrite("info", "Document retrieved successfully. " + documents.toJsonString());
+            return documents.clone();
         }
     }
 }
@@ -157,7 +181,6 @@ public isolated function updateOne(string databaseName, string collectionName, j
     }
 }
 
-// count docuemnts
 public isolated function count(string databaseName, string collectionName, json query) returns int {
     mongodb:Collection|error collectionResult = collectionAccessor(databaseName, collectionName);
     if collectionResult is error {
@@ -178,9 +201,6 @@ public isolated function count(string databaseName, string collectionName, json 
     }
 }
 
-// delete docuemnt
-
-
 isolated function collectionAccessor(string databaseName, string collectionName) returns mongodb:Collection|error {
     lock {
         if mongoAdmin is () {
@@ -197,4 +217,16 @@ isolated function collectionAccessor(string databaseName, string collectionName)
         return databaseResult->getCollection(collectionName);
     }
 
+}
+
+isolated function databaseAccessor(string databaseName) returns mongodb:Database|error {
+    lock {
+        if mongoAdmin is () {
+            LW:loggerWrite("error", "MongoDB connection not established.");
+            return error("MongoDB connection not established.");
+        }
+
+        mongodb:Client mongoClient = <mongodb:Client>mongoAdmin;
+        return mongoClient->getDatabase(databaseName);
+    }
 }
