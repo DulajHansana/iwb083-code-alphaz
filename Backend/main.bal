@@ -2,6 +2,7 @@ import Backend.jsonwebtoken as JWT;
 import Backend.ws_provider as WSP;
 import Backend.logger_writter as LW;
 import Backend.database as DB;
+import Backend.types as Types;
 
 import ballerina/http;
 import ballerina/io;
@@ -24,11 +25,21 @@ type RequestRecord record {
 
 isolated table<RequestRecord> key(connection_id) requestTable = table [];
 
-
 service / on new http:Listener(8080) {
     function init() {
         isDatabaseInitialized = DB:initialize(DB_URI);
         LW:loggerWrite("info", "Server started.");
+        Types:User user = {
+            fullname: "Nivindu Lakshitha",
+            email: "nivindulakshitha@nu.edu.pk",
+            password: "password",
+            websocketId: "1234"
+        };
+        boolean|string result = DB:insert(databaseName = "chatdb", collectionName = "users", document = user);
+
+        if result == false {
+            LW:loggerWrite("info", "User inserted successfully.");
+        }
     }
 
     resource function get .(http:Request req) returns http:Accepted & readonly {
