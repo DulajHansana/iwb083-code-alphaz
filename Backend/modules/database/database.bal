@@ -1,4 +1,5 @@
 import Backend.logger_writter as LW;
+import Backend.types as Types;
 
 import ballerinax/mongodb;
 
@@ -18,32 +19,78 @@ public function initialize(string connectionString) returns boolean {
 }
 
 public function insert(string databaseName, string collectionName, map<anydata> document) returns boolean {
-    if mongoAdmin is () {
-        LW:loggerWrite("error", "MongoDB connection not established. Document insertion failed.");
-        return false;
-    }
-
-    mongodb:Client mongoClient = <mongodb:Client>mongoAdmin;
-    mongodb:Database|error databaseResult = mongoClient->getDatabase(databaseName);
-    if databaseResult is error {
-        LW:loggerWrite("error", "Database not found: " + databaseResult.message() + ". Document insertion failed.");
-        return false;
-    }
-
-    mongodb:Collection|error collectionResult = databaseResult->getCollection(collectionName);
+    mongodb:Collection|error collectionResult = collectionAccessor(databaseName, collectionName);
     if collectionResult is error {
-        LW:loggerWrite("error", "Collection not found: " + collectionResult.message() + ". Document insertion failed.");
+        LW:loggerWrite("error", "Collection not found: " + collectionResult.message() + ".");
+        return false;
+    }
+
+    mongodb:Collection collection = collectionResult;
+    
+    var insertResult = collection->insertOne(document);
+
+    if insertResult is error {
+        LW:loggerWrite("error", "Document insertion failed: " + insertResult.message());
+        return false;
+    } else {
+        LW:loggerWrite("info", "Document inserted successfully. " + document.toJsonString());
+        return true;
+    }
+}
+
+public function insertMany(string databaseName, string collectionName, map<anydata>[] documents) returns boolean {
+    mongodb:Collection|error collectionResult = collectionAccessor(databaseName, collectionName);
+    if collectionResult is error {
+        LW:loggerWrite("error", "Collection not found: " + collectionResult.message() + ".");
         return false;
     }
 
     mongodb:Collection collection = collectionResult;
 
-    var insertResult = collection->insertOne(document);
+    var insertResult = collection->insertMany(documents);
+
     if insertResult is error {
         LW:loggerWrite("error", "Document insertion failed: " + insertResult.message());
         return false;
     } else {
-        LW:loggerWrite("info", "Document inserted successfully." + insertResult.toJsonString());
+        LW:loggerWrite("info", "Document inserted successfully. " + documents.toJsonString());
         return true;
     }
+}
+
+public function findOne(string databaseName, string collectionName, json query) returns map<json>|null {
+    mongodb:Collection|error collectionResult = collectionAccessor(databaseName, collectionName);
+    if collectionResult is error {
+        LW:loggerWrite("error", "Collection not found: " + collectionResult.message() + ".");
+        return null;
+    }
+
+    mongodb:Collection collection = collectionResult;
+
+    Types:User|error|() findResult = collection->findOne(<map<json>>query);
+
+    if findResult is error {
+        LW:loggerWrite("error", "Document retrieval failed: " + findResult.message());
+        return null;
+    } else {
+        string userId = findResult["_id"].toString();
+        LW:loggerWrite("info", "Document retrieved successfully. " + userId);
+        return findResult;
+    }
+}
+
+function collectionAccessor(string databaseName, string collectionName) returns mongodb:Collection|error {
+    if mongoAdmin is () {
+        LW:loggerWrite("error", "MongoDB connection not established.");
+        return error("MongoDB connection not established.");
+    }
+
+    mongodb:Client mongoClient = <mongodb:Client>mongoAdmin;
+    mongodb:Database|error databaseResult = mongoClient->getDatabase(databaseName);
+    if databaseResult is error {
+        LW:loggerWrite("error", "Database not found: " + databaseResult.message() + ".");
+        return error("Database not found: " + databaseResult.message() + ".");
+    }
+
+    return  databaseResult->getCollection(collectionName);
 }

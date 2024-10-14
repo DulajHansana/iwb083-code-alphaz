@@ -40,6 +40,14 @@ service / on new http:Listener(8080) {
         if result == false {
             LW:loggerWrite("info", "User inserted successfully.");
         }
+
+        map<json>|() findOne = DB:findOne(databaseName = "chatdb", collectionName = "users", query = {email: "nivindulakshitha@nu.edu.pk"});
+        if findOne is map<json> {
+            LW:loggerWrite("info", "User found: " + findOne.toJsonString());
+        } else {
+            LW:loggerWrite("error", "User not found.");
+        }
+
     }
 
     resource function get .(http:Request req) returns http:Accepted & readonly {
