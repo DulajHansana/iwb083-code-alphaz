@@ -123,6 +123,27 @@ public isolated function updateOne(string databaseName, string collectionName, j
     }
 }
 
+// count docuemnts
+public isolated function count(string databaseName, string collectionName, json query) returns int {
+    mongodb:Collection|error collectionResult = collectionAccessor(databaseName, collectionName);
+    if collectionResult is error {
+        LW:loggerWrite("error", "Collection not found: " + collectionResult.message() + ".");
+        return -1;
+    }
+
+    mongodb:Collection collection = collectionResult;
+
+    var countResult = collection->countDocuments(<map<json>>query);
+
+    if countResult is error {
+        LW:loggerWrite("error", "Document count failed: " + countResult.message());
+        return -1;
+    } else {
+        LW:loggerWrite("info", "Document count successfully. Query: " + query.toJsonString());
+        return countResult;
+    }
+}
+
 isolated function collectionAccessor(string databaseName, string collectionName) returns mongodb:Collection|error {
     lock {
         if mongoAdmin is () {
