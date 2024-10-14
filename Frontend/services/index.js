@@ -85,7 +85,7 @@ export const serverAuthorization = async (credentials) => {
 
 const jwTokensGenerator = (credentials) => {
 	const { username, id, email } = credentials;
-	
+
 	const payload = {
 		username: username,
 		id: id,
