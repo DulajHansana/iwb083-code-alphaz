@@ -64,20 +64,12 @@ export class WebSocketTrigger {
 	}
 }
 
-/**
- * Makes a request to the server to authorize the WebSocket connection.
- * @returns {Promise<{severAthorization: {code: number, accepted: boolean}, serverResponse: Response}>}
- * @example
- * const {severAthorization, serverResponse} = await serverAuthorization();
- * console.log(`Server authorization status: ${severAthorization.code} ${severAthorization.accepted ? "Accepted" : "Rejected"}`);
- */
 export const serverAuthorization = async (credentials) => {
 	const response = await fetch(`${process.env.SERVICE_SERVER_URL}/authorize`, {
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json",
-			"Authorization": "Bearer " + jwTokensGenerator(credentials),
-			"ConnectionId": credentials.id
+			"Authorization": "Bearer " + jwTokensGenerator(credentials)
 		}
 	});
 
@@ -85,20 +77,12 @@ export const serverAuthorization = async (credentials) => {
 		severAthorization: {
 			code: response.status,
 			accepted: response.statusText === "Accepted",
+			aliveToken: response.headers.get("keep-alive-token") || null
 		},
 		serverResponse: response
 	};
 }
 
-/**
- * Generates a JSON Web Token (JWT) based on the given user credentials.
- * @param {{username: string, id: string, email: string}} credentials - The user's credentials.
- * @returns {string} The generated JWT.
- * @example
- * const {username, id, email} = user;
- * const jwToken = jwTokensGenerator({username, id, email});
- * console.log(`The JWT is: ${jwToken}`);
- */
 const jwTokensGenerator = (credentials) => {
 	const { username, id, email } = credentials;
 	
