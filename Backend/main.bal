@@ -59,6 +59,10 @@ service / on new http:Listener(8080) {
             LW:loggerWrite("info", "User updated successfully.");
         }
 
+        //count documents
+        int countResult = DB:count(databaseName = "chatdb", collectionName = "users", query = {tagname: "2kRriU1F"});
+        LW:loggerWrite("info", "User count: " + countResult.toString());
+
     }
 
     resource function get .(http:Request req) returns http:Accepted & readonly {
