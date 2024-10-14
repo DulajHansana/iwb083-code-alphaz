@@ -101,6 +101,6 @@ console.log(await serverAuthorization(
 	{
 		username: "admin",
 		id: "123",
-		email: "admin@localhos",
+		email: "admin@localhost",
 	}
 ));

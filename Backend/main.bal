@@ -1,6 +1,7 @@
 import Backend.jsonwebtoken as JWT;
 import Backend.ws_provider as WSP;
 import Backend.logger_writter as LW;
+import Backend.database as DB;
 
 import ballerina/http;
 import ballerina/io;
@@ -10,7 +11,9 @@ import ballerina/uuid;
 import ballerina/websocket;
 
 boolean isWebSocketEnabled = false;
+boolean isDatabaseInitialized = false;
 configurable string jwtSecret = ?;
+configurable string DB_URI = ?;
 
 type RequestRecord record {
     readonly string connection_id;
@@ -24,6 +27,7 @@ isolated table<RequestRecord> key(connection_id) requestTable = table [];
 
 service / on new http:Listener(8080) {
     function init() {
+        isDatabaseInitialized = DB:initialize(DB_URI);
         LW:loggerWrite("info", "Server started.");
     }
 
