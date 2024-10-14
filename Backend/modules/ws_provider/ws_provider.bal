@@ -1,6 +1,7 @@
 import ballerina/websocket;
 import ballerina/io;
 
+# Description.
 public isolated service class WsService {
     *websocket:Service;
 
