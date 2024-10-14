@@ -41,11 +41,17 @@ service / on new http:Listener(8080) {
             LW:loggerWrite("info", "User inserted successfully.");
         }
 
-        map<json>|() findOne = DB:findOne(databaseName = "chatdb", collectionName = "users", query = {email: "nivindulakshitha@nu.edu.pk"});
-        if findOne is map<json> {
+        Types:User?? findOne = DB:findOne(databaseName = "chatdb", collectionName = "users", query = {email: "nivindulakshitha@nu.edu.pk"});
+        if findOne is Types:User {
             LW:loggerWrite("info", "User found: " + findOne.toJsonString());
         } else {
             LW:loggerWrite("error", "User not found.");
+        }
+
+        // Delete document
+        boolean removeResult = DB:removeOne(databaseName = "chatdb", collectionName = "users", query = {email: "nivindulakshitha@nu.edu.pk"});
+        if removeResult == false {
+            LW:loggerWrite("info", "User removed successfully.");
         }
 
     }

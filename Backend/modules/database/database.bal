@@ -3,7 +3,7 @@ import Backend.types as Types;
 
 import ballerinax/mongodb;
 
-mongodb:Client? mongoAdmin = ();
+isolated mongodb:Client? mongoAdmin = ();
 
 public function initialize(string connectionString) returns boolean {
     mongodb:Client|error mongoResult = new (connection = connectionString);
@@ -12,9 +12,11 @@ public function initialize(string connectionString) returns boolean {
         LW:loggerWrite("error", "MongoDB connection not established: " + mongoResult.message());
         return false;
     } else {
-        mongoAdmin = mongoResult;
-        LW:loggerWrite("info", "MongoDB connection established.");
-        return true;
+        lock {
+            mongoAdmin = mongoResult;
+            LW:loggerWrite("info", "MongoDB connection established.");
+            return true;
+        }
     }
 }
 
@@ -26,7 +28,7 @@ public function insert(string databaseName, string collectionName, map<anydata> 
     }
 
     mongodb:Collection collection = collectionResult;
-    
+
     var insertResult = collection->insertOne(document);
 
     if insertResult is error {
@@ -58,7 +60,7 @@ public function insertMany(string databaseName, string collectionName, map<anyda
     }
 }
 
-public function findOne(string databaseName, string collectionName, json query) returns map<json>|null {
+public isolated function findOne(string databaseName, string collectionName, json query) returns ()|Types:User? {
     mongodb:Collection|error collectionResult = collectionAccessor(databaseName, collectionName);
     if collectionResult is error {
         LW:loggerWrite("error", "Collection not found: " + collectionResult.message() + ".");
@@ -73,24 +75,45 @@ public function findOne(string databaseName, string collectionName, json query) 
         LW:loggerWrite("error", "Document retrieval failed: " + findResult.message());
         return null;
     } else {
-        string userId = findResult["_id"].toString();
-        LW:loggerWrite("info", "Document retrieved successfully. " + userId);
+        LW:loggerWrite("info", "Document retrieved successfully. " + findResult.toJsonString());
         return findResult;
     }
 }
 
-function collectionAccessor(string databaseName, string collectionName) returns mongodb:Collection|error {
-    if mongoAdmin is () {
-        LW:loggerWrite("error", "MongoDB connection not established.");
-        return error("MongoDB connection not established.");
+public isolated function removeOne(string databaseName, string collectionName, json query) returns boolean {
+    mongodb:Collection|error collectionResult = collectionAccessor(databaseName, collectionName);
+
+    if collectionResult is error {
+        LW:loggerWrite("error", "Collection not found: " + collectionResult.message() + ".");
+        return false;
     }
 
-    mongodb:Client mongoClient = <mongodb:Client>mongoAdmin;
-    mongodb:Database|error databaseResult = mongoClient->getDatabase(databaseName);
-    if databaseResult is error {
-        LW:loggerWrite("error", "Database not found: " + databaseResult.message() + ".");
-        return error("Database not found: " + databaseResult.message() + ".");
+    mongodb:Collection collection = collectionResult;
+    var removeResult = collection->deleteOne(<map<json>>query);
+
+    if removeResult is error {
+        LW:loggerWrite("error", "Document removal failed: " + removeResult.message());
+        return false;
+    } else {
+        LW:loggerWrite("info", "Document removed successfully. " + query.toJsonString());
+        return true;
+    }
+}
+
+isolated function collectionAccessor(string databaseName, string collectionName) returns mongodb:Collection|error {
+    lock {
+        if mongoAdmin is () {
+            LW:loggerWrite("error", "MongoDB connection not established.");
+            return error("MongoDB connection not established.");
+        }
+
+        mongodb:Client mongoClient = <mongodb:Client>mongoAdmin;
+        mongodb:Database|error databaseResult = mongoClient->getDatabase(databaseName);
+        if databaseResult is error {
+            LW:loggerWrite("error", "Database not found: " + databaseResult.message() + ".");
+            return error("Database not found: " + databaseResult.message() + ".");
+        }
+        return databaseResult->getCollection(collectionName);
     }
 
-    return  databaseResult->getCollection(collectionName);
 }
