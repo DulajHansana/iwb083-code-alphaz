@@ -31,7 +31,7 @@ service / on new http:Listener(8080) {
     }
 
     resource function get .(http:Request req) returns http:Accepted & readonly {
-        LW:loggerWrite("info", "Authorization request received.");
+        LW:loggerWrite("info", "Sever acceptance request received.");
         return http:ACCEPTED;
     }
 
