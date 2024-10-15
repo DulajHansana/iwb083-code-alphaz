@@ -95,7 +95,7 @@ const jwTokensGenerator = (credentials) => {
 	const jwToken = jwt.sign(payload, process.env.JWT_SECRET);
 
 	return jwToken;
-}
+}/* 
 
 console.log(await serverAuthorization(
 	{
@@ -103,4 +103,4 @@ console.log(await serverAuthorization(
 		id: "123",
 		email: "admin@localhost",
 	}
-).catch(error => console.log(error)));
+).catch(error => console.log(error))); */

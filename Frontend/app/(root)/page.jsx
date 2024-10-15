@@ -1,23 +1,26 @@
-"use client"; // Add this at the top to make this a Client Component
-import { useRouter } from 'next/navigation'; // Use useRouter from next/navigation in the app directory
+"use client";
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function Home() {
-	const router = useRouter(); // Initialize useRouter hook
+	const router = useRouter();
 
 	const handleNavigate = () => {
-		router.push('/sign-in'); // Navigate to the /sign-in route
+		router.push('/sign-in');
 	};
 
 	return (
 		<div
 			className="flex justify-center items-center h-screen bg-cover bg-center"
-			style={{ backgroundImage: 'url(/Images/banner.jpg)' }} // Path to your background image
+
 		>
 			<div className="flex items-center space-x-8 bg-white bg-opacity-70 p-8 rounded-lg">
 				<div className="flex justify-center">
-					<img
-						src="/Images/App Logo.png"
+					<Image
+						src="/images/App Logo.png"
 						alt="SparkChat Logo"
+						width={128}
+						height={128}
 						className="w-32 h-32"
 					/>
 				</div>
@@ -26,7 +29,7 @@ export default function Home() {
 
 					<h1
 						className="text-4xl font-bold mb-2"
-						style={{ color: '#433878' }} // Custom color for SparkChat text
+						style={{ color: '#433878' }}
 					>
 						SparkChat
 					</h1>
@@ -37,8 +40,8 @@ export default function Home() {
 
 					<button
 						className="text-white py-2 px-6 rounded-lg transition-all duration-300 ease-in-out"
-						style={{ backgroundColor: '#433878' }} // Custom background color
-						onClick={handleNavigate} // Handle button click
+						style={{ backgroundColor: '#433878' }}
+						onClick={handleNavigate}
 					>
 						Get Started
 					</button>
