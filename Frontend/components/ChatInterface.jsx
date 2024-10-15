@@ -27,12 +27,12 @@ export default function ChatInterface() {
       {/* Header */}
       <div className="flex items-center justify-between p-4 bg-white shadow-sm relative">
         <div className="flex items-center space-x-2">
-          <img src="/Images/avatar4.png" alt="Avatar" className="w-8 h-8 rounded-full" />
+          <img src="/images/avatar4.png" alt="Avatar" className="w-8 h-8 rounded-full" />
           <h2 className="text-purple-700 font-bold">SparkChat 3</h2>
         </div>
         <div className="relative">
           <button onClick={toggleMenu} className="p-2">
-            <img src="/Images/menu-icon.png" alt="Menu" className="w-5 h-5" />
+            <img src="/images/menu-icon.png" alt="Menu" className="w-5 h-5" />
           </button>
 
           {/* Dropdown Menu */}
@@ -40,11 +40,11 @@ export default function ChatInterface() {
             <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg z-10">
               <ul className="py-2">
                 <li className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                  <img src="/Images/archive.png" alt="Archive" className="w-4 h-4 mr-2" />
+                  <img src="/images/archive.png" alt="Archive" className="w-4 h-4 mr-2" />
                   <span className="text-customPurple">Archive</span>
                 </li>
                 <li className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                  <img src="/Images/delete.png" alt="Delete" className="w-4 h-4 mr-2" />
+                  <img src="/images/delete.png" alt="Delete" className="w-4 h-4 mr-2" />
                   <span className="text-gray-700">Delete</span>
                 </li>
               </ul>
@@ -80,7 +80,7 @@ export default function ChatInterface() {
           onChange={(e) => setInput(e.target.value)}
         />
         <button className="ml-2 p-2 bg-purple-600 text-white rounded-full" onClick={handleSendMessage}>
-          <img src="/Images/send.png" alt="Send" className="w-6 h-6" />
+          <img src="/images/send.png" alt="Send" className="w-6 h-6" />
         </button>
       </div>
     </div>

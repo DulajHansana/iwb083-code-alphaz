@@ -1,9 +1,9 @@
 export default function ChatList() {
   const chats = [
-    { name: 'SparkChat 0', message: 'How are you doing?', avatar: '/Images/avatar1.png' },
-    { name: 'SparkChat 1', message: 'How are you doing?', avatar: '/Images/avatar2.png' },
-    { name: 'SparkChat 2', message: 'How are you doing?', avatar: '/Images/avatar3.png' },
-    { name: 'SparkChat 3', message: 'How are you doing?', avatar: '/Images/avatar4.png' }
+    { name: 'SparkChat 0', message: 'How are you doing?', avatar: '/images/avatar1.png' },
+    { name: 'SparkChat 1', message: 'How are you doing?', avatar: '/images/avatar2.png' },
+    { name: 'SparkChat 2', message: 'How are you doing?', avatar: '/images/avatar3.png' },
+    { name: 'SparkChat 3', message: 'How are you doing?', avatar: '/images/avatar4.png' }
   ];
 
   return (
@@ -13,7 +13,7 @@ export default function ChatList() {
         <h2 className="text-xl font-bold text-customPurple">Chat</h2>
         {/* Edit icon */}
         <button className="p-2">
-          <img src="/Images/editing.png" alt="Edit" className="w-5 h-5" />
+          <img src="/images/editing.png" alt="Edit" className="w-5 h-5" />
         </button>
       </div>
       
