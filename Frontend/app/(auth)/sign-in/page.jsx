@@ -23,7 +23,7 @@ export default function Home() {
     <div
       className="flex h-screen items-center justify-center bg-cover bg-center"
       style={{
-        backgroundImage: 'url(iwb083-code-alphaz/images/bgimage.jpg)', // Replace with your actual image path
+        backgroundImage: 'url(/iwb083-code-alphaz/images/images/bgimage.jpg)', // Replace with your actual image path
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -101,7 +101,7 @@ export default function Home() {
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               <Image
-                src="iwb083-code-alphaz/images/App Logo.png" // Placeholder for the logo image
+                src="/iwb083-code-alphaz/images/images/App Logo.png" // Placeholder for the logo image
                 alt="SparkChat Logo"
                 width={80}
                 height={80}
