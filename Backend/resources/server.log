@@ -49,3 +49,8 @@ time=2024-10-15T17:05:25.422+05:30 level=INFO module=nivindu_lakshitha/Backend.l
 time=2024-10-15T17:05:25.425+05:30 level=ERROR module=nivindu_lakshitha/Backend.logger_writter message="User already exists."
 time=2024-10-15T17:05:25.437+05:30 level=INFO module=nivindu_lakshitha/Backend.logger_writter message="Document count successfully. Query: {\"email\":\"admin@localhost\"}"
 time=2024-10-15T17:05:25.550+05:30 level=INFO module=nivindu_lakshitha/Backend.logger_writter message="Document retrieved successfully. {\"id\":\"7UKiZcwEBfJS1AiQFVQNt\", \"tagname\":\"17spHe72uJd\", \"fullname\":\"Admin\", \"email\":\"admin@localhost\", \"password\":\"admin\", \"websocketId\":null, \"jwtoken\":null}"
+time=2024-10-15T17:09:57.458+05:30 level=INFO module=nivindu_lakshitha/Backend.logger_writter message="Authorization successful: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3Mjg5OTIzOTd9.crLJcZpi8MhJ_oMhRmBjli8KFNP4EhrE5LafHtH8soo"
+time=2024-10-15T17:09:57.636+05:30 level=INFO module=nivindu_lakshitha/Backend.logger_writter message="Document count successfully. Query: {\"email\":\"admin@localhost\"}"
+time=2024-10-15T17:09:57.636+05:30 level=INFO module=nivindu_lakshitha/Backend.logger_writter message="Document count successfully. Query: {\"email\":\"admin@localhost\"}"
+time=2024-10-15T17:09:57.651+05:30 level=ERROR module=nivindu_lakshitha/Backend.logger_writter message="User already exists."
+time=2024-10-15T17:09:57.719+05:30 level=INFO module=nivindu_lakshitha/Backend.logger_writter message="Document retrieved successfully. {\"id\":\"oNidsQk7TYTKknD12l3Aj\", \"tagname\":\"YtR3TQd3Fuv\", \"fullname\":\"Admin\", \"email\":\"admin@localhost\", \"password\":\"admin\", \"websocketId\":null, \"jwtoken\":null}"
