@@ -13,7 +13,7 @@ export default function Signup() {
 		<div
 			className="flex h-screen items-center justify-center bg-cover bg-center"
 			style={{
-				backgroundImage: 'url(/iwb083-code-alphaz/images/images/bgimage.jpg)',
+				backgroundImage: 'url(/images/bgimage.jpg)',
 				backgroundSize: 'cover',
 				backgroundPosition: 'center',
 				backgroundRepeat: 'no-repeat',
@@ -87,7 +87,7 @@ export default function Signup() {
 					<div className="absolute inset-0 flex items-center justify-center">
 						<div className="text-center">
 							<Image
-								src="/iwb083-code-alphaz/images/images/App Logo.png"
+								src="/images/App Logo.png"
 								alt="SparkChat Logo"
 								width={80}
 								height={80}

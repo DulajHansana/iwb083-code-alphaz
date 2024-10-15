@@ -1,32 +1,28 @@
 import Backend.database as DB;
 import Backend.jsonwebtoken as JWT;
 import Backend.logger_writter as LW;
+import Backend.types as Types;
 import Backend.ws_provider as WSP;
+import Backend.db_actions_dispatcher as DAD;
 
 import ballerina/http;
 import ballerina/io;
 import ballerina/jwt;
-import ballerina/time;
 import ballerina/uuid;
 import ballerina/websocket;
 
 boolean isWebSocketEnabled = false;
-boolean isDatabaseInitialized = false;
+isolated boolean isDatabaseInitialized = false;
 configurable string jwtSecret = ?;
 configurable string DB_URI = ?;
 
-type RequestRecord record {
-    readonly string connection_id;
-    "client"|"websocket" connection_type;
-    readonly string authorization;
-    readonly time:Utc timestamp = time:utcNow();
-};
-
-isolated table<RequestRecord> key(connection_id) requestTable = table [];
+isolated table<Types:RequestRecord> key(connection_id) requestsTable = table [];
 
 service / on new http:Listener(8080) {
     function init() {
-        isDatabaseInitialized = DB:initialize(DB_URI);
+        lock {
+            isDatabaseInitialized = DB:initialize(DB_URI);
+        }
         LW:loggerWrite("info", "Server started.");
     }
 
@@ -43,9 +39,9 @@ service / on new http:Listener(8080) {
 
             if validationResult is jwt:Payload {
                 string keepAliveToken = uuid:createRandomUuid();
-                RequestRecord request = {connection_id: keepAliveToken, connection_type: "client", authorization: authHeader};
+                Types:RequestRecord request = {connection_id: keepAliveToken, connection_type: "client", authorization: authHeader};
                 lock {
-                    requestTable.add(request.clone());
+                    requestsTable.add(request.clone());
                 }
 
                 http:Response response = new;
@@ -64,7 +60,68 @@ service / on new http:Listener(8080) {
             return http:FORBIDDEN;
         }
     }
+
+    isolated resource function post auth/login(http:Request req) returns http:Response {
+        boolean aliveConnection = isConnectionAlive(req);
+        http:Response response = new;
+
+        if aliveConnection {
+            LW:loggerWrite("Info", "Connection is alive.");
+            json|error requestBody = req.getJsonPayload();
+
+            if requestBody is json {
+                return DAD:loginUser(requestBody);
+            } else {
+                response.statusCode = 400;
+                response.reasonPhrase = "Invalid request body. Please try again.";
+                return response;
+            }
+
+        } else {
+            LW:loggerWrite("error", "Connection is not alive.");
+            response.statusCode = 403;
+            response.reasonPhrase = "Connection is not alive. Retry refreshing the page.";
+            return response;
+        }
+    }
+
+    isolated resource function post auth/signup(http:Request req) returns http:Response {
+        boolean aliveConnection = isConnectionAlive(req);
+        http:Response response = new;
+
+        if aliveConnection {
+            LW:loggerWrite("Info", "Connection is alive.");
+            json|error requestBody = req.getJsonPayload();
+
+            if requestBody is json {
+                return DAD:signUpUser(requestBody);
+            } else {
+                response.statusCode = 400;
+                response.reasonPhrase = "Invalid request body. Please try again.";
+                return response;
+            }
+
+        } else {
+            LW:loggerWrite("error", "Connection is not alive.");
+            response.statusCode = 403;
+            response.reasonPhrase = "Connection is not alive. Retry refreshing the page.";
+            return response;
+        }
+        
+    }
 };
+
+isolated function isConnectionAlive(http:Request req) returns boolean {
+    string|http:HeaderNotFoundError authHeader = req.getHeader("keep-alive-token");
+    lock {
+
+        if authHeader is string && Types:RequestRecord.count(requestsTable.get(authHeader)) > 0 {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
 
 service /ws on new websocket:Listener(21003) {
     resource function get .(http:Request req) returns websocket:Service|websocket:UpgradeError {

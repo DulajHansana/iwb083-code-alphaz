@@ -5,7 +5,7 @@ import ballerinax/mongodb;
 
 isolated mongodb:Client? mongoAdmin = ();
 
-public function initialize(string connectionString) returns boolean {
+public isolated function initialize(string connectionString) returns boolean {
     mongodb:Client|error mongoResult = new (connection = connectionString);
 
     if mongoResult is error {
@@ -20,7 +20,7 @@ public function initialize(string connectionString) returns boolean {
     }
 }
 
-public function createCollection(string databaseName, string collectionName) returns boolean {
+public isolated function createCollection(string databaseName, string collectionName) returns boolean {
     mongodb:Database|error databaseResult = databaseAccessor(databaseName);
     if databaseResult is error {
         LW:loggerWrite("error", "Database not found: " + databaseResult.message() + ".");
@@ -40,7 +40,7 @@ public function createCollection(string databaseName, string collectionName) ret
     }
 }
 
-public function insert(string databaseName, string collectionName, map<anydata> document) returns boolean {
+public isolated function insert(string databaseName, string collectionName, map<anydata> document) returns boolean {
     mongodb:Collection|error collectionResult = collectionAccessor(databaseName, collectionName);
     if collectionResult is error {
         LW:loggerWrite("error", "Collection not found: " + collectionResult.message() + ".");
@@ -60,7 +60,7 @@ public function insert(string databaseName, string collectionName, map<anydata> 
     }
 }
 
-public function insertMany(string databaseName, string collectionName, map<anydata>[] documents) returns boolean {
+public isolated function insertMany(string databaseName, string collectionName, map<anydata>[] documents) returns boolean {
     mongodb:Collection|error collectionResult = collectionAccessor(databaseName, collectionName);
     if collectionResult is error {
         LW:loggerWrite("error", "Collection not found: " + collectionResult.message() + ".");
