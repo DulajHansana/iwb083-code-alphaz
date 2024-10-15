@@ -1,4 +1,12 @@
 import ballerina/random;
+import ballerina/time;
+
+public type RequestRecord record {
+    readonly string connection_id;
+    "client"|"websocket" connection_type;
+    readonly string authorization;
+    readonly time:Utc timestamp = time:utcNow();
+};
 
 public type User record {
     string id = getRandomId(20);

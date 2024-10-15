@@ -5,7 +5,7 @@ import ballerinax/mongodb;
 
 isolated mongodb:Client? mongoAdmin = ();
 
-public function initialize(string connectionString) returns boolean {
+public isolated function initialize(string connectionString) returns boolean {
     mongodb:Client|error mongoResult = new (connection = connectionString);
 
     if mongoResult is error {
