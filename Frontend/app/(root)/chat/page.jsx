@@ -6,13 +6,8 @@ import ChatInterface from '../../../components/ChatInterface';
 const Chat = () => {
   return (
     <div className="flex h-screen">
-      {/* Sidebar section */}
       <Sidebar />
-      
-      {/* Chat list section */}
       <ChatList />
-      
-      {/* Chat interface section */}
       <ChatInterface />
     </div>
   );
