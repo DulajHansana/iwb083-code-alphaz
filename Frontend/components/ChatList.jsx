@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export default function ChatList() {
   const chats = [
     { name: 'SparkChat 0', message: 'How are you doing?', avatar: '/images/avatar1.png' },
@@ -13,7 +15,7 @@ export default function ChatList() {
         <h2 className="text-xl font-bold text-customPurple">Chat</h2>
         {/* Edit icon */}
         <button className="p-2">
-          <img src="/images/editing.png" alt="Edit" className="w-5 h-5" />
+          <Image src="/images/editing.png" alt="Edit" width={20} height={20} />
         </button>
       </div>
       
@@ -34,10 +36,12 @@ export default function ChatList() {
             className={`flex items-center p-4 rounded-2xl ${index === 3 ? 'bg-purple-200' : 'bg-purple-300'} space-x-4`}
           >
             {/* Avatar */}
-            <img
+            <Image
               src={chat.avatar}
               alt={`${chat.name} avatar`}
-              className="w-10 h-10 rounded-full"
+              width={40}
+              height={40}
+              className="rounded-full"
             />
             {/* Chat details */}
             <div>

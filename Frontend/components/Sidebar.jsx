@@ -1,8 +1,10 @@
+import Image from 'next/image';
+
 export default function Sidebar() {
   return (
     <div className="w-24 bg-purple-600 h-screen flex flex-col items-center p-4">
       {/* APP logo without circle, maintaining aspect ratio */}
-      <img src="/images/App Logo.png" alt="App Logo" className="w-10 h-10 object-contain" />
+      <Image src="/images/App Logo.png" alt="App Logo" width={40} height={40} className="object-contain" />
       
       {/* Other icon changed to letter 'E' inside a circle */}
       <div className="bg-purple-400 p-4 rounded-full mt-4 flex items-center justify-center w-10 h-10">
@@ -13,7 +15,7 @@ export default function Sidebar() {
       <div className="mt-auto flex flex-col items-center">
         {/* Image at the bottom */}
         <div className="bg-blue-500 p-2 rounded-lg">
-          <img src="/images/logout.png" alt="Logout" className="w-6 h-6 object-contain" />
+          <Image src="/images/logout.png" alt="Logout" width={24} height={24} className="object-contain" />
         </div>
         {/* Logout text */}
         <span className="text-white mt-2">Logout</span>

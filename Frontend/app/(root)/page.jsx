@@ -1,5 +1,6 @@
 "use client"; // Add this at the top to make this a Client Component
-import { useRouter } from 'next/navigation'; // Use useRouter from next/navigation in the app directory
+import { useRouter } from 'next/navigation';
+import Image from 'next/image'; // Use useRouter from next/navigation in the app directory
 
 export default function Home() {
 	const router = useRouter(); // Initialize useRouter hook
@@ -11,13 +12,15 @@ export default function Home() {
 	return (
 		<div
 			className="flex justify-center items-center h-screen bg-cover bg-center"
-			style={{ backgroundImage: 'url(/Images/banner.jpg)' }} // Path to your background image
+		// Path to your background image
 		>
 			<div className="flex items-center space-x-8 bg-white bg-opacity-70 p-8 rounded-lg">
 				<div className="flex justify-center">
-					<img
+					<Image
 						src="/Images/App Logo.png"
 						alt="SparkChat Logo"
+						width={128}
+						height={128}
 						className="w-32 h-32"
 					/>
 				</div>
