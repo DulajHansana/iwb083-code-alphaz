@@ -43,6 +43,11 @@ jobs:
           cache: npm
           cache-dependency-path: Frontend/package-lock.json
 
+      - name: Clear Next.js Cache
+        run: |
+          echo "Clearing Next.js cache..."
+          rm -rf Frontend/.next/cache
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
         with:
