@@ -17,7 +17,7 @@ export default function Home() {
 			<div className="flex items-center space-x-8 bg-white bg-opacity-70 p-8 rounded-lg">
 				<div className="flex justify-center">
 					<Image
-						src="/Images/App Logo.png"
+						src="/images/App Logo.png"
 						alt="SparkChat Logo"
 						width={128}
 						height={128}
