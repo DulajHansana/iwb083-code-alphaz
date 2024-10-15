@@ -3,6 +3,7 @@ import Backend.jsonwebtoken as JWT;
 import Backend.logger_writter as LW;
 import Backend.types as Types;
 import Backend.ws_provider as WSP;
+import Backend.db_actions_dispatcher as DAD;
 
 import ballerina/http;
 import ballerina/io;
@@ -69,44 +70,7 @@ service / on new http:Listener(8080) {
             json|error requestBody = req.getJsonPayload();
 
             if requestBody is json {
-                Types:User|null loginResult = null;
-                do {
-
-                    json query = {
-                        "email": check requestBody.email
-                    };
-
-                    if DB:count("users", "users", query) == 0 {
-                        response.statusCode = 404;
-                        response.reasonPhrase = "User not found. Sign up to continue.";
-                        LW:loggerWrite("error", "User not found.");
-                        return response;
-                    }
-
-                    query = {
-                        "email": check requestBody.email,
-                        "password": check requestBody.password
-                    };
-
-                    loginResult = DB:findOne("users", "users", query);
-
-                    if loginResult is Types:User {
-                        response.statusCode = 202;
-                        response.reasonPhrase = "Successful login.";
-                        return response;
-                    } else {
-                        response.statusCode = 401;
-                        response.reasonPhrase = "Invalid credentials. Please try again.";
-                        return response;
-                    }
-
-                } on fail var e {
-                    response.statusCode = 400;
-                    response.reasonPhrase = "Invalid request body. Please try again.";
-                    LW:loggerWrite("error", e.message());
-                    return response;
-                }
-
+                return DAD:loginUser(requestBody);
             } else {
                 response.statusCode = 400;
                 response.reasonPhrase = "Invalid request body. Please try again.";
@@ -120,13 +84,38 @@ service / on new http:Listener(8080) {
             return response;
         }
     }
+
+    isolated resource function post auth/signup(http:Request req) returns http:Response {
+        boolean aliveConnection = isConnectionAlive(req);
+        http:Response response = new;
+
+        if aliveConnection {
+            LW:loggerWrite("Info", "Connection is alive.");
+            json|error requestBody = req.getJsonPayload();
+
+            if requestBody is json {
+                return DAD:signUpUser(requestBody);
+            } else {
+                response.statusCode = 400;
+                response.reasonPhrase = "Invalid request body. Please try again.";
+                return response;
+            }
+
+        } else {
+            LW:loggerWrite("error", "Connection is not alive.");
+            response.statusCode = 403;
+            response.reasonPhrase = "Connection is not alive. Retry refreshing the page.";
+            return response;
+        }
+        
+    }
 };
 
 isolated function isConnectionAlive(http:Request req) returns boolean {
     string|http:HeaderNotFoundError authHeader = req.getHeader("keep-alive-token");
     lock {
 
-        if authHeader is string && requestsTable.get(authHeader) is Types:RequestRecord {
+        if authHeader is string && Types:RequestRecord.count(requestsTable.get(authHeader)) > 0 {
             return true;
         } else {
             return false;
