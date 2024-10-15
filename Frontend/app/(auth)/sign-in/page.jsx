@@ -23,7 +23,7 @@ export default function Home() {
     <div
       className="flex h-screen items-center justify-center bg-cover bg-center"
       style={{
-        backgroundImage: 'url(/Images/bgimage.jpg)', // Replace with your actual image path
+        backgroundImage: 'url(/images/bgimage.jpg)', // Replace with your actual image path
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -101,7 +101,7 @@ export default function Home() {
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               <Image
-                src="/Images/App Logo.png" // Placeholder for the logo image
+                src="/images/App Logo.png" // Placeholder for the logo image
                 alt="SparkChat Logo"
                 width={80}
                 height={80}
@@ -109,7 +109,7 @@ export default function Home() {
               />
               <h2 className="mt-4 text-3xl font-bold text-customPurple">SparkChat</h2>
               <p className="mt-2 text-lg text-purple-600">Chat, Connect, Spark!</p>
-              <p className="mt-4 text-gray-600 text-sm text-customPurple">
+              <p className="mt-4 text-gray-600 text-sm">
                 Ignite your conversations. Fast, simple, and seamless messaging that connects you instantly!
               </p>
             </div>
