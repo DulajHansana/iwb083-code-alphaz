@@ -53,15 +53,6 @@ jobs:
         with:
           static_site_generator: next
 
-      - name: Restore cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            Frontend/.next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('Frontend/package-lock.json') }}-${{ hashFiles('Frontend/**/*.[jt]s', 'Frontend/**/*.[jt]sx') }}
-          restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('Frontend/package-lock.json') }}-
-
       - name: Install dependencies
         working-directory: Frontend
         run: npm ${{ steps.detect-package-manager.outputs.command }}
