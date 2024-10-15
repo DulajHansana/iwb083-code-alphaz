@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Image from 'next/image';
 
 export default function ChatInterface() {
   const [messages, setMessages] = useState([
@@ -27,12 +28,12 @@ export default function ChatInterface() {
       {/* Header */}
       <div className="flex items-center justify-between p-4 bg-white shadow-sm relative">
         <div className="flex items-center space-x-2">
-          <img src="/images/avatar4.png" alt="Avatar" className="w-8 h-8 rounded-full" />
+          <Image src="/images/avatar4.png" alt="Avatar" className="w-8 h-8 rounded-full" width={32} height={32} />
           <h2 className="text-purple-700 font-bold">SparkChat 3</h2>
         </div>
         <div className="relative">
           <button onClick={toggleMenu} className="p-2">
-            <img src="/images/menu-icon.png" alt="Menu" className="w-5 h-5" />
+            <Image src="/images/menu-icon.png" alt="Menu" className="w-5 h-5" width={20} height={20} />
           </button>
 
           {/* Dropdown Menu */}
@@ -40,11 +41,11 @@ export default function ChatInterface() {
             <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg z-10">
               <ul className="py-2">
                 <li className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                  <img src="/images/archive.png" alt="Archive" className="w-4 h-4 mr-2" />
+                  <Image src="/images/archive.png" alt="Archive" className="w-4 h-4 mr-2" width={16} height={16} />
                   <span className="text-customPurple">Archive</span>
                 </li>
                 <li className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                  <img src="/images/delete.png" alt="Delete" className="w-4 h-4 mr-2" />
+                  <Image src="/images/delete.png" alt="Delete" className="w-4 h-4 mr-2" width={16} height={16} />
                   <span className="text-gray-700">Delete</span>
                 </li>
               </ul>
@@ -80,7 +81,7 @@ export default function ChatInterface() {
           onChange={(e) => setInput(e.target.value)}
         />
         <button className="ml-2 p-2 bg-purple-600 text-white rounded-full" onClick={handleSendMessage}>
-          <img src="/images/send.png" alt="Send" className="w-6 h-6" />
+          <Image src="/images/send.png" alt="Send" className="w-6 h-6" width={24} height={24} />
         </button>
       </div>
     </div>
