@@ -81,7 +81,7 @@ export async function handleServerLogin(credentials) {
 	if (response?.status === 202) {
 		return {
 			code: 202,
-			details: response.body,
+			user: response.body,
 		};
 	} else {
 		return {

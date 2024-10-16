@@ -7,40 +7,44 @@ export async function jwtProvider() {
 	return jwt.sign({}, jwtSecret);
 }
 
+async function serverFetches(url, headers, body, method = "GET") {
+	try {
+		const response = await fetch(url, {
+			method: method,
+			headers: {
+				"Content-Type": "application/json",
+				...headers,
+			},
+			body: JSON.stringify(body),
+		})
+
+		return response;
+
+	} catch (error) {
+		console.log(error);
+		return {
+			status: 500,
+			statusText: "Server is not responding. Try again later.",
+		};
+	}
+}
+
 export async function serverAuthorization() {
 	const token = await jwtProvider();
-	const response = await fetch(`${serviceServerUrl}/authorize`, {
-		method: "GET",
-		headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Bearer " + token
-		}
-	});
+	const response = await serverFetches(`${serviceServerUrl}/authorize`, { "Authorization": "Bearer " + token });
 
 	const serverResponse = {
 		code: response.status,
 		accepted: response.statusText === "Accepted",
-		aliveToken: response.headers.get("keep-alive-token") || null,
+		aliveToken: response.headers?.get("keep-alive-token") || null,
 	};
 
 	return serverResponse;
 }
 
 export async function serverLogin(credentials, aliveToken) {
-	const { fullname, password, email } = credentials;
-	const response = await fetch(`${serviceServerUrl}/auth/login`, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-			"keep-alive-token": aliveToken // server generated keep-alive-token should be provided with every request:nivindulakshitha
-		},
-		body: JSON.stringify({ // Credentials for signup request:nivindulakshitha
-			fullname: fullname,
-			email: email,
-			password: password,
-		})
-	})
-	
+	const response = await serverFetches(`${serviceServerUrl}/auth/logins`, { "keep-alive-token": aliveToken }, credentials, "POST");
+
 	let responseBody;
 	try {
 		if (response.headers.get("Content-Length") !== "0") {
