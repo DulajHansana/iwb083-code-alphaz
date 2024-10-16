@@ -29,7 +29,7 @@ async function serverFetches(url, headers, body, method = "GET") {
 	}
 }
 
-async function serverAuthorization() {
+export async function serverAuthorization() {
 	const token = await jwtProvider();
 	const response = await serverFetches(`${serviceServerUrl}/authorize`, { "Authorization": "Bearer " + token });
 
@@ -42,7 +42,7 @@ async function serverAuthorization() {
 	return serverResponse;
 }
 
-async function serverLogin(credentials, aliveToken) {
+export async function serverLogin(credentials, aliveToken) {
 	const response = await serverFetches(`${serviceServerUrl}/auth/login`, { "keep-alive-token": aliveToken }, credentials, "POST");
 
 	let responseBody;
@@ -62,11 +62,6 @@ async function serverLogin(credentials, aliveToken) {
 		message: response.statusText,
 		body: responseBody
 	};
-}
-
-export default {
-	serverAuthorization,
-	serverLogin
 }
 
 /* 
