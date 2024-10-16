@@ -1,22 +1,25 @@
 "use client";
 import { serverAuthorization, serverLogin, serverSignup } from "./actions";
-export var socket = new WebSocket(null);
 
-export class WebSocketTrigger {
+export class WebSocketClient {
+	constructor() {
+		this.socket = new WebSocket("ws://localhost:21003/ws");
+	}
+	
 	onOpen(callback) {
-		socket.addEventListener("open", (event) => {
+		this.socket.addEventListener("open", (event) => {
 			callback(event);
 		});
 	}
 	
 	onMessage(callback) {
-		socket.addEventListener("message", (event) => {
+		this.socket.addEventListener("message", (event) => {
 			callback(event.data);
 		});
 	}
 
 	onError(callback) {
-		socket.addEventListener("error", (event) => {
+		this.socket.addEventListener("error", (event) => {
 			callback(event);
 		});
 	}
@@ -36,6 +39,7 @@ export async function handleServerLogin(credentials) {
 	const response = await serverLogin(credentials, serverAuth?.aliveToken || "");
 
 	if (response?.status === 202) {
+		serverLoginDetails = response.body;
 		return {
 			code: 202,
 			user: response.body,
