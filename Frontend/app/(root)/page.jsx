@@ -5,7 +5,7 @@ import Image from 'next/image';
 export default function Home() {
 	const router = useRouter();
 
-	const handleNavigate = () => {
+	const handleNavigate = async () => {
 		router.push('/sign-in');
 	};
 
