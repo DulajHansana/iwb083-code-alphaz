@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 const serviceServerUrl = process.env.SERVICE_SERVER_URL;
 const jwtSecret = process.env.JWT_SECRET;
 
-export async function jwtProvider() {
+async function jwtProvider() {
 	return jwt.sign({}, jwtSecret);
 }
 
@@ -43,7 +43,7 @@ export async function serverAuthorization() {
 }
 
 export async function serverLogin(credentials, aliveToken) {
-	const response = await serverFetches(`${serviceServerUrl}/auth/logins`, { "keep-alive-token": aliveToken }, credentials, "POST");
+	const response = await serverFetches(`${serviceServerUrl}/auth/login`, { "keep-alive-token": aliveToken }, credentials, "POST");
 
 	let responseBody;
 	try {

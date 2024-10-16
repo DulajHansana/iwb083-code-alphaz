@@ -76,7 +76,7 @@ export async function handleServerAuthorization() {
 
 export async function handleServerLogin(credentials) {
 	serverAuth === undefined ? await handleServerAuthorization() : null;
-	const response = await serverLogin(credentials, serverAuth?.aliveToken || "fghj");
+	const response = await serverLogin(credentials, serverAuth?.aliveToken || "");
 
 	if (response?.status === 202) {
 		return {
