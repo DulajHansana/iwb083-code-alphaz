@@ -8,6 +8,7 @@ export default function Home() {
 
 	handleServerLogin({ fullname: "Admin", email: "admin@localhost", password: "admin" }).then(res => {
 		console.log(res)
+		alert(res)
 	});
 	const handleSignup = () => {
 		router.push('/sign-up');
