@@ -1,20 +1,10 @@
 "use client";
-import { handleServerLogin } from '@/server';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { WebSocketClient } from '@/server';
 
 export default function Home() {
 	const router = useRouter();
 
-	var client = new WebSocketClient();
-	client.onOpen(() => {
-		console.log("Client connected.")
-	})
-
-	handleServerLogin({ fullname: "Admin", email: "admin@localhost", password: "admin" }).then(res => {
-		console.log(res)
-	});
 	const handleSignup = () => {
 		router.push('/sign-up');
 	};

@@ -1,9 +1,24 @@
 "use client";
 import { serverAuthorization, serverLogin, serverSignup } from "./actions";
+var serverAuth = undefined;
+var serverLoginDetails = undefined;
 
 export class WebSocketClient {
 	constructor() {
 		this.socket = new WebSocket("ws://localhost:21003/ws");
+	}
+
+	getStatus() {
+		return this.socket.CONNECTING;
+	}
+
+	sendMessage(message) {
+		const data = {
+			message: message,
+			txDetails: serverLoginDetails ? serverLoginDetails : null
+		}
+		
+		console.log(this.socket.send(JSON.stringify(data)))
 	}
 	
 	onOpen(callback) {
@@ -14,7 +29,7 @@ export class WebSocketClient {
 	
 	onMessage(callback) {
 		this.socket.addEventListener("message", (event) => {
-			callback(event.data);
+			console.log(event.data)
 		});
 	}
 
@@ -24,9 +39,6 @@ export class WebSocketClient {
 		});
 	}
 }
-
-var serverAuth = undefined;
-var serverLoginDetails = undefined;
 
 export async function handleServerAuthorization() {
 	serverAuth = await serverAuthorization();
