@@ -63,3 +63,7 @@ export class WebSocketTrigger {
 		});
 	}
 }
+
+export default async function authFirst() {
+	return await jwtProvider()
+}

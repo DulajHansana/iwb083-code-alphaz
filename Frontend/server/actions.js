@@ -3,11 +3,11 @@ import jwt from "jsonwebtoken";
 const serviceServerUrl = process.env.SERVICE_SERVER_URL;
 const jwtSecret = process.env.JWT_SECRET;
 
-async function jwtProvider() {
+export async function jwtProvider() {
 	return jwt.sign({}, jwtSecret);
 }
 
-const serverAuthorization = async () => {
+export async function serverAuthorization () {
 	const token = await jwtProvider();
 	const response = await fetch(`${serviceServerUrl}/authorize`, {
 		method: "GET",
