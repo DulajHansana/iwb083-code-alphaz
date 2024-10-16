@@ -1,5 +1,5 @@
 "use client";
-import { handleServerLogin } from '@/server';
+import { handleServerLogin, fetchServerAuth } from '@/server';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
