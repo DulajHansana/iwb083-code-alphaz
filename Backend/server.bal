@@ -114,9 +114,13 @@ service / on new http:Listener(8080) {
 isolated function isConnectionAlive(http:Request req) returns boolean {
     string|http:HeaderNotFoundError authHeader = req.getHeader("keep-alive-token");
     lock {
-
-        if authHeader is string && Types:RequestRecord.count(requestsTable.get(authHeader)) > 0 {
-            return true;
+        if authHeader is string && authHeader != "" {
+            Types:RequestRecord|error request = trap requestsTable.get(authHeader);
+            if request is Types:RequestRecord {
+                return true;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
