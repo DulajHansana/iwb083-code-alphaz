@@ -7,7 +7,7 @@ export async function jwtProvider() {
 	return jwt.sign({}, jwtSecret);
 }
 
-export async function serverAuthorization () {
+export async function serverAuthorization() {
 	const token = await jwtProvider();
 	const response = await fetch(`${serviceServerUrl}/authorize`, {
 		method: "GET",
@@ -17,19 +17,51 @@ export async function serverAuthorization () {
 		}
 	});
 
-	return {
-		serverAthorization: {
-			code: response.status,
-			accepted: response.statusText === "Accepted",
-			aliveToken: response.headers.get("keep-alive-token") || null
+	const serverResponse = {
+		code: response.status,
+		accepted: response.statusText === "Accepted",
+		aliveToken: response.headers.get("keep-alive-token") || null,
+	};
+
+	return serverResponse;
+}
+
+export async function serverLogin(credentials, aliveToken) {
+	const { fullname, password, email } = credentials;
+	const response = await fetch(`${serviceServerUrl}/auth/login`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			"keep-alive-token": aliveToken // server generated keep-alive-token should be provided with every request:nivindulakshitha
 		},
-		serverResponse: response
+		body: JSON.stringify({ // Credentials for signup request:nivindulakshitha
+			fullname: fullname,
+			email: email,
+			password: password,
+		})
+	})
+	
+	let responseBody;
+	try {
+		if (response.headers.get("Content-Length") !== "0") {
+			responseBody = await response.json();
+		} else {
+			responseBody = null;
+		}
+	} catch (error) {
+		responseBody = null;
+	}
+
+	return {
+		ok: response.ok,
+		status: response.status,
+		message: response.statusText,
+		body: responseBody
 	};
 }
 
 /* 
 // User should authorized by the server with the token before accessing further server actions:nivindulakshitha
-const serverAuth = await serverAuthorization();
 
 if (serverAuth.serverAthorization.accepted) {
 	fetch(`${serviceServerUrl}/auth/signup`, {
