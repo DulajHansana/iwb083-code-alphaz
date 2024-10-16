@@ -48,7 +48,7 @@ service / on new http:Listener(8080) {
                 response.setHeader("keep-alive-token", keepAliveToken);
                 response.statusCode = 202;
 
-                LW:loggerWrite("info", "Authorization successful: " + authHeader);
+                LW:loggerWrite("info", "Authorization successful");
                 return response;
 
             } else {
