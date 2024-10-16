@@ -1,11 +1,14 @@
 "use client";
+import { handleServerLogin } from '@/server';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
 	const router = useRouter();
 
-
+	handleServerLogin({ fullname: "Admin", email: "admin@localhost", password: "admin" }).then(res => {
+		console.log(res)
+	});
 	const handleSignup = () => {
 		router.push('/sign-up');
 	};

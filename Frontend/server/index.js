@@ -1,4 +1,5 @@
-import { jwtProvider } from "./actions";
+"use client";
+import { serverAuthorization, serverLogin } from "./actions";
 export var socket = new WebSocket(null);
 
 export class WebSocketTrigger {
@@ -62,4 +63,30 @@ export class WebSocketTrigger {
 			callback(event);
 		});
 	}
+}
+
+var serverAuth = undefined;
+var serverLoginDetails = undefined;
+
+export async function handleServerAuthorization() {
+	serverAuth = await serverAuthorization();
+	return serverAuth.accepted;
+}
+
+
+export async function handleServerLogin(credentials) {
+	serverAuth === undefined ? await handleServerAuthorization() : null;
+	const response = await serverLogin(credentials, serverAuth?.aliveToken || "fghj");
+
+	if (response?.status === 202) {
+		return {
+			code: 202,
+			user: response.body,
+		};
+	} else {
+		return {
+			code: response?.status || 500,
+			message: response?.message || "Internal Server Error",
+		}
+	}	
 }

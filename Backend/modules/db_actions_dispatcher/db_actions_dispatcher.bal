@@ -31,6 +31,7 @@ public isolated function loginUser(json requestBody) returns http:Response {
         if loginResult is Types:User {
             response.statusCode = 202;
             response.reasonPhrase = "Successful login.";
+            response.setJsonPayload(loginResult.toJson());
             return response;
         } else {
             response.statusCode = 401;
