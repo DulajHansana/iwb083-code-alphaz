@@ -18,6 +18,12 @@ public type User record {
     string|() jwtoken = ();
 };
 
+public type Message record {|
+    string rxId;
+    string message;
+    string timestamp = getThisTime();
+|};
+
 isolated function getRandomId(int length) returns string {
     string fulltext = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     string randomId = "";
@@ -28,4 +34,9 @@ isolated function getRandomId(int length) returns string {
     }
 
     return randomId;
+}
+
+isolated function getThisTime() returns string {
+    time:Utc now = time:utcNow();
+    return now.toString();
 }

@@ -90,3 +90,16 @@ public isolated function signUpUser(json requestBody) returns http:Response {
         return response;
     }
 }
+
+public isolated function sendMessage(string txEmail, Types:Message message) returns boolean {
+    do {
+        boolean insertResult = DB:insert("messages", txEmail, message);
+
+        return insertResult;
+
+    } on fail var e {
+        LW:loggerWrite("error", "DAD: sendMessage " + e.message());
+        return false;
+    }
+
+}
