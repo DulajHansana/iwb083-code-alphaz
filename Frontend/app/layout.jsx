@@ -1,6 +1,5 @@
 import "./globals.css";
 import { Lato } from 'next/font/google'
-import { socket } from "../server";
 
 const lato = Lato({ subsets: ['latin'], weight: ['100', '300', '400', '700'] })
 
