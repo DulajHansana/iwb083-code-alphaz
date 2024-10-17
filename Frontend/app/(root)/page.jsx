@@ -8,7 +8,7 @@ export default function Home() {
 	handleServerAuthorization();
 
 	const handleNavigate = async () => {
-		handleServerSignup({ fullname: "Nivindu Lakshitha", email: "iamuser4@localhost", password: "admin" }).then(res => {
+		handleServerSignup({ fullname: "Nivindu Lakshitha", email: "iamuser6@localhost", password: "admin" }).then(res => {
 			console.log(res) // see the response for more details
 		});
 		//router.push('/sign-in');

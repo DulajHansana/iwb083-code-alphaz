@@ -1,7 +1,6 @@
 import ballerina/http;
 import ballerina/random;
 import ballerina/time;
-import Backend.logger_writter;
 
 public type RequestRecord record {
     readonly string connection_id;
@@ -104,7 +103,6 @@ public isolated function getProfilePicture(string username, int gender = 1) retu
     http:Client|http:ClientError apiFetch = new ("https://avatar.iran.liara.run/");
     if apiFetch is http:Client {
         string url = string `username?username=${username.toString()}`;
-        logger_writter:loggerWrite("info", "https://avatar.iran.liara.run/" + url);
         string|http:ClientError data = apiFetch->get(url);
         if data is string {
             return "https://avatar.iran.liara.run" + url;
