@@ -13,44 +13,39 @@ import ballerina/websocket;
 public isolated service class WsService {
     *websocket:Service;
 
-    remote isolated function onOpen(websocket:Caller caller) returns websocket:Error|error? {
-        any|error storedEmail = caller.getAttribute("email");
-        if storedEmail is string {
-            LW:loggerWrite("info", "Email stored: " + storedEmail);
-        } else {
-            LW:loggerWrite("error", "10 Invalid message received: " + (typeof storedEmail).toString());
-            return;
-        }
-
-        final string email = check value:ensureType(storedEmail, string);
+    isolated function streamWorker(websocket:Caller caller, string email) returns websocket:Error|error? {
         worker messagesStreamer returns error? {
             check self.streamMessagesFromDB(caller, email);
         }
-
     }
 
-    isolated function streamMessagesFromDB(websocket:Caller caller, json data) returns error? {
-        json|error txDetails = data.toJson();
+    isolated function streamMessagesFromDB(websocket:Caller caller, string email) returns error? {
+        int totalMessages = DAD:totalMessages(email);
+        final Types:SystemMessage systemMessage = {
+            code: 703,
+            message: "Total messages: " + totalMessages.toString(),
+            value: totalMessages
+        };
 
-        if txDetails is error {
-            LW:loggerWrite("error", "4 Invalid message received: " + txDetails.message());
-            return;
+        LW:loggerWrite("info", "Total messages: " + totalMessages.toString());
+
+        check caller->writeTextMessage(systemMessage.toString());
+
+        Types:Message[]? messages = DAD:retrieveMessages(email);
+
+        if messages is null {
+            LW:loggerWrite("info", "No any message found for this mail: " + email);
         } else {
-            string|error email = value:ensureType(txDetails.email, string);
-
-            if email is string {
-                int totalMessages = DAD:totalMessages(email);
-                final Types:SystemMessage systemMessage = {
-                    code: 703,
-                    message: "Total messages: " + totalMessages.toString(),
-                    value: totalMessages
+            foreach Types:Message message in messages {
+                Types:SystemMessage newMessage = {
+                    code: 704,
+                    message: "New pre-loading message",
+                    value: message
                 };
-
-                check caller->writeMessage(<anydata>systemMessage);
-            } else {
-                LW:loggerWrite("error", "3 Invalid message received: " + (typeof email).toString());
+                check caller->writeTextMessage(newMessage.toString());
             }
         }
+
     }
 
     remote isolated function onMessage(websocket:Caller caller, json data) returns error? {
@@ -83,6 +78,7 @@ public isolated service class WsService {
                 caller.setAttribute("email", messageData.email);
                 any|error storedEmail = caller.getAttribute("email");
                 if storedEmail is string {
+                    check self.streamWorker(caller, storedEmail);
                     LW:loggerWrite("info", "Email stored: " + storedEmail);
                 } else {
                     LW:loggerWrite("error", "10 Invalid message received: " + (typeof storedEmail).toString());

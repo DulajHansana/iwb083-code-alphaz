@@ -101,7 +101,7 @@ public isolated function findOne(string databaseName, string collectionName, jso
 }
 
 isolated Types:User[] documents = [];
-public isolated function find(string databaseName, string collectionName, json query) returns ()|Types:User[] {
+public isolated function findUsers(string databaseName, string collectionName, json query) returns ()|Types:User[] {
     mongodb:Collection|error collectionResult = collectionAccessor(databaseName, collectionName);
     if collectionResult is error {
         LW:loggerWrite("error", "Collection not found: " + collectionResult.message() + ".");
@@ -132,6 +132,42 @@ public isolated function find(string databaseName, string collectionName, json q
         lock {
 	        LW:loggerWrite("info", "Document retrieved successfully. " + documents.toJsonString());
             return documents.clone();
+        }
+    }
+}
+
+isolated Types:Message[] messagesDocuments = [];
+public isolated function findMessages(string databaseName, string collectionName, json query) returns ()|Types:Message[] {
+    mongodb:Collection|error collectionResult = collectionAccessor(databaseName, collectionName);
+    if collectionResult is error {
+        LW:loggerWrite("error", "Collection not found: " + collectionResult.message() + ".");
+        return ();
+    }
+
+    mongodb:Collection collection = collectionResult;
+
+    stream<Types:Message, error?>|error findStream = collection->find(<map<json>>query, targetType = Types:Message);
+    if findStream is error {
+        LW:loggerWrite("error", "Document retrieval failed: " + findStream.message());
+        return [];
+    }
+
+    lock {
+	    messagesDocuments = [];
+    }
+    error? e = findStream.forEach(isolated function(Types:Message document) {
+        lock {
+            messagesDocuments.push(document.clone());
+        }
+    });
+
+    if e is error {
+        LW:loggerWrite("error", "Error occurred while processing the stream: " + e.message());
+        return [];
+    } else {
+        lock {
+	        LW:loggerWrite("info", "Document retrieved successfully. " + messagesDocuments.toJsonString());
+            return messagesDocuments.clone();
         }
     }
 }
