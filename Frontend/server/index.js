@@ -15,7 +15,7 @@ export class WebSocketClient {
 	sendMessage(message) {
 		const data = {
 			message: message,
-			txDetails: serverLoginDetails ? serverLoginDetails : null
+			...serverLoginDetails
 		}
 		
 		console.log(this.socket.send(JSON.stringify(data)))
