@@ -110,3 +110,7 @@ public isolated function sendMessage(string txEmail, Types:Message message) retu
     }
 
 }
+
+public isolated function totalMessages(string txEmail) returns int {
+    return DB:count("messages", txEmail, {});
+}

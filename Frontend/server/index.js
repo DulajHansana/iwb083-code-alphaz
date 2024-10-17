@@ -18,6 +18,7 @@ export class WebSocketClient {
 
 	sendMessage(message) {
 		const data = {
+			messageType: "usermessage",
 			messageId: Date.now(),
 			message: message,
 			...serverLoginDetails
@@ -27,9 +28,12 @@ export class WebSocketClient {
 	}
 	
 	onOpen(callback) {
-		this.socket.addEventListener("open", (event) => {
-			callback(event);
-		});
+		const data = {
+			messageType: "#email",
+			...serverLoginDetails
+		}
+
+		this.socket.send(JSON.stringify(JSON.parse(JSON.stringify(data))));
 	}
 	
 	onMessage(callback) {
