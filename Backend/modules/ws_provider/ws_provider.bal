@@ -1,7 +1,8 @@
 //import Backend.db_actions_dispatcher as DB;
+
+import Backend.db_actions_dispatcher as DAD;
 import Backend.logger_writter as LW;
 import Backend.types as Types;
-import Backend.db_actions_dispatcher as DAD;
 
 import ballerina/lang.value;
 import ballerina/websocket;
@@ -25,12 +26,8 @@ public isolated service class WsService {
             string|error message = value:ensureType(messageData.message, string);
 
             if messageId is int {
-                Types:MessageState MessageState = {
-                    messageId: messageId,
-                    state: 601
-                };
-
-                check caller->writeMessage(MessageState.toJsonString());
+                final Types:MessageState & readonly MessageState = <Types:MessageState & readonly>self.MessageState(messageId, 601);
+                check caller->writeMessage(MessageState);
             }
 
             if messageId is int && collectionName is string && rxId is string && message is string {
@@ -51,6 +48,7 @@ public isolated service class WsService {
                 //check caller->writeMessage(messageData.toJsonString());
             } else {
                 if messageId is int {
+                    LW:loggerWrite("error", "Invalid message received: " + (typeof collectionName).toString() + " " + (typeof rxId).toString() + " " + (typeof message).toString());
                     check caller->writeMessage(self.MessageState(messageId, 601));
                 }
             }
@@ -61,11 +59,38 @@ public isolated service class WsService {
         }
     }
 
-    public isolated function MessageState(int messageId, 601|602|603|604|605 state) returns Types:MessageState {
-        Types:MessageState MessageStatee = {
-            messageId: messageId,
-            state: state
-        };
-        return MessageStatee;
-    }
+    public isolated function MessageState(int messageId, 601|602|603|604|605 state, string? stateDescription = null) returns Types:MessageState {
+        do {
+            string|error stateText = <string>Types:getStateCode(state.toString());
+
+            if stateText is string {
+                Types:MessageState MessageState = {
+                    messageId: messageId,
+                    state: state,
+                    stateText: <"recieved"|"sent"|"seen"|"deleted"|"failed"|"unknown">stateText,
+                    stateDescription: stateDescription
+                };
+                return MessageState;
+
+            } else {
+                Types:MessageState MessageState = {
+                    messageId: messageId,
+                    state: state,
+                    stateText: "unknown",
+                    stateDescription: stateDescription
+                };
+                return MessageState;
+
+            }
+        } on fail var e {
+            Types:MessageState MessageState = {
+                messageId: messageId,
+                state: state,
+                stateText: "unknown",
+                stateDescription: e.toString()
+            };
+            return MessageState;
+        }
+
+    };
 };
