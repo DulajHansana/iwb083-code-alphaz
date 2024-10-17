@@ -42,14 +42,14 @@ public isolated service class WsService {
                 if sendMessage {
                     check caller->writeMessage(self.MessageState(messageId, 602));
                 } else {
-                    check caller->writeMessage(self.MessageState(messageId, 605));
+                    check caller->writeMessage(self.MessageState(messageId, 607));
                 }
 
                 //check caller->writeMessage(messageData.toJsonString());
             } else {
                 if messageId is int {
                     LW:loggerWrite("error", "Invalid message received: " + (typeof collectionName).toString() + " " + (typeof rxId).toString() + " " + (typeof message).toString());
-                    check caller->writeMessage(self.MessageState(messageId, 605));
+                    check caller->writeMessage(self.MessageState(messageId, 607));
                 }
             }
 
@@ -59,7 +59,7 @@ public isolated service class WsService {
         }
     }
 
-    public isolated function MessageState(int messageId, 601|602|603|604|605 state, string? stateDescription = null) returns Types:MessageState {
+    public isolated function MessageState(int messageId, 601|602|603|604|605|606|607 state, string? stateDescription = null) returns Types:MessageState {
         do {
             string|error stateText = <string>Types:getStateCode(state.toString());
 
@@ -67,7 +67,7 @@ public isolated service class WsService {
                 Types:MessageState MessageState = {
                     messageId: messageId,
                     state: state,
-                    stateText: <"recieved"|"sent"|"seen"|"deleted"|"failed"|"unknown">stateText,
+                    stateText: <"recieved"|"stored"|"sent"|"delivered"|"seen"|"deleted"|"failed"|"unknown">stateText,
                     stateDescription: stateDescription
                 };
                 return MessageState;

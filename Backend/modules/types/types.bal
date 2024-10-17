@@ -28,18 +28,20 @@ public type Message record {|
 public isolated function getStateCode(string state) returns string {
     match string:toLowerAscii(state) {
         "601" => {return "recieved";}
-        "602" => {return "sent";}
-        "603" => {return "seen";}
-        "604" => {return "deleted";}
-        "605" => {return "failed";}
+        "602" => {return "stored";}
+        "603" => {return "sent";}
+        "604" => {return "delivered";}
+        "605" => {return "seen";}
+        "606" => {return "deleted";}
+        "607" => {return "failed";}
         _ => {return "unknown";}
     }
 };
 
 public type MessageState record {|
     int messageId;
-    601|602|603|604|605 state; // 601 = received, 602 = sent, 603 = seen, 604 = deleted, 605 = failed
-    "recieved"|"sent"|"seen"|"deleted"|"failed"|"unknown" stateText;
+    601|602|603|604|605|606|607 state; // 601 = received, 602 = stored, 603 = sent, 604 = delivered, 605 = seen, 606 = deleted, 607 = failed 
+    "recieved"|"stored"|"sent"|"delivered"|"seen"|"deleted"|"failed"|"unknown" stateText;
     string|null stateDescription;
 |};
 
