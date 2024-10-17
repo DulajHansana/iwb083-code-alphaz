@@ -10,6 +10,9 @@ COPY /Backend /app/
 RUN ls -la /app/  # List files in the /app directory
 RUN bal version  # Check the Ballerina version
 
+# Change permissions to ensure write access
+RUN chmod -R 777 /app
+
 # Build the Ballerina project (this will generate the .jar or binary)
 RUN bal build
 
