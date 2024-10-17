@@ -11,7 +11,7 @@ RUN ls -la /app/  # List files in the /app directory
 RUN bal version  # Check the Ballerina version
 
 # Build the Ballerina project (this will generate the .jar or binary)
-RUN bal build server.bal
+RUN bal build
 
 # Expose the port your Ballerina HTTP server will listen on
 EXPOSE 8080
