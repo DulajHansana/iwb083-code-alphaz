@@ -18,7 +18,7 @@ export class WebSocketClient {
 			...serverLoginDetails
 		}
 		
-		console.log(this.socket.send(JSON.stringify(data)))
+		this.socket.send(JSON.stringify(JSON.parse(JSON.stringify(data))));
 	}
 	
 	onOpen(callback) {
