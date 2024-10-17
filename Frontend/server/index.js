@@ -6,6 +6,11 @@ var serverLoginDetails = undefined;
 export class WebSocketClient {
 	constructor() {
 		this.socket = new WebSocket("ws://localhost:21003/ws");
+		this.socket.addEventListener("message", (event) => {
+			const response = JSON.parse(event.data)
+			const sendDatetime = new Date(response.messageId);
+			console.log("You sent this message on:", sendDatetime);
+		});
 	}
 
 	getStatus() {
@@ -14,6 +19,7 @@ export class WebSocketClient {
 
 	sendMessage(message) {
 		const data = {
+			messageId: Date.now(),
 			message: message,
 			...serverLoginDetails
 		}
