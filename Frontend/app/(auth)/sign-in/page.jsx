@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 
 export default function Home() {
 	const router = useRouter();
-
+  
 	const handleSignup = () => {
 		router.push('/sign-up');
 	};
@@ -12,7 +12,6 @@ export default function Home() {
 	const handleLogin = () => {
 		router.push('/chat');
 	};
-
 
 	const handleDemoLogin = () => {
 		router.push('/profile');
