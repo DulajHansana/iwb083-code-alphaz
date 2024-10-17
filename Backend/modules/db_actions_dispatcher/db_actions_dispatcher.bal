@@ -75,7 +75,8 @@ public isolated function signUpUser(json requestBody) returns http:Response {
         Types:User insertQuery = {
             "fullname": check requestBody.fullname,
             "email": email,
-            "password": check requestBody.password
+            "password": check requestBody.password,
+            "avatar": Types:getProfilePicture(check requestBody.fullname)
         };
 
         signUpResult = DB:insert("users", check requestBody.email, insertQuery);

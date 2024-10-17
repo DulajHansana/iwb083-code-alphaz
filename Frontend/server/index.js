@@ -16,7 +16,24 @@ export class WebSocketClient {
 		};
 		this.socket.send(JSON.stringify(data));
 		this.preMessagesSyncCallback = callback;
+	}
 
+	sendMessage(message) {
+		/* const data = {
+			messageType: "usermessage",
+			messageId: Date.now(),
+			message: message,
+			...serverLoginDetails
+		}
+		
+		this.socket.send(JSON.stringify(JSON.parse(JSON.stringify(data)))); */
+	}
+
+	onOpen(callback) {
+
+	}
+
+	onMessage(callback) {
 		this.socket.addEventListener("message", (event) => {
 			const response = JSON.parse(event.data);
 
@@ -50,27 +67,6 @@ export class WebSocketClient {
 					}, 1000);
 				}
 			}
-		});
-	}
-
-	sendMessage(message) {
-		/* const data = {
-			messageType: "usermessage",
-			messageId: Date.now(),
-			message: message,
-			...serverLoginDetails
-		}
-		
-		this.socket.send(JSON.stringify(JSON.parse(JSON.stringify(data)))); */
-	}
-
-	onOpen(callback) {
-
-	}
-
-	onMessage(callback) {
-		this.socket.addEventListener("message", (event) => {
-			console.log(event.data)
 		});
 	}
 
