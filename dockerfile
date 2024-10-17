@@ -1,17 +1,11 @@
-# Use the Ballerina base image to start with
+# Use the Ballerina base image
 FROM ballerina/ballerina:latest
 
 # Set the working directory inside the container
 WORKDIR /app
 
 # Copy your Ballerina project files from your repository to the container
-COPY /Backend /app/
-
-RUN ls -la /app/  # List files in the /app directory
-RUN bal version  # Check the Ballerina version
-
-# Change permissions to ensure write access
-RUN chmod -R 777 /app
+COPY . .
 
 # Build the Ballerina project (this will generate the .jar or binary)
 RUN bal build
