@@ -25,17 +25,16 @@ public type Message record {|
     string timestamp = getThisTime();
 |};
 
-public final map<json> & readonly stateCodes = {
-    "601": "recieved",
-    "602": "sent",
-    "603": "seen",
-    "604": "deleted",
-    "605": "failed"
-};
-
 public isolated function getStateCode(string state) returns string {
-    return <string>stateCodes[state];
-}
+    match string:toLowerAscii(state) {
+        "601" => {return "recieved";}
+        "602" => {return "sent";}
+        "603" => {return "seen";}
+        "604" => {return "deleted";}
+        "605" => {return "failed";}
+        _ => {return "unknown";}
+    }
+};
 
 public type MessageState record {|
     int messageId;

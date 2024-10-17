@@ -26,7 +26,7 @@ public isolated service class WsService {
             string|error message = value:ensureType(messageData.message, string);
 
             if messageId is int {
-                final Types:MessageState & readonly MessageState = <Types:MessageState & readonly>self.MessageState(messageId, 601);
+                final Types:MessageState MessageState = <Types:MessageState>self.MessageState(messageId, 601);
                 check caller->writeMessage(MessageState);
             }
 
