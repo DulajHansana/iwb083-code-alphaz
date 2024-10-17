@@ -1,12 +1,11 @@
-import Backend.database as DB;
-import Backend.jsonwebtoken as JWT;
-import Backend.logger_writter as LW;
 import Backend.types as Types;
 import Backend.ws_provider as WSP;
+import Backend.jsonwebtoken as JWT;
+import Backend.logger_writter as LW;
+import Backend.database as DB;
 import Backend.db_actions_dispatcher as DAD;
 
 import ballerina/http;
-import ballerina/io;
 import ballerina/jwt;
 import ballerina/uuid;
 import ballerina/websocket;
@@ -135,7 +134,7 @@ service /ws on new websocket:Listener(21003) {
             req.getHeader("Connection") == "Upgrade" {
 
             LW:loggerWrite("info", "Valid WebSocket handshake request received.");
-            io:println(req.getHeader("Sec-WebSocket-Key"), req.getHeader("Sec-WebSocket-Version"));
+            //io:println(req.getHeader("Sec-WebSocket-Key"), req.getHeader("Sec-WebSocket-Version"));
 
             return new WSP:WsService();
         } else {

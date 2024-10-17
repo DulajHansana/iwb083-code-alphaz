@@ -18,6 +18,33 @@ public type User record {
     string|() jwtoken = ();
 };
 
+public type Message record {|
+    int id;
+    string rxId;
+    string message;
+    string|int timestamp = getThisTime();
+|};
+
+public isolated function getStateCode(string state) returns string {
+    match string:toLowerAscii(state) {
+        "601" => {return "recieved";}
+        "602" => {return "stored";}
+        "603" => {return "sent";}
+        "604" => {return "delivered";}
+        "605" => {return "seen";}
+        "606" => {return "deleted";}
+        "607" => {return "failed";}
+        _ => {return "unknown";}
+    }
+};
+
+public type MessageState record {|
+    int messageId;
+    601|602|603|604|605|606|607 state; // 601 = received, 602 = stored, 603 = sent, 604 = delivered, 605 = seen, 606 = deleted, 607 = failed 
+    "recieved"|"stored"|"sent"|"delivered"|"seen"|"deleted"|"failed"|"unknown" stateText;
+    string|null stateDescription;
+|};
+
 isolated function getRandomId(int length) returns string {
     string fulltext = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     string randomId = "";
@@ -28,4 +55,10 @@ isolated function getRandomId(int length) returns string {
     }
 
     return randomId;
+}
+
+isolated function getThisTime() returns string|int {
+    time:Utc now = time:utcNow();
+    int timestamp = now[0] + <int>now[1];
+    return timestamp;
 }
