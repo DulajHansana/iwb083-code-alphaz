@@ -75,14 +75,22 @@ public isolated function signUpUser(json requestBody) returns http:Response {
         Types:User insertQuery = {
             "fullname": check requestBody.fullname,
             "email": email,
-            "password": check requestBody.password
+            "password": check requestBody.password,
+            "avatar": Types:getProfilePicture(check requestBody.fullname)
         };
 
         signUpResult = DB:insert("users", check requestBody.email, insertQuery);
 
-        if signUpResult is boolean {
+        if signUpResult is boolean && signUpResult {
             response.statusCode = 202;
             response.reasonPhrase = "Successful sign up.";
+            http:Response loginResponse = loginUser(requestBody);
+            if loginResponse.statusCode == 202 {
+                json|http:ClientError loginPayload = loginResponse.getJsonPayload();
+                if loginPayload is json {
+                    response.setJsonPayload(loginPayload.toJson());
+                }
+            }
             return response;
         } else {
             response.statusCode = 400;

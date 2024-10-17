@@ -1,9 +1,9 @@
-import Backend.types as Types;
-import Backend.ws_provider as WSP;
-import Backend.jsonwebtoken as JWT;
-import Backend.logger_writter as LW;
 import Backend.database as DB;
 import Backend.db_actions_dispatcher as DAD;
+import Backend.jsonwebtoken as JWT;
+import Backend.logger_writter as LW;
+import Backend.types as Types;
+import Backend.ws_provider as WSP;
 
 import ballerina/http;
 import ballerina/jwt;
@@ -106,7 +106,7 @@ service / on new http:Listener(8080) {
             response.reasonPhrase = "Connection is not alive. Retry refreshing the page.";
             return response;
         }
-        
+
     }
 };
 
