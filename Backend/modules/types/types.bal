@@ -22,7 +22,7 @@ public type Message record {|
     int id;
     string rxId;
     string message;
-    string timestamp = getThisTime();
+    string|int timestamp = getThisTime();
 |};
 
 public isolated function getStateCode(string state) returns string {
@@ -55,7 +55,8 @@ isolated function getRandomId(int length) returns string {
     return randomId;
 }
 
-isolated function getThisTime() returns string {
+isolated function getThisTime() returns string|int {
     time:Utc now = time:utcNow();
-    return now.toString();
+    int timestamp = now[0] + <int>now[1];
+    return timestamp;
 }

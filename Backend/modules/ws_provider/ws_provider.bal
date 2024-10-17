@@ -22,7 +22,7 @@ public isolated service class WsService {
         } else {
             int|error messageId = value:ensureType(messageData.messageId, int);
             string|error collectionName = value:ensureType(messageData.email, string); // User email is the collection name
-            string|error rxId = value:ensureType(messageData.rxId, string); // Should be changed later
+            string|error rxId = value:ensureType(messageData.id, string); // Should be changed later
             string|error message = value:ensureType(messageData.message, string);
 
             if messageId is int {
@@ -49,7 +49,7 @@ public isolated service class WsService {
             } else {
                 if messageId is int {
                     LW:loggerWrite("error", "Invalid message received: " + (typeof collectionName).toString() + " " + (typeof rxId).toString() + " " + (typeof message).toString());
-                    check caller->writeMessage(self.MessageState(messageId, 601));
+                    check caller->writeMessage(self.MessageState(messageId, 605));
                 }
             }
 

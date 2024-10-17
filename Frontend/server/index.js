@@ -8,8 +8,7 @@ export class WebSocketClient {
 		this.socket = new WebSocket("ws://localhost:21003/ws");
 		this.socket.addEventListener("message", (event) => {
 			const response = JSON.parse(event.data)
-			const sendDatetime = new Date(response.messageId);
-			console.log("You sent this message on:", sendDatetime);
+			console.log("We recieved: ", response);
 		});
 	}
 
