@@ -6,10 +6,6 @@ import { useRouter } from 'next/navigation';
 export default function Signup() {
 	const router = useRouter();
 
-	handleServerSignup({ fullname: "Admin", email: "admin@localhost", password: "admin" }).then(res => {
-		console.log(res)
-	});
-
 	const handleLogin = () => {
 		router.push('/sign-in');
 	};

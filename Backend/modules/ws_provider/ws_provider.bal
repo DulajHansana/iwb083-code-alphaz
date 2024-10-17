@@ -13,53 +13,123 @@ import ballerina/websocket;
 public isolated service class WsService {
     *websocket:Service;
 
+    isolated function streamWorker(websocket:Caller caller, string email) returns websocket:Error|error? {
+        worker messagesStreamer returns error? {
+            check self.streamMessagesFromDB(caller, email);
+        }
+    }
+
+    isolated function streamMessagesFromDB(websocket:Caller caller, string email) returns error? {
+        int totalMessages = DAD:totalMessages(email);
+        final Types:SystemMessage systemMessage = {
+            code: 703,
+            message: "Total messages: " + totalMessages.toString(),
+            value: totalMessages
+        };
+
+        LW:loggerWrite("info", "Total messages: " + totalMessages.toString());
+
+        check caller->writeTextMessage(systemMessage.toString());
+
+        Types:Message[]? messages = DAD:retrieveMessages(email);
+
+        if messages is null {
+            LW:loggerWrite("info", "No any message found for this mail: " + email);
+        } else {
+            foreach Types:Message message in messages {
+                Types:SystemMessage newMessage = {
+                    code: 704,
+                    message: "New pre-loading message",
+                    value: message
+                };
+                check caller->writeTextMessage(newMessage.toString());
+            }
+        }
+
+    }
+
     remote isolated function onMessage(websocket:Caller caller, json data) returns error? {
         json|error messageData = data.toJson();
 
         if messageData is error {
-            LW:loggerWrite("error", "Invalid message received: " + messageData.message());
+            LW:loggerWrite("error", "2 Invalid message received: " + messageData.message());
             return;
         } else {
-            int|error messageId = value:ensureType(messageData.messageId, int);
-            string|error collectionName = value:ensureType(messageData.email, string); // User email is the collection name
-            string|error rxId = value:ensureType(messageData.id, string); // Should be changed later
-            string|error message = value:ensureType(messageData.message, string);
+            string|error messageType = value:ensureType(messageData.messageType, string);
 
-            if messageId is int {
-                final Types:MessageState MessageState = <Types:MessageState>self.MessageState(messageId, 601);
-                check caller->writeMessage(MessageState);
-            }
-
-            if messageId is int && collectionName is string && rxId is string && message is string {
-                Types:Message newMessage = {
-                    id: messageId,
-                    rxId: rxId,
-                    message: message
-                };
-
-                boolean sendMessage = DAD:sendMessage(collectionName, newMessage);
-
-                if sendMessage {
-                    check caller->writeMessage(self.MessageState(messageId, 602));
-                } else {
-                    check caller->writeMessage(self.MessageState(messageId, 607));
+            if messageType is string {
+                if messageType == "usermessage" {
+                    check self.handleUserMessage(caller, messageData);
+                } else if messageType.startsWith("#") {
+                    check self.handleSystemMessage(caller, messageData);
                 }
-
-                //check caller->writeMessage(messageData.toJsonString());
             } else {
-                if messageId is int {
-                    LW:loggerWrite("error", "Invalid message received: " + (typeof collectionName).toString() + " " + (typeof rxId).toString() + " " + (typeof message).toString());
-                    check caller->writeMessage(self.MessageState(messageId, 607));
-                }
-            }
-
-            if message is string {
-                LW:loggerWrite("info", "Message received: " + message);
+                LW:loggerWrite("error", "1 Invalid message received: " + (typeof messageType).toString());
+                return;
             }
         }
     }
 
-    public isolated function MessageState(int messageId, 601|602|603|604|605|606|607 state, string? stateDescription = null) returns Types:MessageState {
+    isolated function handleSystemMessage(websocket:Caller caller, json messageData) returns error? {
+        string|error messageType = value:ensureType(messageData.messageType, string);
+
+        if messageType is string {
+            if messageType == "#email" {
+                caller.setAttribute("email", messageData.email);
+                any|error storedEmail = caller.getAttribute("email");
+                if storedEmail is string {
+                    check self.streamWorker(caller, storedEmail);
+                    LW:loggerWrite("info", "Email stored: " + storedEmail);
+                } else {
+                    LW:loggerWrite("error", "10 Invalid message received: " + (typeof storedEmail).toString());
+                }
+                //check self.streamMessagesFromDB(caller, messageData);
+            }
+        } else {
+            LW:loggerWrite("error", "5 Invalid message received: " + (typeof messageType).toString());
+            return;
+        }
+    }
+
+    isolated function handleUserMessage(websocket:Caller caller, json messageData) returns error? {
+        int|error messageId = value:ensureType(messageData.messageId, int);
+        string|error collectionName = value:ensureType(messageData.email, string); // User email is the collection name
+        string|error rxId = value:ensureType(messageData.id, string); // Should be changed later
+        string|error message = value:ensureType(messageData.message, string);
+
+        if messageId is int {
+            final Types:MessageState MessageState = <Types:MessageState>self.MessageState(messageId, 601);
+            check caller->writeMessage(MessageState);
+        }
+
+        if messageId is int && collectionName is string && rxId is string && message is string {
+            Types:Message newMessage = {
+                id: messageId,
+                rxId: rxId,
+                message: message
+            };
+
+            boolean sendMessage = DAD:sendMessage(collectionName, newMessage);
+
+            if sendMessage {
+                check caller->writeMessage(self.MessageState(messageId, 602));
+            } else {
+                check caller->writeMessage(self.MessageState(messageId, 607));
+            }
+
+        } else {
+            if messageId is int {
+                LW:loggerWrite("error", "6 Invalid message received: " + (typeof collectionName).toString() + " " + (typeof rxId).toString() + " " + (typeof message).toString());
+                check caller->writeMessage(self.MessageState(messageId, 607));
+            }
+        }
+
+        if message is string {
+            LW:loggerWrite("info", "Message received: " + message);
+        }
+    }
+
+    isolated function MessageState(int messageId, 601|602|603|604|605|606|607 state, string? stateDescription = null) returns Types:MessageState {
         do {
             string|error stateText = <string>Types:getStateCode(state.toString());
 
