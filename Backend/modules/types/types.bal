@@ -19,9 +19,15 @@ public type User record {
 };
 
 public type Message record {|
+    int id;
     string rxId;
     string message;
     string timestamp = getThisTime();
+|};
+
+public type MessageState record {|
+    int messageId;
+    601|602|603|604|605 state; // 601 = received, 602 = sent, 603 = seen, 604 = deleted, 605 = failed
 |};
 
 isolated function getRandomId(int length) returns string {
