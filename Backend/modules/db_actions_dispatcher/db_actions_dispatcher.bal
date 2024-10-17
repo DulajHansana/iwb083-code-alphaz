@@ -3,6 +3,7 @@ import Backend.logger_writter as LW;
 import Backend.types as Types;
 
 import ballerina/http;
+import ballerina/lang.value;
 
 public isolated function loginUser(json requestBody) returns http:Response {
     http:Response response = new;
@@ -10,23 +11,26 @@ public isolated function loginUser(json requestBody) returns http:Response {
     Types:User|null loginResult = null;
     do {
 
+        json|error requestedEmail = value:ensureType(requestBody.email, string);
+        string email = requestedEmail is error ? "" : check requestedEmail;
+
         json query = {
-            "email": check requestBody.email
+            "email": email
         };
 
-        if DB:count("users", "users", query) == 0 {
+        if DB:count("users", email, query) == 0 {
             response.statusCode = 404;
             response.reasonPhrase = "User not found. Sign up to continue.";
             LW:loggerWrite("error", "User not found.");
             return response;
         }
 
-        query = {
-            "email": check requestBody.email,
+        json loginUser = {
+            "email": email,
             "password": check requestBody.password
         };
 
-        loginResult = DB:findOne("users", "users", query);
+        loginResult = DB:findOne("users", email, loginUser);
 
         if loginResult is Types:User {
             response.statusCode = 202;
@@ -54,24 +58,27 @@ public isolated function signUpUser(json requestBody) returns http:Response {
 
     do {
 
+        json|error requestedEmail = value:ensureType(requestBody.email, string);
+        string email = requestedEmail is error ? "" : check requestedEmail;
+
         json searchQuery = {
-            "email": check requestBody.email
+            "email": email
         };
 
-        if DB:count("users", "users", searchQuery) > 0 {
+        if DB:count("users", email, searchQuery) > 0 {
             response.statusCode = 409;
             response.reasonPhrase = "User already exists. Login to continue.";
             LW:loggerWrite("error", "User already exists.");
             return response;
         }
 
-        map<anydata> insertQuery = {
+        Types:User insertQuery = {
             "fullname": check requestBody.fullname,
-            "email": check requestBody.email,
+            "email": email,
             "password": check requestBody.password
         };
 
-        signUpResult = DB:insert("users", "users", insertQuery);
+        signUpResult = DB:insert("users", check requestBody.email, insertQuery);
 
         if signUpResult is boolean {
             response.statusCode = 202;
