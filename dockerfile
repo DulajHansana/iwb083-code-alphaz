@@ -9,5 +9,7 @@ COPY /Backend /app/
 RUN ls -la /app/
 RUN bal version
 
+RUN rm -rf /app/target
+
 # Build the Ballerina project (this will generate the .jar or binary)
 RUN bal build
