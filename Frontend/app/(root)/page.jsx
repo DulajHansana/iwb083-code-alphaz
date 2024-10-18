@@ -11,7 +11,7 @@ export default function Home() {
 		handleServerSignup({ fullname: "Nivindu Lakshitha", email: "iamuser6@localhost", password: "admin" }).then(res => {
 			console.log(res) // see the response for more details
 		});
-		//router.push('/sign-in');
+		router.push('/sign-in');
 	};
 
 	return (
