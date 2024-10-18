@@ -80,7 +80,6 @@ export class WebSocketClient {
 		}
 
 		if (response.code === 705) { // A ping-pong message received
-			console.log("Server is responding...");
 			this.sendMessage("#pong", "pong");
 		}
 	}

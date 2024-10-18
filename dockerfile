@@ -1,7 +1,13 @@
+# Use the Ballerina base image to start with
 FROM ballerina/ballerina:latest
 
-COPY Backend/target/bin/Backend.jar /app/
+# Set the working directory inside the container
+WORKDIR /app
 
-COPY Backend/Config.toml /app/
+# Copy your Ballerina project files from your repository to the container
+COPY /Backend /app/
+RUN ls -la /app/
+RUN bal version
 
-CMD ["bal", "run", "/app/Backend.jar", "--config", "/app/Config.toml"]
+# Build the Ballerina project (this will generate the .jar or binary)
+RUN bal build

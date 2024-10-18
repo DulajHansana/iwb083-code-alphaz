@@ -53,6 +53,16 @@ public isolated service class WsService {
         check caller->writeTextMessage(systemMessage.toString());
     }
 
+    isolated function sendPingMessage(websocket:Caller caller) returns error? {
+        Types:SystemMessage systemMessage = {
+            code: 705,
+            message: "Ping",
+            value: ()
+        };
+
+        check caller->writeTextMessage(systemMessage.toString());
+    }
+
     remote isolated function onMessage(websocket:Caller caller, json data) returns error? {
         json|error messageData = data.toJson();
 
@@ -77,6 +87,7 @@ public isolated service class WsService {
 
     isolated function handleSystemMessage(websocket:Caller caller, string messageType, json messageData) returns error? {
         if messageType == "#email" {
+            LW:loggerWrite("info", messageData.toString());
             caller.setAttribute("email", messageData.email);
             any|error storedEmail = caller.getAttribute("email");
             if storedEmail is string {

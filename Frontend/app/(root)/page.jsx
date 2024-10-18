@@ -9,6 +9,7 @@ export default function Home() {
 
 	const handleNavigate = async () => {
 		const client = new WebSocketClient();
+		client.syncMessages();
 		/* handleServerSignup({ fullname: "Nivindu Lakshitha", email: "iamuser6@localhost", password: "admin" }).then(res => {
 			console.log(res) // see the response for more details
 		}); */
