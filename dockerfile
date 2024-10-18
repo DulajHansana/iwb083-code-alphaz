@@ -12,4 +12,4 @@ RUN bal version
 RUN rm -rf /app/target
 
 # Build the Ballerina project (this will generate the .jar or binary)
-RUN bal build
+RUN bal build --target-dir /app/custom-target
