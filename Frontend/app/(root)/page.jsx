@@ -1,16 +1,17 @@
 "use client";
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { handleServerSignup, handleServerAuthorization } from '@/server';
+import { handleServerSignup, handleServerAuthorization, WebSocketClient } from '@/server';
 
 export default function Home() {
 	const router = useRouter();
 	handleServerAuthorization();
 
 	const handleNavigate = async () => {
-		handleServerSignup({ fullname: "Nivindu Lakshitha", email: "iamuser6@localhost", password: "admin" }).then(res => {
+		const client = new WebSocketClient();
+		/* handleServerSignup({ fullname: "Nivindu Lakshitha", email: "iamuser6@localhost", password: "admin" }).then(res => {
 			console.log(res) // see the response for more details
-		});
+		}); */
 		//router.push('/sign-in');
 	};
 

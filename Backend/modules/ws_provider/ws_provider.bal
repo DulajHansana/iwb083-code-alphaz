@@ -1,5 +1,3 @@
-//import Backend.db_actions_dispatcher as DB;
-
 import Backend.db_actions_dispatcher as DAD;
 import Backend.logger_writter as LW;
 import Backend.types as Types;
@@ -7,9 +5,6 @@ import Backend.types as Types;
 import ballerina/lang.value;
 import ballerina/websocket;
 
-//import ballerina/lang.value;
-
-# Description.
 public isolated service class WsService {
     *websocket:Service;
 
@@ -48,6 +43,16 @@ public isolated service class WsService {
 
     }
 
+    isolated function sendPongMessage(websocket:Caller caller) returns error? {
+        Types:SystemMessage systemMessage = {
+            code: 705,
+            message: "Pong",
+            value: ()
+        };
+
+        check caller->writeTextMessage(systemMessage.toString());
+    }
+
     remote isolated function onMessage(websocket:Caller caller, json data) returns error? {
         json|error messageData = data.toJson();
 
@@ -61,7 +66,7 @@ public isolated service class WsService {
                 if messageType == "usermessage" {
                     check self.handleUserMessage(caller, messageData);
                 } else if messageType.startsWith("#") {
-                    check self.handleSystemMessage(caller, messageData);
+                    check self.handleSystemMessage(caller, messageType, messageData);
                 }
             } else {
                 LW:loggerWrite("error", "1 Invalid message received: " + (typeof messageType).toString());
@@ -70,31 +75,27 @@ public isolated service class WsService {
         }
     }
 
-    isolated function handleSystemMessage(websocket:Caller caller, json messageData) returns error? {
-        string|error messageType = value:ensureType(messageData.messageType, string);
-
-        if messageType is string {
-            if messageType == "#email" {
-                caller.setAttribute("email", messageData.email);
-                any|error storedEmail = caller.getAttribute("email");
-                if storedEmail is string {
-                    check self.streamWorker(caller, storedEmail);
-                    LW:loggerWrite("info", "Email stored: " + storedEmail);
-                } else {
-                    LW:loggerWrite("error", "10 Invalid message received: " + (typeof storedEmail).toString());
-                }
-                //check self.streamMessagesFromDB(caller, messageData);
+    isolated function handleSystemMessage(websocket:Caller caller, string messageType, json messageData) returns error? {
+        if messageType == "#email" {
+            caller.setAttribute("email", messageData.email);
+            any|error storedEmail = caller.getAttribute("email");
+            if storedEmail is string {
+                check self.streamWorker(caller, storedEmail);
+                LW:loggerWrite("info", "Email stored: " + storedEmail);
+            } else {
+                LW:loggerWrite("error", "10 Invalid message received: " + (typeof storedEmail).toString());
             }
-        } else {
-            LW:loggerWrite("error", "5 Invalid message received: " + (typeof messageType).toString());
-            return;
+        } else if messageType == "#ping" {
+            return self.sendPongMessage(caller);
+        } else if messageType == "#pong" {
+            LW:loggerWrite("info", "Connection is alive: " + caller.getConnectionId().toString());
         }
     }
 
     isolated function handleUserMessage(websocket:Caller caller, json messageData) returns error? {
         int|error messageId = value:ensureType(messageData.messageId, int);
         string|error collectionName = value:ensureType(messageData.email, string); // User email is the collection name
-        string|error rxId = value:ensureType(messageData.id, string); // Should be changed later
+        string|error rxId = value:ensureType(messageData.id, string); // TODO Should be changed later
         string|error message = value:ensureType(messageData.message, string);
 
         if messageId is int {
@@ -122,10 +123,6 @@ public isolated service class WsService {
                 LW:loggerWrite("error", "6 Invalid message received: " + (typeof collectionName).toString() + " " + (typeof rxId).toString() + " " + (typeof message).toString());
                 check caller->writeMessage(self.MessageState(messageId, 607));
             }
-        }
-
-        if message is string {
-            LW:loggerWrite("info", "Message received: " + message);
         }
     }
 
