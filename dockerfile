@@ -9,6 +9,9 @@ COPY /Backend /app/
 RUN ls -la /app/
 RUN bal version
 
+RUN adduser -u 1001 -S nonroot && chown -R nonroot /app
+USER nonroot
+
 RUN rm -rf /app/target
 
 # Build the Ballerina project (this will generate the .jar or binary)
