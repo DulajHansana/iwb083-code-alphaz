@@ -29,11 +29,10 @@ export default function ChatList() {
 
 			<ul className="space-y-2">
 				{chats.map((chat, index) => (
-					<li
+					<button
 						key={index}
-						className={`flex items-center p-4 rounded-2xl ${index === 3 ? 'bg-purple-200' : 'bg-purple-300'} space-x-4`}
+						className={`w-full flex items-center p-4 rounded-2xl focus:outline-none ${index === 3 ? 'bg-purple-200' : 'bg-purple-300'} space-x-4`}
 					>
-
 						<Image
 							src={chat.avatar}
 							alt={`${chat.name} avatar`}
@@ -46,7 +45,7 @@ export default function ChatList() {
 							<p className="text-customPurple font-semibold">{chat.name}</p>
 							<p className="text-gray-200 text-sm">{chat.message}</p>
 						</div>
-					</li>
+					</button>
 				))}
 			</ul>
 		</div>
