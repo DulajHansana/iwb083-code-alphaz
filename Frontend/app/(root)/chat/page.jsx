@@ -1,4 +1,4 @@
-"use client"; // This will make the component a Client Component
+"use client"; 
 
 import React, { useState } from 'react';
 import Sidebar from '../../../components/Sidebar';
@@ -6,7 +6,7 @@ import ChatList from '../../../components/ChatList';
 import ChatInterface from '../../../components/ChatInterface';
 
 const Chat = () => {
-  const [selectedChat, setSelectedChat] = useState(null);  // Track selected chat
+  const [selectedChat, setSelectedChat] = useState(null); 
 
   return (
     <div className="flex h-screen">

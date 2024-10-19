@@ -1,4 +1,4 @@
-"use client";  // Ensure this is a client component for event handling
+"use client";  
 
 import Image from 'next/image';
 
@@ -32,7 +32,7 @@ export default function ChatList({ onSelectChat }) {
           <button
             key={index}
             className={`w-full flex items-center p-4 rounded-2xl focus:outline-none ${index === 3 ? 'bg-purple-200' : 'bg-purple-300'} space-x-4`}
-            onClick={() => onSelectChat(chat)}  // Use the onSelectChat prop to handle chat selection
+            onClick={() => onSelectChat(chat)}  n
           >
             <Image
               src={chat.avatar}

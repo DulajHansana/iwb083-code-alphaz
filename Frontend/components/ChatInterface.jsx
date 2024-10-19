@@ -1,4 +1,4 @@
-"use client";  // This ensures client-side interactivity
+"use client";  
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
@@ -24,7 +24,7 @@ export default function ChatInterface({ selectedChat }) {
       { text: 'Hi, Welcome!', sender: 'other', time: new Date().toLocaleTimeString() },
       { text: 'How are you? All OK??', sender: 'other', time: new Date().toLocaleTimeString() }
     ]);
-  }, [selectedChat]);  // Reset messages when a new chat is selected
+  }, [selectedChat]);  
 
   return (
     <div className="w-3/4 p-4 bg-white h-screen flex flex-col">
