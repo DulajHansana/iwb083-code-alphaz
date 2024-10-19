@@ -13,7 +13,7 @@ const Profile = () => {
     };
 
     const handlechat = () => {
-        router.push('/chat');
+        router.push('/loadingchat');
     };
 
 
