@@ -1,12 +1,15 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 const Profile = () => {
     const router = useRouter();
 
+    // Use state for managing input fields
+    const [displayName, setDisplayName] = useState("");
+    const [email, setEmail] = useState("");
 
     const handleLogout = () => {
         router.push('/sign-in');
@@ -16,14 +19,18 @@ const Profile = () => {
         router.push('/loadingchat');
     };
 
-
     const handleEdit = () => {
         console.log("Edit action triggered");
     };
 
-
     const handleUpload = () => {
         console.log("Upload action triggered");
+    };
+
+    // Function to handle resetting input fields
+    const handleReset = () => {
+        setDisplayName("");
+        setEmail("");
     };
 
     return (
@@ -69,21 +76,27 @@ const Profile = () => {
                             />
                         </button>
                     </div>
+
                     <div className="mb-4">
                         <label className="block text-lg text-customPurple">Display name</label>
                         <div className="relative">
                             <input
                                 type="text"
+                                value={displayName} // Bind state to input
+                                onChange={(e) => setDisplayName(e.target.value)} // Update state on change
                                 placeholder="Enter Name Here"
                                 className="mt-2 w-full p-4 border border-gray-300 rounded-full text-gray-700 placeholder-gray-400 focus:outline-none focus:border-purple-500"
                             />
                         </div>
                     </div>
+
                     <div className="mb-4">
                         <label className="block text-lg text-customPurple">Email</label>
                         <div className="relative">
                             <input
                                 type="email"
+                                value={email} // Bind state to input
+                                onChange={(e) => setEmail(e.target.value)} // Update state on change
                                 placeholder="Enter Email Here"
                                 className="mt-2 w-full p-4 border border-gray-300 rounded-full text-gray-700 placeholder-gray-400 focus:outline-none focus:border-purple-500"
                             />
@@ -97,15 +110,17 @@ const Profile = () => {
                             </button>
                         </div>
                     </div>
+
                     <div className="flex gap-4 mt-6">
-                        <button  onClick={handlechat}className="bg-customPurple text-white px-6 py-2 rounded-full">
+                        <button onClick={handlechat} className="bg-customPurple text-white px-6 py-2 rounded-full">
                             Save Changes
                         </button>
-                        <button className="border border-customPurple text-customPurple px-6 py-2 rounded-full">
+                        <button onClick={handleReset} className="border border-customPurple text-customPurple px-6 py-2 rounded-full">
                             Reset Changes
                         </button>
                     </div>
                 </div>
+
                 <div className="w-1/2 bg-gray-100 flex flex-col justify-center items-center p-10">
                     <Image
                         src="/images/App Logo.png"
