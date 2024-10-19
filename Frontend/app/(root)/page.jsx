@@ -9,7 +9,7 @@ export default function Home() {
 
 	const handleNavigate = async () => {
 		const client = new WebSocketClient();
-		client.syncMessages();
+		//client.syncMessages();
 		router.push('/sign-in');
 	};
 
@@ -39,7 +39,7 @@ export default function Home() {
 					</h1>
 
 					<p className="text-gray-600 mb-4 max-w-md">
-						Lorem ipsum dolor sit amet. Eos similique alias est voluptas galisum in eligendi
+					Ignite your conversations. Fast, simple, and seamless messaging that connects you instantly!
 					</p>
 
 					<button
