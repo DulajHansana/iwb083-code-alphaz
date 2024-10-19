@@ -1,14 +1,22 @@
-"use client";  
+"use client";
 
+import React, { useState } from 'react';
 import Image from 'next/image';
 
 export default function ChatList({ onSelectChat }) {
+  const [selectedChatId, setSelectedChatId] = useState(null);
+
   const chats = [
     { name: 'SparkChat 0', message: 'How are you doing?', avatar: '/images/avatar1.png', id: 0 },
     { name: 'SparkChat 1', message: 'How are you doing?', avatar: '/images/avatar2.png', id: 1 },
     { name: 'SparkChat 2', message: 'How are you doing?', avatar: '/images/avatar3.png', id: 2 },
     { name: 'SparkChat 3', message: 'How are you doing?', avatar: '/images/avatar4.png', id: 3 }
   ];
+
+  const handleChatSelect = (chat) => {
+    setSelectedChatId(chat.id);
+    onSelectChat(chat);
+  };
 
   return (
     <div className="w-80 bg-gray-100 h-screen p-4 relative">
@@ -28,11 +36,15 @@ export default function ChatList({ onSelectChat }) {
       </div>
 
       <ul className="space-y-2">
-        {chats.map((chat, index) => (
+        {chats.map((chat) => (
           <button
-            key={index}
-            className={`w-full flex items-center p-4 rounded-2xl focus:outline-none ${index === 3 ? 'bg-purple-200' : 'bg-purple-300'} space-x-4`}
-            onClick={() => onSelectChat(chat)}  n
+            key={chat.id}
+            className={`w-full flex items-center p-4 rounded-2xl focus:outline-none 
+                        ${selectedChatId === chat.id 
+                          ? 'bg-purple-700 text-white' 
+                          : 'bg-purple-300 hover:bg-purple-400'} 
+                        space-x-4 transition-colors duration-200`}
+            onClick={() => handleChatSelect(chat)}
           >
             <Image
               src={chat.avatar}
@@ -41,9 +53,13 @@ export default function ChatList({ onSelectChat }) {
               height={40}
               className="rounded-full"
             />
-            <div>
-              <p className="text-customPurple font-semibold">{chat.name}</p>
-              <p className="text-gray-200 text-sm">{chat.message}</p>
+            <div className="text-left">
+              <p className={`font-semibold ${selectedChatId === chat.id ? 'text-white' : 'text-customPurple'}`}>
+                {chat.name}
+              </p>
+              <p className={`text-sm ${selectedChatId === chat.id ? 'text-purple-200' : 'text-gray-600'}`}>
+                {chat.message}
+              </p>
             </div>
           </button>
         ))}
