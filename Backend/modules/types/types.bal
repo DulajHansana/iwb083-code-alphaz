@@ -62,6 +62,10 @@ public isolated function getStateCode(string state) returns string {
         "704" => {
             return "#message";
         }
+
+        "705" => {
+            return "#pingpong";
+        }
         _ => {
             return "unknown";
         }
@@ -76,7 +80,7 @@ public type MessageState record {|
 |};
 
 public type SystemMessage record {|
-    701|702|703|704 code;
+    701|702|703|704|705 code;
     string message;
     any|() value;
 |};

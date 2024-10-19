@@ -1,5 +1,7 @@
+# Use the Ballerina base image to start with
 FROM ballerina/ballerina:latest
 
+# Set the working directory inside the container
 WORKDIR /app
 
 COPY /Backend /app/

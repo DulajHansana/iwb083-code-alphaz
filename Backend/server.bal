@@ -61,7 +61,7 @@ service / on new http:Listener(8080) {
     }
 
     isolated resource function post auth/login(http:Request req) returns http:Response {
-        boolean aliveConnection = isConnectionAlive(req);
+        boolean aliveConnection = hasConnectionAlive(req);
         http:Response response = new;
 
         if aliveConnection {
@@ -85,7 +85,7 @@ service / on new http:Listener(8080) {
     }
 
     isolated resource function post auth/signup(http:Request req) returns http:Response {
-        boolean aliveConnection = isConnectionAlive(req);
+        boolean aliveConnection = hasConnectionAlive(req);
         http:Response response = new;
 
         if aliveConnection {
@@ -110,7 +110,7 @@ service / on new http:Listener(8080) {
     }
 };
 
-isolated function isConnectionAlive(http:Request req) returns boolean {
+isolated function hasConnectionAlive(http:Request req) returns boolean {
     string|http:HeaderNotFoundError authHeader = req.getHeader("keep-alive-token");
     lock {
         if authHeader is string && authHeader != "" {
@@ -133,7 +133,7 @@ service /ws on new websocket:Listener(21003) {
             req.getHeader("Upgrade") == "websocket" &&
             req.getHeader("Connection") == "Upgrade" {
 
-            LW:loggerWrite("info", "Valid WebSocket handshake request received.");
+            LW:loggerWrite("info", "WebSocket handshake request received.");
             //io:println(req.getHeader("Sec-WebSocket-Key"), req.getHeader("Sec-WebSocket-Version"));
 
             return new WSP:WsService();
