@@ -1,7 +1,16 @@
+# Use the Ballerina base image to start with
 FROM ballerina/ballerina:latest
 
-COPY Backend/target/bin/Backend.jar /app/
+# Set the working directory inside the container
+WORKDIR /app
 
-COPY Backend/Config.toml /app/
+COPY /Backend /app/
+RUN ls -la /app/
+RUN bal version
 
-CMD ["bal", "run", "/app/Backend.jar", "--config", "/app/Config.toml"]
+EXPOSE 8080
+EXPOSE 21003
+
+RUN bal build
+
+CMD ["bal", "run"]
