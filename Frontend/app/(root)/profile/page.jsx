@@ -12,6 +12,10 @@ const Profile = () => {
         router.push('/sign-in');
     };
 
+    const handlechat = () => {
+        router.push('/chat');
+    };
+
 
     const handleEdit = () => {
         console.log("Edit action triggered");
@@ -94,7 +98,7 @@ const Profile = () => {
                         </div>
                     </div>
                     <div className="flex gap-4 mt-6">
-                        <button className="bg-customPurple text-white px-6 py-2 rounded-full">
+                        <button  onClick={handlechat}className="bg-customPurple text-white px-6 py-2 rounded-full">
                             Save Changes
                         </button>
                         <button className="border border-customPurple text-customPurple px-6 py-2 rounded-full">
