@@ -1,10 +1,9 @@
-"use client";
-
 import React, { useState } from 'react';
 import Image from 'next/image';
 
 export default function ChatList({ onSelectChat }) {
   const [selectedChatId, setSelectedChatId] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const chats = [
     { name: 'SparkChat 0', message: 'How are you doing?', avatar: '/images/avatar1.png', id: 0 },
@@ -17,6 +16,14 @@ export default function ChatList({ onSelectChat }) {
     setSelectedChatId(chat.id);
     onSelectChat(chat);
   };
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const filteredChats = chats.filter(chat => 
+    chat.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="w-80 bg-gray-100 h-screen p-4 relative">
@@ -32,38 +39,44 @@ export default function ChatList({ onSelectChat }) {
           type="text"
           placeholder="Search"
           className="w-full p-2 bg-gray-200 rounded-lg"
+          value={searchQuery}
+          onChange={handleSearchChange}
         />
       </div>
 
-      <ul className="space-y-2">
-        {chats.map((chat) => (
-          <button
-            key={chat.id}
-            className={`w-full flex items-center p-4 rounded-2xl focus:outline-none 
-                        ${selectedChatId === chat.id 
-                          ? 'bg-purple-700 text-white' 
-                          : 'bg-purple-300 hover:bg-purple-400'} 
-                        space-x-4 transition-colors duration-200`}
-            onClick={() => handleChatSelect(chat)}
-          >
-            <Image
-              src={chat.avatar}
-              alt={`${chat.name} avatar`}
-              width={40}
-              height={40}
-              className="rounded-full"
-            />
-            <div className="text-left">
-              <p className={`font-semibold ${selectedChatId === chat.id ? 'text-white' : 'text-customPurple'}`}>
-                {chat.name}
-              </p>
-              <p className={`text-sm ${selectedChatId === chat.id ? 'text-purple-200' : 'text-gray-600'}`}>
-                {chat.message}
-              </p>
-            </div>
-          </button>
-        ))}
-      </ul>
+      {filteredChats.length > 0 ? (
+        <ul className="space-y-2">
+          {filteredChats.map((chat) => (
+            <button
+              key={chat.id}
+              className={`w-full flex items-center p-4 rounded-2xl focus:outline-none 
+                          ${selectedChatId === chat.id 
+                            ? 'bg-purple-700 text-white' 
+                            : 'bg-purple-300 hover:bg-purple-400'} 
+                          space-x-4 transition-colors duration-200`}
+              onClick={() => handleChatSelect(chat)}
+            >
+              <Image
+                src={chat.avatar}
+                alt={`${chat.name} avatar`}
+                width={40}
+                height={40}
+                className="rounded-full"
+              />
+              <div className="text-left">
+                <p className={`font-semibold ${selectedChatId === chat.id ? 'text-white' : 'text-customPurple'}`}>
+                  {chat.name}
+                </p>
+                <p className={`text-sm ${selectedChatId === chat.id ? 'text-purple-200' : 'text-gray-600'}`}>
+                  {chat.message}
+                </p>
+              </div>
+            </button>
+          ))}
+        </ul>
+      ) : (
+        <p className="text-center text-gray-600">No results found</p>
+      )}
     </div>
   );
 }
