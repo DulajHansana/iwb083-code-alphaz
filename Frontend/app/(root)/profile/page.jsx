@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import Sidebar from '../../../components/Sidebar';
+
 
 const Profile = () => {
     const router = useRouter();
@@ -35,29 +37,7 @@ const Profile = () => {
 
     return (
         <div className="flex h-screen">
-            <div className="bg-purple-700 text-white w-1/5 flex flex-col items-center py-8">
-                <div className="mb-6">
-                    <Image
-                        src="/images/App Logo.png"
-                        alt="Profile Icon"
-                        width={100}
-                        height={100}
-                    />
-                </div>
-                <div className="text-xl mb-8">Profile</div>
-
-                <div className="mt-auto mb-6">
-                    <button onClick={handleLogout} className="focus:outline-none">
-                        <Image
-                            src="/images/logout.png"
-                            alt="Logout Icon"
-                            width={45}
-                            height={45}
-                        />
-                    </button>
-                </div>
-                <div className="text-xl">Logout</div>
-            </div>
+            <Sidebar />
 
             <div className="flex-grow flex">
                 <div className="w-1/2 p-10">
@@ -78,14 +58,27 @@ const Profile = () => {
                     </div>
 
                     <div className="mb-4">
-                        <label className="block text-lg text-customPurple">Display name</label>
+                        <label className="block text-lg text-customPurple">Tag Name</label>
                         <div className="relative">
                             <input
                                 type="text"
                                 value={displayName} // Bind state to input
                                 onChange={(e) => setDisplayName(e.target.value)} // Update state on change
                                 placeholder="Enter Name Here"
-                                className="mt-2 w-full p-4 border border-gray-300 rounded-full text-gray-700 placeholder-gray-400 focus:outline-none focus:border-purple-500"
+                                className="mt-2 w-full p-4 border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:border-purple-500"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block text-lg text-customPurple">Display Name</label>
+                        <div className="relative">
+                            <input
+                                type="text"
+                                value={displayName} // Bind state to input
+                                onChange={(e) => setDisplayName(e.target.value)} // Update state on change
+                                placeholder="Enter Name Here"
+                                className="mt-2 w-full p-4 border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:border-purple-500"
                             />
                         </div>
                     </div>
@@ -98,7 +91,7 @@ const Profile = () => {
                                 value={email} // Bind state to input
                                 onChange={(e) => setEmail(e.target.value)} // Update state on change
                                 placeholder="Enter Email Here"
-                                className="mt-2 w-full p-4 border border-gray-300 rounded-full text-gray-700 placeholder-gray-400 focus:outline-none focus:border-purple-500"
+                                className="mt-2 w-full p-4 border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:border-purple-500"
                             />
                             <button onClick={handleEdit} className="absolute right-4 top-1/2 transform -translate-y-1/2 focus:outline-none">
                                 <Image
@@ -112,10 +105,10 @@ const Profile = () => {
                     </div>
 
                     <div className="flex gap-4 mt-6">
-                        <button onClick={handlechat} className="bg-customPurple text-white px-6 py-2 rounded-full">
+                        <button onClick={handlechat} className="bg-customPurple text-white px-6 py-2 rounded-lg">
                             Save Changes
                         </button>
-                        <button onClick={handleReset} className="border border-customPurple text-customPurple px-6 py-2 rounded-full">
+                        <button onClick={handleReset} className="border border-customPurple text-customPurple px-6 py-2 rounded-lg">
                             Reset Changes
                         </button>
                     </div>
