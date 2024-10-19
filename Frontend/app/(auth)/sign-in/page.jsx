@@ -10,7 +10,7 @@ export default function Home() {
 	};
 
 	const handleLogin = () => {
-		router.push('/chat');
+		router.push('/profile');
 	};
 
 	const handleDemoLogin = () => {
