@@ -1,14 +1,12 @@
-"use client";  
+"use client";
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useWebSocket } from '@/contexts/WebSocketContext';
 
 export default function ChatInterface({ selectedChat }) {
-  const [messages, setMessages] = useState([
-    { text: 'Hi, Welcome!', sender: 'other', time: new Date().toLocaleTimeString() },
-    { text: 'How are you? All OK??', sender: 'other', time: new Date().toLocaleTimeString() },
-    { text: 'Hi, All OK!!!!!!!', sender: 'self', time: new Date().toLocaleTimeString() }
-  ]);
+  const { messageClient, readyState } = useWebSocket();
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
 
   const handleSendMessage = () => {
@@ -20,11 +18,27 @@ export default function ChatInterface({ selectedChat }) {
   };
 
   useEffect(() => {
-    setMessages([
-      { text: 'Hi, Welcome!', sender: 'other', time: new Date().toLocaleTimeString() },
-      { text: 'How are you? All OK??', sender: 'other', time: new Date().toLocaleTimeString() }
-    ]);
-  }, [selectedChat]);  
+    if (messageClient) {
+      const myDetails = messageClient.clientDetails();
+
+      const newMessage = {
+        text: selectedChat.message,
+        sender: selectedChat.rxId === myDetails.id ? 'self' : 'other',
+        time: new Date(selectedChat.id).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+
+      setMessages((prevMessages) => {
+        const messageExists = prevMessages.some(
+          (msg) => msg.text === newMessage.text && msg.time === newMessage.time
+        );
+
+        if (!messageExists) {
+          return [...prevMessages, newMessage];
+        }
+        return prevMessages;
+      });
+    }
+  }, [selectedChat, messageClient]);
 
   return (
     <div className="w-3/4 p-4 bg-white h-screen flex flex-col">

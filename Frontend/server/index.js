@@ -12,6 +12,10 @@ export class WebSocketClient {
 		this.readyState = this.socket.readyState;
 	}
 
+	clientDetails() {
+		return serverLoginDetails;
+	}
+
 	syncMessages(callback) {
 		const data = {
 			messageType: "#email",
@@ -23,21 +27,25 @@ export class WebSocketClient {
 
 	startHeartbeat() {
 		this.pingInterval = setInterval(() => {
-			if (this.socket.readyState === WebSocket.OPEN) {
+			if (serverLoginDetails !== undefined && this.socket.readyState === WebSocket.OPEN) {
 				this.sendMessage("#ping", "ping");
 			}
 		}, 5000)
 	}
 
 	sendMessage(messageType, message) {
-		const data = {
-			messageType: messageType !== undefined ? messageType : "usermessage",
-			messageId: Date.now(),
-			message: message,
-			...serverLoginDetails
+		if (serverLoginDetails !== undefined && Object.keys(serverLoginDetails).length !== 0) {
+			const data = {
+				messageType: messageType !== undefined ? messageType : "usermessage",
+				messageId: Date.now(),
+				message: message,
+				...serverLoginDetails
+			}
+
+			this.socket.send(JSON.stringify(JSON.parse(JSON.stringify(data))));
+		} else {
+			window.location.href = "/";
 		}
-		
-		this.socket.send(JSON.stringify(JSON.parse(JSON.stringify(data))));
 	}
 
 	onOpen(callback) {
@@ -54,7 +62,7 @@ export class WebSocketClient {
 		this.socket.close();
 	}
 
-	onMessage(callback) {
+	onMessage(event) {
 		const response = JSON.parse(event.data);
 
 		if (response.code === 703) { // When server return user's pre-messages
@@ -88,7 +96,7 @@ export class WebSocketClient {
 			}
 		}
 
-		if (response.code === 705) { // A ping-pong message received
+		if (response.state === 705 && serverLoginDetails !== undefined) { // A ping-pong message received
 			this.sendMessage("#pong", "pong");
 		}
 	}
