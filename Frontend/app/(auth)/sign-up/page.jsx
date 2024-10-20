@@ -1,9 +1,16 @@
 "use client";
+import { handleServerSignup } from '@/server';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 export default function Signup() {
 	const router = useRouter();
+
+	const handleSignup = () => {
+		handleServerSignup({ fullname: "Admin", email: "ladmin@localhost", password: "admin" }).then(res => {
+			console.log(res)
+		});
+	};
 
 	const handleLogin = () => {
 		router.push('/sign-in');
@@ -70,7 +77,7 @@ export default function Signup() {
 							/>
 						</div>
 
-						<button className="mt-6 w-full rounded-md bg-customPurple py-2 text-white hover:bg-purple-700">
+						<button className="mt-6 w-full rounded-md bg-customPurple py-2 text-white hover:bg-purple-700" onClick={handleSignup}>
 							Sign Up
 						</button>
 
