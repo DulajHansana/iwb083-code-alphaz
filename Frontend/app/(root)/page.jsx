@@ -9,8 +9,8 @@ export default function Home() {
 	const router = useRouter();
 
 	useEffect(() => {
-		console.log(readyState);
 		if (messageClient) {
+			messageClient.navigateToLogin = () => router.push('/sign-in');
 		}
 	}, [messageClient, readyState]);
 

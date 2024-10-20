@@ -1,18 +1,26 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Image from 'next/image';
 
-export default function ChatList({ onSelectChat }) {
+export default function ChatList({ onSelectChat, userMessages }) {
   const [selectedChatId, setSelectedChatId] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [chats, setChats] = useState([]);
 
-  const chats = [
+/*   const chats = [
     { name: 'SparkChat 0', message: 'How are you doing?', avatar: '/images/avatar1.png', id: 0 },
     { name: 'SparkChat 1', message: 'How are you doing?', avatar: '/images/avatar2.png', id: 1 },
     { name: 'SparkChat 2', message: 'How are you doing?', avatar: '/images/avatar3.png', id: 2 },
     { name: 'SparkChat 3', message: 'How are you doing?', avatar: '/images/avatar4.png', id: 3 }
-  ];
+  ]; */
+
+  useEffect(() => {
+    Object.entries(userMessages).forEach(([key, value]) => {
+      value.name = key;
+      setChats((prevChats) => [...prevChats, value]); 
+    })
+  }, [userMessages]);
 
   const handleChatSelect = (chat) => {
     setSelectedChatId(chat.id);
@@ -24,7 +32,7 @@ export default function ChatList({ onSelectChat }) {
   };
 
   const filteredChats = chats.filter(chat =>
-    chat.name.toLowerCase().includes(searchQuery.toLowerCase())
+    chat.name?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -77,7 +85,7 @@ export default function ChatList({ onSelectChat }) {
           ))}
         </ul>
       ) : (
-        <p className="text-center text-gray-600">No results found</p>
+        <p className="text-center text-gray-600">No chats found yet</p>
       )}
     </div>
   );

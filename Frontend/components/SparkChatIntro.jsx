@@ -23,7 +23,7 @@ export default function SparkChatIntro() {
 
 				<br />
 
-				Select a chat to start messaging...
+				Select a chat to start messaging.
 			</p>
 		</div>
 	);
