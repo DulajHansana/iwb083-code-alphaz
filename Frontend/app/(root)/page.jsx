@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useWebSocket } from '@/contexts/WebSocketContext';
-import LoadingScreen from '/components/LoadingScreen'; // Import the LoadingScreen component
+
 
 export default function Home() {
     let { messageClient, readyState } = useWebSocket();
@@ -26,10 +26,6 @@ export default function Home() {
     };
 
     // Show LoadingScreen if the WebSocket connection is still being established
-    if (isLoading) {
-        return <LoadingScreen />;
-    }
-
     // Once WebSocket is ready, show the main interface
     return (
         <div className="flex justify-center items-center h-screen bg-cover bg-center">
