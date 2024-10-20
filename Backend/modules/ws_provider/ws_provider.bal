@@ -68,15 +68,15 @@ public isolated service class WsService {
 
         if messageData is error {
             LW:loggerWrite("error", "2 Invalid message received: " + messageData.message());
-            return;
+            return error("Invalid message received: " + messageData.message());
         } else {
             string|error messageType = value:ensureType(messageData.messageType, string);
 
             if messageType is string {
                 if messageType == "usermessage" {
-                    check self.handleUserMessage(caller, messageData);
+                    return self.handleUserMessage(caller, messageData);
                 } else if messageType.startsWith("#") {
-                    check self.handleSystemMessage(caller, messageType, messageData);
+                    return self.handleSystemMessage(caller, messageType, messageData);
                 }
             } else {
                 LW:loggerWrite("error", "1 Invalid message received: " + (typeof messageType).toString());
@@ -99,7 +99,21 @@ public isolated service class WsService {
         } else if messageType == "#ping" {
             return self.sendPongMessage(caller);
         } else if messageType == "#pong" {
-            LW:loggerWrite("info", "Connection is alive: " + caller.getConnectionId().toString());
+            //LW:loggerWrite("info", "Connection is alive: " + caller.getConnectionId().toString());
+        } else if messageType == "#user" {
+            string|error email = value:ensureType(messageData.email, string);
+            if email is string {
+                Types:User? user = DAD:getUser(email);
+
+                if user is Types:User {
+                    return caller->writeTextMessage(user.toString());
+                } else {
+                    LW:loggerWrite("error", "User not found: " + email);
+                }
+            } else {
+                LW:loggerWrite("error", "11 Invalid message received: " + (typeof email).toString());
+            }
+
         }
     }
 
