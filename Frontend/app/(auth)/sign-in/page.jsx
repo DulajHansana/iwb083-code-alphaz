@@ -11,12 +11,14 @@ export default function Home() {
 	};
 
 	const handleLogin = () => {
-		handleServerLogin({ email: "admin@localhost", password: "admin" }).then(res => {
+		handleServerLogin({ username: "Admin", email: "ladmin@localhost", password: "admin" }).then(res => {
 			if (res.user) {
-				router.push('/profile');
+				router.push('/chat');
 			} else {
 				if (res.code === 403) {
 					router.push('/');
+				} else {
+					alert(res.message);
 				}
 			}
 		});
@@ -68,9 +70,6 @@ export default function Home() {
 								/>
 								<span className="ml-2 text-sm text-gray-700">Remember me?</span>
 							</label>
-							<a href="#" className="text-sm text-purple-600 hover:underline">
-								Forgot Password?
-							</a>
 						</div>
 
 						<button

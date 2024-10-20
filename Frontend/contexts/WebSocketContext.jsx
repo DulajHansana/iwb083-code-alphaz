@@ -17,12 +17,22 @@ export const WebSocketProvider = ({ children }) => {
 	});
 
 	useEffect(() => {
-		serverAuthorization().then(res => {
-			setReadyState(prevState => ({
-				...prevState,
-				server: res.accepted
-			}))
-		})
+		const checkServerAuthorization = async () => {
+			let authorized = false;
+			while (!authorized) {
+				const res = await serverAuthorization();
+				authorized = res.accepted;
+				setReadyState(prevState => ({
+					...prevState,
+					server: authorized
+				}));
+				if (!authorized) {
+					await new Promise(resolve => setTimeout(resolve, 3000));
+				}
+			}
+		};
+
+		checkServerAuthorization();
 		const client = new WebSocketClient();
 
 		client.onOpen(() => {
