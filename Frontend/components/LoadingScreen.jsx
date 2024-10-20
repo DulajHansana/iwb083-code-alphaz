@@ -26,24 +26,18 @@ const LoadingSpinner = () => {
 };
 
 // Main LoadingScreen Component
-export default function LoadingScreen({ progressProp }) {
+export default function LoadingScreen({ progress: progressProp }) {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    // Simulate loading progress
-    const interval = setInterval(() => {
-      if (progress >= 100) {
-        setProgress(100);
-      } else if (progress == undefined || progress < 0) {
-        setProgress(0);
-      } else {
-        setProgress(progressProp);
-      }
-      
-    }, 500); // Update every 500ms
-
-    return () => clearInterval(interval); // Clean up on unmount
-  }, []);
+    if (progressProp >= 100) {
+      setProgress(100);
+    } else if (progressProp < 0) {
+      setProgress(0);
+    } else if (progressProp !== undefined) {
+      setProgress(progressProp);
+    }
+  }, [progressProp]); // Add progressProp as a dependency to re-run on updates
 
   return (
     <div className="w-full h-screen bg-white flex flex-col justify-center items-center">
@@ -54,11 +48,11 @@ export default function LoadingScreen({ progressProp }) {
           className="w-40 h-40"
         />
         <h2 className="mt-4 text-4xl font-bold text-customPurple">SparkChat</h2>
-        <p className="mt-2 text-xl text-purple-500">Loading Chats... {progress}%</p>
+        <p className="mt-2 text-xl text-purple-500">Loading Chats... {Math.floor(progress.toFixed(0))}%</p>
       </div>
 
       {/* Loading Spinner */}
-      <LoadingSpinner progress={progress} />
+      <LoadingSpinner />
     </div>
   );
 }

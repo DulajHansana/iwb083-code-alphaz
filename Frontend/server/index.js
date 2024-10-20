@@ -10,11 +10,15 @@ export class WebSocketClient {
 		this.socket.addEventListener("open", (event) => this.onOpen(event));
 		this.socket.addEventListener("message", (event) => this.onMessage(event));
 		this.readyState = this.socket.readyState;
-		this.preLoadingCount = 0;
 	}
 
 	clientDetails() {
 		return serverLoginDetails;
+	}
+	
+	setClientDetails(clientDetails) {
+		console.log("ssdd")
+		serverLoginDetails = clientDetails;
 	}
 
 	syncMessages(callback) {
@@ -79,11 +83,11 @@ export class WebSocketClient {
 
 			const currentProgress = this.currentProgress || 0;
 			const targetProgress = progress;
-
 			let interval = setInterval(() => {
 				if (this.currentProgress >= targetProgress) {
 					clearInterval(interval);
 				} else {
+					console.log(this.currentProgress)
 					this.currentProgress = Math.min(this.currentProgress + 1, targetProgress);
 					this.preMessagesSyncCallback(preLoadingMessages, isNaN(this.currentProgress) ? 0 : this.currentProgress);
 				}

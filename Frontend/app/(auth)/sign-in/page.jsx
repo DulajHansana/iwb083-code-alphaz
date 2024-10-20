@@ -22,13 +22,13 @@ export default function Home() {
 	const handleLogin = () => {
 		handleServerLogin({ email, password })
 			.then(res => {
-				console.log(res);
-				if (res.user.id !== undefined) {
+				if (res.user) {
 					if (res.code === 403) {
 						router.push('/');
 					} else if (res.code !== 202) {
 						alert(res.message);
 					} else if (res.code === 202) {
+						messageClient.setClientDetails(res.user);
 						setIsLoading(true);
 						setSyncing(true); 
 					}
@@ -47,10 +47,12 @@ export default function Home() {
 	useEffect(() => {
 		if (syncing && readyState.client && readyState.server) {
 			messageClient.syncMessages((preMessages, syncProgress) => {
-				if (syncProgress == 100) {
+				setProgress(syncProgress);
+				if (Math.ceil(syncProgress) >= 100) {
 					setIsLoading(false);
 					setProgress(0);
-					setSyncing(false); 
+					setSyncing(false);
+					router.push('/chat');
 				}
 			});
 		}
