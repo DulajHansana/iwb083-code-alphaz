@@ -19,7 +19,9 @@ export const WebSocketProvider = ({ children }) => {
 	useEffect(() => {
 		const checkServerAuthorization = async () => {
 			let authorized = false;
-			while (!authorized) {
+			let attempts = 0;
+			const maxAttempts = 5;
+			while (!authorized && attempts < maxAttempts) {
 				const res = await serverAuthorization();
 				authorized = res.accepted;
 				setReadyState(prevState => ({
@@ -27,6 +29,7 @@ export const WebSocketProvider = ({ children }) => {
 					server: authorized
 				}));
 				if (!authorized) {
+					attempts++;
 					await new Promise(resolve => setTimeout(resolve, 3000));
 				}
 			}

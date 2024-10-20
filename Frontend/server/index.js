@@ -10,6 +10,7 @@ export class WebSocketClient {
 		this.socket.addEventListener("open", (event) => this.onOpen(event));
 		this.socket.addEventListener("message", (event) => this.onMessage(event));
 		this.readyState = this.socket.readyState;
+		this.preLoadingCount = 0;
 	}
 
 	clientDetails() {
