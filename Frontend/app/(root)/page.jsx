@@ -1,20 +1,19 @@
 "use client";
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useWebSocket } from '@/contexts/WebSocketContext';
 
 
 export default function Home() {
     let { messageClient, readyState } = useWebSocket();
     const router = useRouter();
-    const [isLoading, setIsLoading] = useState(true); // State to control loading screen
 
-	useEffect(() => {
-		console.log(readyState);
-		if (messageClient) {
-		}
-	}, [messageClient, readyState]);
+    useEffect(() => {
+        console.log(readyState);
+        if (messageClient) {
+        }
+    }, [messageClient, readyState]);
 
     const handleNavigate = async () => {
         if (readyState.client && readyState.server) {
@@ -22,8 +21,6 @@ export default function Home() {
         }
     };
 
-    // Show LoadingScreen if the WebSocket connection is still being established
-    // Once WebSocket is ready, show the main interface
     return (
         <div className="flex justify-center items-center h-screen bg-cover bg-center">
             <div className="flex items-center space-x-8 bg-white bg-opacity-70 p-8 rounded-lg">
