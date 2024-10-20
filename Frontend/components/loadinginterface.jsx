@@ -6,7 +6,7 @@ import Image from 'next/image';
 
 export default function SparkChatIntro() {
 	return (
-		<div className="w-1/2 bg-gray-100 flex flex-col justify-center items-center p-10">
+		<div className="w-3/4 bg-gray-100 flex flex-col justify-center items-center p-10">
 			<Image 
 				src="/images/App Logo.png" 
 				alt="SparkChat Logo" 
