@@ -23,45 +23,76 @@ Contributions are welcome! If you have any suggestions, bug fixes, or new featur
   <img src="https://contrib.rocks/image?repo=DulajHansana/iwb083-code-alphaz" />
 </a>
 
+## Frontend Architecture
+
+### Overview
+
+The front-end of Spark Chat is built using **JavaScript** and **CSS**, focusing on creating a dynamic, responsive user interface that provides a smooth and engaging user experience.
+
+### Core Technologies
+
+- **JavaScript**: Manages UI logic and real-time interactions, ensuring seamless user experiences.
+- **CSS**: Styles the application consistently and beautifully across different devices and browsers.
+
+### Design and Interaction
+
+- **React Components**: Utilizes React to build a modular and maintainable structure, enhancing the application's responsiveness and performance.
+- **Real-Time Communication**: Implements WebSockets to ensure that the user interface reflects the chat state in real-time without any perceivable delay.
+
+![Frontend Diagram](path_to_your_frontend_diagram_here)
+
 ---
 
-# How to Run
+## Technologies Used
 
-### Prerequisites:
-1. **Docker**: Ensure Docker is installed on your machine. You can download it [here](https://www.docker.com/get-started).
-2. **Node.js & npm**: Ensure that Node.js and npm are installed for building the React app. You can download Node.js [here](https://nodejs.org/).
-3. **Ballerina**: Ensure you have Ballerina installed. You can download it [here](https://ballerina.io/).
-4. **Git**: Ensure Git is installed to clone the repository. Get it [here](https://git-scm.com/).
+- **Frontend**: JavaScript, React, CSS
+- **Backend**: Ballerina, MongoDB, WebSocket
+- **DevOps**: Docker, GitHub Actions
 
-### Steps to Run the Application:
+## Performance Optimizations
 
-1. **Clone the Repository**:
-   Clone your repository using Git:
-   ```bash
-   git clone https://github.com/DulajHansana/iwb083-code-alphaz.git
-   cd iwb083-code-alphaz
-2. **Docker Setup**:
-   If your project has a <b>docker-compose.yml</b> or <b>Dockerfile</b>, you can build and start the services using Docker.<br>
-   If using <b>docker-compose.yml</b>,
-    execute:
-      ```bash
-        docker-compose up --build
-      ````
-    If there's only a <b>Dockerfile</b>, build and run the Docker image manually:
+- **Code Minification**: Reduces the size of code files to enhance load times.
+- **Lazy Loading**: Improves the initial load time by loading components on demand.
 
-3. **Frontend (React) Setup**: Navigate to the frontend directory (if applicable), then install dependencies and start the React app
-    ```bash
-       cd frontend  # Or wherever the React app is located
-       npm install
-       npm start
-      ````
-    This should start the React app on http://localhost:3000.
-4. **Backend (Ballerina) Setup**: Navigate to the backend directory where the Ballerina code is located and run the Ballerina service
-   ```bash
-     cd backend  # Or the location of Ballerina code
-     ballerina run service.bal
-      ````
-   This should start the backend on http://localhost:8080.
-5.  **Access the Web App**: The application should be accessible at http://localhost:3000 for the frontend, with API requests routed to http://localhost:8080 (Ballerina backend).
-6.  **Docker for Production**: If the Docker setup is for production, make sure you're correctly using multi-stage builds and that environment variables are correctly passed.
+## Contributing
 
+Interested in contributing to Spark Chat? Please read through our [contributing guidelines](#) for details on our code of conduct, and the process for submitting pull requests to us.
+
+---
+
+Thank you for visiting our repository! For more information, please check out our [Wiki](#) or [Issues](#) section to see how you can get involved in future updates or fixes.
+
+
+## Backend Architecture
+
+### Overview
+
+The backend of Spark Chat is crafted to ensure robust and scalable messaging capabilities, utilizing **Ballerina** and **MongoDB** to handle large volumes of real-time data efficiently.
+
+### Key Components
+
+#### Authentication Flow
+
+- **JWT Authentication**: Ensures secure communication between clients and the server by using JSON Web Tokens.
+- **Web Server Connection**: Utilizes WebSockets for maintaining a persistent, real-time connection that is crucial for instant messaging.
+
+#### Microservices and Modularity
+
+- **Ballerina Microservices**: Leverages Ballerina for creating highly scalable microservices for user management, chat services, and notification handling.
+- **Database Integration**: MongoDB is used for its robust data storage capabilities, managed through Ballerina modules for optimal performance.
+
+#### Real-Time Synchronization
+
+- **WebSocket Technology**: Enables real-time data transfer and synchronization across client devices.
+- **Efficient Data Handling**: Uses MongoDB to store and retrieve user and chat data rapidly and reliably.
+
+![Backend Diagram](path_to_your_backend_diagram_here)
+
+
+## Conclusion
+
+By leveraging Ballerina's microservices architecture and MongoDB's effective data handling, Spark Chat's backend is optimized for a growing user base, providing a scalable and efficient platform for real-time messaging.
+
+---
+
+For more information on our technology stack and development practices, visit our [Wiki](#) or check out our [Issue Tracker](#) to see upcoming features and releases.
