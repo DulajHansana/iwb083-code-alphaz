@@ -10,14 +10,11 @@ export default function Home() {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(true); // State to control loading screen
 
-    useEffect(() => {
-        console.log(readyState);
-        
-        // Once WebSocket is ready, stop showing the loading screen
-        if (readyState.client && readyState.server) {
-            setIsLoading(false); // Disable the loading screen
-        }
-    }, [readyState]);
+	useEffect(() => {
+		console.log(readyState);
+		if (messageClient) {
+		}
+	}, [messageClient, readyState]);
 
     const handleNavigate = async () => {
         if (readyState.client && readyState.server) {
