@@ -24,47 +24,71 @@ Contributions are welcome! If you have any suggestions, bug fixes, or new featur
 
 
 
-# Spark Chat Backend Architecture
+## Frontend Architecture
 
-## Overview
+### Overview
 
-The Spark Chat backend is crafted to ensure robust, scalable, and efficient messaging. Utilizing **Ballerina** for its exceptional cloud-native support and seamless API integration, our system is split into two main services: the **Server** and the **Web Server**.
+The front-end of Spark Chat is built using **JavaScript** and **CSS**, focusing on creating a dynamic, responsive user interface that provides a smooth and engaging user experience.
 
-## Key Components
+### Core Technologies
 
-### Authentication and Initial Connection
+- **JavaScript**: Manages UI logic and real-time interactions, ensuring seamless user experiences.
+- **CSS**: Styles the application consistently and beautifully across different devices and browsers.
 
-- **Connecting Screen**: Upon entry, users encounter a 'Connecting...' screen.
-- **JWT Handling**: The frontend initiates a secure request to the Server with a JSON Web Token (JWT).
-- **Token Validation**: On valid authentication, an 'allow' token is issued, critical for subsequent secure interactions.
+### Design and Interaction
 
-### Web Server Interaction
+- **React Components**: Utilizes React to build a modular and maintainable structure, enhancing the application's responsiveness and performance.
+- **Real-Time Communication**: Implements WebSockets to ensure that the user interface reflects the chat state in real-time without any perceivable delay.
 
-- **WebSocket Connection**: Post-authentication, users connect via WebSockets, enabling real-time communications.
-- **Get Started Page**: After a successful connection, users proceed to the 'Get Started' page to log in.
+![Frontend Diagram](path_to_your_frontend_diagram_here)
 
-### Modular Backend with Ballerina
+---
 
-- **Database Module**: Manages MongoDB connections for robust data interaction.
-- **WebSocket Module**: Ensures real-time data transfer and instant message delivery.
-- **Logger and Types Modules**: Aid in system monitoring and data consistency.
-- **WS Provider and DB Action Dispatcher Modules**: Facilitate message routing and database operations.
-- **JWT Module**: Oversees all JWT-related functionalities.
+## Technologies Used
 
-## Real-Time Data Handling and Synchronization
+- **Frontend**: JavaScript, React, CSS
+- **Backend**: Ballerina, MongoDB, WebSocket
+- **DevOps**: Docker, GitHub Actions
 
-- **Login Validation**: Users are prompted to sign up if credentials are not recognized.
-- **Message Sync**: Real-time synchronization through WebSockets ensures that messages are updated across devices instantly.
+## Performance Optimizations
 
-## Cloud Services and MongoDB Integration
+- **Code Minification**: Reduces the size of code files to enhance load times.
+- **Lazy Loading**: Improves the initial load time by loading components on demand.
 
-- **Cloud-Based MongoDB**: Serves as the backbone for storing user data and chat histories.
-- **Security and Efficiency**: Ballerina handles secure data exchanges, enhancing performance and scalability.
+## Contributing
 
-## Enhancements and Style
+Interested in contributing to Spark Chat? Please read through our [contributing guidelines](#) for details on our code of conduct, and the process for submitting pull requests to us.
 
-- **Progress Indicators**: A progress bar visually indicates synchronization status.
-- **Message Management**: Messages are managed and synchronized efficiently, ensuring seamless user interactions.
+---
+
+Thank you for visiting our repository! For more information, please check out our [Wiki](#) or [Issues](#) section to see how you can get involved in future updates or fixes.
+
+
+## Backend Architecture
+
+### Overview
+
+The backend of Spark Chat is crafted to ensure robust and scalable messaging capabilities, utilizing **Ballerina** and **MongoDB** to handle large volumes of real-time data efficiently.
+
+### Key Components
+
+#### Authentication Flow
+
+- **JWT Authentication**: Ensures secure communication between clients and the server by using JSON Web Tokens.
+- **Web Server Connection**: Utilizes WebSockets for maintaining a persistent, real-time connection that is crucial for instant messaging.
+
+#### Microservices and Modularity
+
+- **Ballerina Microservices**: Leverages Ballerina for creating highly scalable microservices for user management, chat services, and notification handling.
+- **Database Integration**: MongoDB is used for its robust data storage capabilities, managed through Ballerina modules for optimal performance.
+
+#### Real-Time Synchronization
+
+- **WebSocket Technology**: Enables real-time data transfer and synchronization across client devices.
+- **Efficient Data Handling**: Uses MongoDB to store and retrieve user and chat data rapidly and reliably.
+
+![Backend Diagram](path_to_your_backend_diagram_here)
+
 
 ## Conclusion
 
