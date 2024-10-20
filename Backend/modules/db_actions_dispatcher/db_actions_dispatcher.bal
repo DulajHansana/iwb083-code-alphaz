@@ -57,7 +57,6 @@ public isolated function signUpUser(json requestBody) returns http:Response {
     boolean|Types:User|null signUpResult = null;
 
     do {
-
         json|error requestedEmail = value:ensureType(requestBody.email, string);
         string email = requestedEmail is error ? "" : check requestedEmail;
 
@@ -106,10 +105,13 @@ public isolated function signUpUser(json requestBody) returns http:Response {
     }
 }
 
+public isolated function getUser(string email) returns Types:User? {
+    return DB:findOne("users", email, {});
+}
+
 public isolated function sendMessage(string txEmail, Types:Message message) returns boolean {
     do {
         boolean insertResult = DB:insert("messages", txEmail, message);
-
         return insertResult;
 
     } on fail var e {
