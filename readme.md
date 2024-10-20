@@ -13,3 +13,11 @@ Perfect for teams, communities, or casual conversations, this application showca
 ## License
 
 This project is licensed under the Creative Common License - see the [LICENSE](LICENSE) file for details.
+
+## Contributing
+
+Contributions are welcome! If you have any suggestions, bug fixes, or new features to add, please feel free to open an issue or submit a pull request.
+</br></br>
+<a href="https://github.com/DulajHansana/iwb083-code-alphaz/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=DulajHansana/iwb083-code-alphaz" />
+</a>
