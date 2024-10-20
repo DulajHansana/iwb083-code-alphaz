@@ -2,13 +2,56 @@
 import { handleServerSignup } from '@/server';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function Signup() {
 	const router = useRouter();
+	const [formData, setFormData] = useState({
+		fullname: '',
+		email: '',
+		password: '',
+		confirmPassword: ''
+	});
+	const [errors, setErrors] = useState({});
+
+	const handleChange = (e) => {
+		const { name, value } = e.target;
+		setFormData({
+			...formData,
+			[name]: value
+		});
+	};
+
+	const validate = () => {
+		const newErrors = {};
+		if (!formData.fullname) newErrors.fullname = 'Full Name is required';
+		if (!formData.email) newErrors.email = 'Email is required';
+		if (!formData.password) newErrors.password = 'Password is required';
+		if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
+		return newErrors;
+	};
 
 	const handleSignup = () => {
-		handleServerSignup({ fullname: "Admin", email: "ladmin@localhost", password: "admin" }).then(res => {
-			console.log(res)
+		const validationErrors = validate();
+		if (Object.keys(validationErrors).length > 0) {
+			setErrors(validationErrors);
+			return;
+		}
+
+		handleServerSignup({
+			fullname: formData.fullname,
+			email: formData.email,
+			password: formData.password
+		}).then(res => {
+			if (res.code === 202) {
+				router.push('/chat');
+			} else if (res.code === 403) {
+				router.push('/');
+			} else {
+				alert(res.message);
+			}
+		}).catch(err => {
+			console.error(err);
 		});
 	};
 
@@ -39,9 +82,13 @@ export default function Signup() {
 							</label>
 							<input
 								type="text"
+								name="fullname"
 								placeholder="Enter Full Name"
+								value={formData.fullname}
+								onChange={handleChange}
 								className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50"
 							/>
+							{errors.fullname && <p className="text-red-500 text-sm">{errors.fullname}</p>}
 						</div>
 
 						<div>
@@ -50,9 +97,13 @@ export default function Signup() {
 							</label>
 							<input
 								type="email"
+								name="email"
 								placeholder="Enter Email Here"
+								value={formData.email}
+								onChange={handleChange}
 								className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50"
 							/>
+							{errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
 						</div>
 
 						<div>
@@ -61,9 +112,13 @@ export default function Signup() {
 							</label>
 							<input
 								type="password"
+								name="password"
 								placeholder="Enter Password Here"
+								value={formData.password}
+								onChange={handleChange}
 								className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50"
 							/>
+							{errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
 						</div>
 
 						<div>
@@ -72,9 +127,13 @@ export default function Signup() {
 							</label>
 							<input
 								type="password"
+								name="confirmPassword"
 								placeholder="Confirm Password Here"
+								value={formData.confirmPassword}
+								onChange={handleChange}
 								className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50"
 							/>
+							{errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
 						</div>
 
 						<button className="mt-6 w-full rounded-md bg-customPurple py-2 text-white hover:bg-purple-700" onClick={handleSignup}>
