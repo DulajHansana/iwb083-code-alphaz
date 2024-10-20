@@ -15,6 +15,11 @@ export class WebSocketClient {
 	clientDetails() {
 		return serverLoginDetails;
 	}
+	
+	setClientDetails(clientDetails) {
+		console.log("ssdd")
+		serverLoginDetails = clientDetails;
+	}
 
 	syncMessages(callback) {
 		const data = {
@@ -33,13 +38,14 @@ export class WebSocketClient {
 		}, 5000)
 	}
 
-	sendMessage(messageType, message) {
+	sendMessage(messageType, message, rxEmail) {
 		if (serverLoginDetails !== undefined && Object.keys(serverLoginDetails).length !== 0) {
 			const data = {
 				messageType: messageType !== undefined ? messageType : "usermessage",
 				messageId: Date.now(),
 				message: message,
-				...serverLoginDetails
+				rxEmail: rxEmail,
+			...serverLoginDetails
 			}
 
 			this.socket.send(JSON.stringify(JSON.parse(JSON.stringify(data))));
@@ -77,11 +83,11 @@ export class WebSocketClient {
 
 			const currentProgress = this.currentProgress || 0;
 			const targetProgress = progress;
-
 			let interval = setInterval(() => {
 				if (this.currentProgress >= targetProgress) {
 					clearInterval(interval);
 				} else {
+					console.log(this.currentProgress)
 					this.currentProgress = Math.min(this.currentProgress + 1, targetProgress);
 					this.preMessagesSyncCallback(preLoadingMessages, isNaN(this.currentProgress) ? 0 : this.currentProgress);
 				}
