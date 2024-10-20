@@ -1,3 +1,4 @@
+import { WebSocketProvider } from "@/contexts/WebSocketContext";
 import "./globals.css";
 import { Lato } from 'next/font/google'
 
@@ -14,11 +15,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
 	return (
-		<html lang="en" encoding="UTF-8">
-
-			<body className={`${lato.className} antialiased`}>
-				{children}
-			</body>
-		</html>
+		<WebSocketProvider>
+			<html lang="en" encoding="UTF-8">
+				<body className={`${lato.className} antialiased`}>
+					{children}
+				</body>
+			</html>
+		</WebSocketProvider>
 	);
 }

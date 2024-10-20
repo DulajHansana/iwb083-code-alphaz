@@ -1,32 +1,21 @@
 "use client";
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { WebSocketClient } from '@/server'; // Assuming this is how WebSocketClient is imported
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useWebSocket } from '@/contexts/WebSocketContext';
 
 export default function Home() {
-	const [readyState, setReadyState] = useState(false);
+	let { messageClient, readyState } = useWebSocket();
 	const router = useRouter();
-	let messageClient;
 
 	useEffect(() => {
-		messageClient = new WebSocketClient();
-
-		messageClient.onOpen(() => {
-			console.log("Client connected!");
-			setReadyState(true);
-			
-		});
-
-		return () => {
-			if (messageClient) {
-				messageClient.close();
-			}
-		};
-	}, []);
+		console.log(readyState);
+		if (messageClient) {
+		}
+	}, [messageClient, readyState]);
 
 	const handleNavigate = async () => {
-		if (readyState) {
+		if (readyState.client && readyState.server) {
 			router.push('/sign-in');
 		}
 	};
@@ -57,9 +46,11 @@ export default function Home() {
 						className="text-white py-2 px-6 rounded-lg transition-all duration-300 ease-in-out disabled:opacity-70"
 						style={{ backgroundColor: '#433878' }}
 						onClick={handleNavigate}
-						disabled={!readyState} // Button is only enabled when the WebSocket is ready
+						disabled={!(readyState.client && readyState.server)} // Button is only enabled when the WebSocket is ready
 					>
-						Get Started
+						{
+							readyState.client && readyState.server ? 'Get Started' : 'Connecting...' 
+						}
 					</button>
 				</div>
 			</div>
