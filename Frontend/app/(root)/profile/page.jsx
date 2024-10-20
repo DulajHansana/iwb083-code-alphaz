@@ -10,16 +10,12 @@ const Profile = () => {
     const fileInputRef = useRef(null);
 
     // Use state for managing input fields and profile image
-    const [displayName, setDisplayName] = useState("");
-    const [email, setEmail] = useState("");
+    const [displayName, setDisplayName] = useState("Emma");
+    const [email, setEmail] = useState("emma@example.com");
     const [profileImage, setProfileImage] = useState(null);
 
-    const handleLogout = () => {
-        router.push('/sign-in');
-    };
-
     const handlechat = () => {
-        router.push('/loadingchat');
+        router.push('/chat'); // Navigate to the chat list after saving profile changes
     };
 
     const handleEdit = () => {
@@ -50,7 +46,7 @@ const Profile = () => {
 
     return (
         <div className="flex h-screen">
-            <Sidebar />
+            <Sidebar /> {/* Include the Sidebar in the profile layout */}
 
             <div className="flex-grow flex">
                 <div className="w-1/2 p-10">
@@ -101,19 +97,6 @@ const Profile = () => {
                     </div>
 
                     <div className="mb-4">
-                        <label className="block text-lg text-customPurple">Display Name</label>
-                        <div className="relative">
-                            <input
-                                type="text"
-                                value={displayName}
-                                onChange={(e) => setDisplayName(e.target.value)}
-                                placeholder="Enter Name Here"
-                                className="mt-2 w-full p-4 border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:border-purple-500"
-                            />
-                        </div>
-                    </div>
-
-                    <div className="mb-4">
                         <label className="block text-lg text-customPurple">Email</label>
                         <div className="relative">
                             <input
@@ -131,26 +114,6 @@ const Profile = () => {
                                     height={20}
                                 />
                             </button>
-                            <input
-                                type="file"
-                                ref={fileInputRef}
-                                onChange={handleFileChange}
-                                accept="image/*"
-                                className="hidden"
-                            />
-                        </div>
-
-                        <div className="mb-4">
-                            <label className="block text-lg text-customPurple">Display Name</label>
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    value={displayName}
-                                    onChange={(e) => setDisplayName(e.target.value)}
-                                    placeholder="Enter Name Here"
-                                    className="mt-2 w-full p-4 border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:border-purple-500"
-                                />
-                            </div>
                         </div>
                     </div>
 
