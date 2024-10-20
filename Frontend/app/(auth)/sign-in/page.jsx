@@ -3,29 +3,29 @@ import { handleServerLogin } from '@/server';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import LoadingScreen from '/components/LoadingScreen';  // Import the LoadingScreen component
+import LoadingScreen from '/components/LoadingScreen';  
 
 export default function Home() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false); // Add state to control loading screen
+  const [isLoading, setIsLoading] = useState(false); 
 
   const handleSignup = () => {
     router.push('/sign-up');
   };
 
   const handleLogin = () => {
-    // Show the loading screen during login processing
+    
     setIsLoading(true);
 
     handleServerLogin({ username: "Admin", email: "ladmin@localhost", password: "admin" })
       .then(res => {
         if (res.user) {
-          // Simulate some delay before navigating to the chat list
+          
           setTimeout(() => {
-            router.push('/chat'); // Navigate to chat list after successful login
-          }, 2000); // Adjust delay if needed
+            router.push('/chat'); 
+          }, 2000); 
         } else {
-          setIsLoading(false); // Hide the loading screen if login fails
+          setIsLoading(false); 
           if (res.code === 403) {
             router.push('/');
           } else {
@@ -34,12 +34,12 @@ export default function Home() {
         }
       })
       .catch(() => {
-        setIsLoading(false); // Hide loading screen on error
+        setIsLoading(false); 
         alert('Login failed. Please try again.');
       });
   };
 
-  // Show LoadingScreen when isLoading is true
+  
   if (isLoading) {
     return <LoadingScreen />;
   }

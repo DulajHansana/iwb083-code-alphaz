@@ -33,13 +33,14 @@ export class WebSocketClient {
 		}, 5000)
 	}
 
-	sendMessage(messageType, message) {
+	sendMessage(messageType, message, rxEmail) {
 		if (serverLoginDetails !== undefined && Object.keys(serverLoginDetails).length !== 0) {
 			const data = {
 				messageType: messageType !== undefined ? messageType : "usermessage",
 				messageId: Date.now(),
 				message: message,
-				...serverLoginDetails
+				rxEmail: rxEmail,
+			...serverLoginDetails
 			}
 
 			this.socket.send(JSON.stringify(JSON.parse(JSON.stringify(data))));
