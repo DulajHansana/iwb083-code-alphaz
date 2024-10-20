@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useState } from 'react';
 
@@ -23,7 +24,9 @@ export default function ChatList({ onSelectChat }) {
     setSearchQuery(event.target.value);
   };
 
+
   const filteredChats = chats.filter(chat =>
+
     chat.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -52,9 +55,11 @@ export default function ChatList({ onSelectChat }) {
             <button
               key={chat.id}
               className={`w-full flex items-center p-4 rounded-2xl focus:outline-none 
+
                           ${selectedChatId === chat.id
                   ? 'bg-purple-700 text-white'
                   : 'bg-purple-300 hover:bg-purple-400'} 
+
                           space-x-4 transition-colors duration-200`}
               onClick={() => handleChatSelect(chat)}
             >
