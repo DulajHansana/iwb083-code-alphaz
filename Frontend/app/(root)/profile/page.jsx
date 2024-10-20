@@ -131,6 +131,26 @@ const Profile = () => {
                                     height={20}
                                 />
                             </button>
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                onChange={handleFileChange}
+                                accept="image/*"
+                                className="hidden"
+                            />
+                        </div>
+
+                        <div className="mb-4">
+                            <label className="block text-lg text-customPurple">Display Name</label>
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    value={displayName}
+                                    onChange={(e) => setDisplayName(e.target.value)}
+                                    placeholder="Enter Name Here"
+                                    className="mt-2 w-full p-4 border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:border-purple-500"
+                                />
+                            </div>
                         </div>
                     </div>
 
