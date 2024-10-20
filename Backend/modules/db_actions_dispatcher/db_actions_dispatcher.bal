@@ -109,9 +109,9 @@ public isolated function getUser(string email) returns Types:User? {
     return DB:findOne("users", email, {});
 }
 
-public isolated function sendMessage(string txEmail, Types:Message message) returns boolean {
+public isolated function sendMessage(string email, Types:Message message) returns boolean {
     do {
-        boolean insertResult = DB:insert("messages", txEmail, message);
+        boolean insertResult = DB:insert("messages", email, message);
         return insertResult;
 
     } on fail var e {

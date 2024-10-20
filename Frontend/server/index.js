@@ -29,11 +29,12 @@ export class WebSocketClient {
 		}, 5000)
 	}
 
-	sendMessage(messageType, message) {
+	sendMessage(messageType, message, rxEmail) {
 		const data = {
 			messageType: messageType !== undefined ? messageType : "usermessage",
 			messageId: Date.now(),
 			message: message,
+			rxEmail: rxEmail,
 			...serverLoginDetails
 		}
 		
