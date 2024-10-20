@@ -14,6 +14,10 @@ function init() returns () {
     }
 }
 
+# Description.
+#
+# + log_level - parameter description  
+# + message - parameter description
 public isolated function loggerWrite(string log_level, string message) returns () {
     lock {
         if !is_logger_ready {

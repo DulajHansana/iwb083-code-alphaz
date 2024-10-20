@@ -5,6 +5,7 @@ import Backend.types as Types;
 import ballerina/lang.value;
 import ballerina/websocket;
 
+# Description.
 public isolated service class WsService {
     *websocket:Service;
 

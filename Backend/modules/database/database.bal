@@ -6,6 +6,10 @@ import ballerinax/mongodb;
 isolated mongodb:Client? mongoAdmin = ();
 isolated int mongoConnectionRetry = 10;
 
+# Description.
+#
+# + connectionString - parameter description
+# + return - return value description
 public isolated function initialize(string connectionString) returns boolean {
     mongodb:Client|error mongoResult = new (connection = connectionString);
 
@@ -29,6 +33,11 @@ public isolated function initialize(string connectionString) returns boolean {
     }
 }
 
+# Description.
+#
+# + databaseName - parameter description  
+# + collectionName - parameter description
+# + return - return value description
 public isolated function createCollection(string databaseName, string collectionName) returns boolean {
     mongodb:Database|error databaseResult = databaseAccessor(databaseName);
     if databaseResult is error {
@@ -49,6 +58,12 @@ public isolated function createCollection(string databaseName, string collection
     }
 }
 
+# Description.
+#
+# + databaseName - parameter description  
+# + collectionName - parameter description  
+# + document - parameter description
+# + return - return value description
 public isolated function insert(string databaseName, string collectionName, map<anydata> document) returns boolean {
     mongodb:Collection|error collectionResult = collectionAccessor(databaseName, collectionName);
     if collectionResult is error {
@@ -69,6 +84,12 @@ public isolated function insert(string databaseName, string collectionName, map<
     }
 }
 
+# Description.
+#
+# + databaseName - parameter description  
+# + collectionName - parameter description  
+# + documents - parameter description
+# + return - return value description
 public isolated function insertMany(string databaseName, string collectionName, map<anydata>[] documents) returns boolean {
     mongodb:Collection|error collectionResult = collectionAccessor(databaseName, collectionName);
     if collectionResult is error {
@@ -89,6 +110,12 @@ public isolated function insertMany(string databaseName, string collectionName, 
     }
 }
 
+# Description.
+#
+# + databaseName - parameter description  
+# + collectionName - parameter description  
+# + query - parameter description
+# + return - return value description
 public isolated function findOne(string databaseName, string collectionName, json query) returns ()|Types:User? {
     mongodb:Collection|error collectionResult = collectionAccessor(databaseName, collectionName);
     if collectionResult is error {
@@ -111,6 +138,12 @@ public isolated function findOne(string databaseName, string collectionName, jso
 
 isolated Types:User[] documents = [];
 
+# Description.
+#
+# + databaseName - parameter description  
+# + collectionName - parameter description  
+# + query - parameter description
+# + return - return value description
 public isolated function findUsers(string databaseName, string collectionName, json query) returns ()|Types:User[] {
     mongodb:Collection|error collectionResult = collectionAccessor(databaseName, collectionName);
     if collectionResult is error {
@@ -148,6 +181,12 @@ public isolated function findUsers(string databaseName, string collectionName, j
 
 isolated Types:Message[] messagesDocuments = [];
 
+# Description.
+#
+# + databaseName - parameter description  
+# + collectionName - parameter description  
+# + query - parameter description
+# + return - return value description
 public isolated function findMessages(string databaseName, string collectionName, json query) returns ()|Types:Message[] {
     mongodb:Collection|error collectionResult = collectionAccessor(databaseName, collectionName);
     if collectionResult is error {
@@ -183,6 +222,12 @@ public isolated function findMessages(string databaseName, string collectionName
     }
 }
 
+# Description.
+#
+# + databaseName - parameter description  
+# + collectionName - parameter description  
+# + query - parameter description
+# + return - return value description
 public isolated function removeOne(string databaseName, string collectionName, json query) returns boolean {
     mongodb:Collection|error collectionResult = collectionAccessor(databaseName, collectionName);
 
@@ -203,6 +248,13 @@ public isolated function removeOne(string databaseName, string collectionName, j
     }
 }
 
+# Description.
+#
+# + databaseName - parameter description  
+# + collectionName - parameter description  
+# + query - parameter description  
+# + update - parameter description
+# + return - return value description
 public isolated function updateOne(string databaseName, string collectionName, json query, json update) returns boolean {
     mongodb:Collection|error collectionResult = collectionAccessor(databaseName, collectionName);
 
@@ -226,6 +278,12 @@ public isolated function updateOne(string databaseName, string collectionName, j
     }
 }
 
+# Description.
+#
+# + databaseName - parameter description  
+# + collectionName - parameter description  
+# + query - parameter description
+# + return - return value description
 public isolated function count(string databaseName, string collectionName, json query) returns int {
     mongodb:Collection|error collectionResult = collectionAccessor(databaseName, collectionName);
     if collectionResult is error {

@@ -5,6 +5,10 @@ import Backend.types as Types;
 import ballerina/http;
 import ballerina/lang.value;
 
+# Description.
+#
+# + requestBody - parameter description
+# + return - return value description
 public isolated function loginUser(json requestBody) returns http:Response {
     http:Response response = new;
 
@@ -51,6 +55,10 @@ public isolated function loginUser(json requestBody) returns http:Response {
     }
 }
 
+# Description.
+#
+# + requestBody - parameter description
+# + return - return value description
 public isolated function signUpUser(json requestBody) returns http:Response {
     http:Response response = new;
 
@@ -105,10 +113,19 @@ public isolated function signUpUser(json requestBody) returns http:Response {
     }
 }
 
+# Description.
+#
+# + email - parameter description
+# + return - return value description
 public isolated function getUser(string email) returns Types:User? {
     return DB:findOne("users", email, {});
 }
 
+# Description.
+#
+# + email - parameter description  
+# + message - parameter description
+# + return - return value description
 public isolated function sendMessage(string email, Types:Message message) returns boolean {
     do {
         boolean insertResult = DB:insert("messages", email, message);
@@ -121,10 +138,18 @@ public isolated function sendMessage(string email, Types:Message message) return
 
 }
 
+# Description.
+#
+# + txEmail - parameter description
+# + return - return value description
 public isolated function totalMessages(string txEmail) returns int {
     return DB:count("messages", txEmail, {});
 }
 
+# Description.
+#
+# + txEmail - parameter description
+# + return - return value description
 public isolated function retrieveMessages(string txEmail) returns Types:Message[]? {
     return DB:findMessages("messages", txEmail, {});
 }
