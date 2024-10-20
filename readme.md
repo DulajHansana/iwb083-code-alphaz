@@ -21,3 +21,5 @@ Contributions are welcome! If you have any suggestions, bug fixes, or new featur
 <a href="https://github.com/DulajHansana/iwb083-code-alphaz/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=DulajHansana/iwb083-code-alphaz" />
 </a>
+
+<h1>How to Run </h1>
