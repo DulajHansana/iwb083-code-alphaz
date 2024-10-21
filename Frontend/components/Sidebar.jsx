@@ -4,7 +4,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react'; // For managing profile dropdown or modal
 
-const Sidebar = () => {
+const Sidebar = ({ myDetails }) => {
+  console.log(myDetails);
   const router = useRouter();
   const [user, setUser] = useState({ // Example user data, replace with actual data fetching logic
     name: "Emma",
