@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 
 import React, { useEffect, useState } from 'react';
 import Sidebar from '@/components/Sidebar';
@@ -7,20 +7,17 @@ import ChatInterface from '@/components/ChatInterface';
 import SparkChatIntro from '@/components/SparkChatIntro';
 import { useWebSocket } from '@/contexts/WebSocketContext';
 import { useMessages } from '@/contexts/MessageContext';
+import { useUser } from '@/contexts/UserProfile';
 
 const Chat = () => {
   const { messages } = useMessages();
   let { messageClient, readyState } = useWebSocket();
   const [selectedChat, setSelectedChat] = useState(null);
   const [userMessages, setUserMessages] = useState([]);
-  const [myDetails, setMyDetails] = useState({});
+  const { user } = useUser();
 
-  useEffect(() => {    
+  useEffect(() => {
     if (readyState.client && readyState.server) {
-      //messageClient.sendMessage("usermessage", "Hello Ballerina!");
-      console.log(messageClient.clientDetails())
-      
-      setMyDetails(messageClient.clientDetails());
 
     } else {
       window.location.href = "/";
@@ -34,12 +31,12 @@ const Chat = () => {
 
   return (
     <div className="flex h-screen">
-      <Sidebar profile={ myDetails } />
+      <Sidebar profile={user} />
       <ChatList onSelectChat={(chat) => setSelectedChat(chat)} userMessages={userMessages} />
       {selectedChat ? (
         <ChatInterface selectedChat={selectedChat} />
       ) : (
-            <SparkChatIntro />
+        <SparkChatIntro />
       )}
     </div>
   );

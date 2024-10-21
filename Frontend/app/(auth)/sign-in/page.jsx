@@ -7,6 +7,7 @@ import LoadingScreen from '@/components/LoadingScreen';
 import { useWebSocket } from '@/contexts/WebSocketContext';
 import { useMessages } from '@/contexts/MessageContext';
 import { useUser } from '@/contexts/UserProfile';
+import { CircularProgress, Stack } from '@mui/material';
 
 async function formatMessages(messages) {
 	console.log(messages);
@@ -24,12 +25,14 @@ export default function Home() {
 	const [syncing, setSyncing] = useState(false);
 	const [progressState, setProgressState] = useState("formatting");
 	const [loadingUnmounter, setLoadingUnmounter] = useState(false);
+	const [isHandlingLogin, setIsHandlingLogin] = useState(false);
 
 	const handleSignup = () => {
 		router.push('/sign-up');
 	};
 
 	const handleLogin = () => {
+		setIsHandlingLogin(true);
 		handleServerLogin({ email, password })
 			.then(res => {
 				if (res.user) {
@@ -45,12 +48,14 @@ export default function Home() {
 					}
 				} else {
 					alert('Login failed because ' + res.message);
+					setIsHandlingLogin(false);
 				}
 			})
 			.catch((e) => {
 				setIsLoading(false);
 				console.log(e);
 				alert('Login failed. Please try again.');
+				setIsHandlingLogin(false);
 			});
 	};
 
@@ -126,7 +131,6 @@ export default function Home() {
 							</label>
 							<input
 								type="password"
-								placeholder="Enter Password Here"
 								className="mt-1 py-2 px-2 w-full tracking-widest rounded-md border-gray-300 border shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50 outline-none"
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
@@ -144,10 +148,13 @@ export default function Home() {
 						</div>
 
 						<button
-							className="mt-6 w-full rounded-md bg-customPurple py-2 text-white hover:bg-customPurple/90"
+							className="mt-6 min-h-10 w-full rounded-md bg-customPurple text-white hover:bg-customPurple/90"
 							onClick={handleLogin}
+							disabled={isHandlingLogin}
 						>
-							Login
+							<Stack direction="row" alignItems="center" justifyContent="center" sx={{ minWidth: 100 }}>
+								{isHandlingLogin ? <CircularProgress sx={{ ml: 1 }} size={18} color='white' /> : <span>Login</span>}
+							</Stack>
 						</button>
 
 						<div className="mt-4 text-center">
