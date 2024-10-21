@@ -6,29 +6,32 @@ import ChatList from '@/components/ChatList';
 import ChatInterface from '@/components/ChatInterface';
 import SparkChatIntro from '@/components/SparkChatIntro';
 import { useWebSocket } from '@/contexts/WebSocketContext';
+import { useMessages } from '@/contexts/MessageContext';
 
 const Chat = () => {
+  const { messages } = useMessages();
   let { messageClient, readyState } = useWebSocket();
   const [selectedChat, setSelectedChat] = useState(null);
   const [userMessages, setUserMessages] = useState([]);
   const [myDetails, setMyDetails] = useState({});
 
-  useEffect(() => {
-    
+  useEffect(() => {    
     if (readyState.client && readyState.server) {
       //messageClient.sendMessage("usermessage", "Hello Ballerina!");
       messageClient.syncMessages((preMessages, syncingProgress) => { // preMessages has user's old messages, syncingProgress has how much messages are retrieved
         setUserMessages(preMessages);
       })
       setMyDetails(messageClient.clientDetails());
-      
+
     } else {
       window.location.href = "/";
       console.log("messageClient is null");
     }
   }, [readyState]);
 
-/*    */
+  useEffect(() => {
+    console.log(messages);
+  }, [messages])
 
   return (
     <div className="flex h-screen">

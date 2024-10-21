@@ -5,9 +5,11 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import LoadingScreen from '@/components/LoadingScreen';
 import { useWebSocket } from '@/contexts/WebSocketContext';
+import { useMessages } from '@/contexts/MessageContext';
 
 export default function Home() {
 	const { messageClient, readyState } = useWebSocket();
+	const { syncMessages } = useMessages();
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState(false);
 	const [progress, setProgress] = useState(0);
@@ -49,7 +51,9 @@ export default function Home() {
 			messageClient.syncMessages((preMessages, syncProgress) => {
 				setProgress(syncProgress);
 				if (Math.ceil(syncProgress) >= 100) {
-					router.push('/chat');
+					syncMessages(preMessages);
+					router.push(`/chat`);
+
 					setTimeout(() => {
 						setProgress(0);
 						setSyncing(false);

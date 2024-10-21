@@ -1,6 +1,7 @@
 import { WebSocketProvider } from "@/contexts/WebSocketContext";
 import "./globals.css";
 import { Lato } from 'next/font/google'
+import { MessageProvider } from "@/contexts/MessageContext";
 
 const lato = Lato({ subsets: ['latin'], weight: ['100', '300', '400', '700'] })
 
@@ -16,11 +17,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
 	return (
 		<WebSocketProvider>
-			<html lang="en" encoding="UTF-8">
-				<body className={`${lato.className} antialiased`}>
-					{children}
-				</body>
-			</html>
+			<MessageProvider>
+				<html lang="en" encoding="UTF-8">
+					<body className={`${lato.className} antialiased`}>
+						{children}
+					</body>
+				</html>
+			</MessageProvider>
 		</WebSocketProvider>
 	);
 }

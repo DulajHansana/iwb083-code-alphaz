@@ -17,7 +17,6 @@ export class WebSocketClient {
 	}
 	
 	setClientDetails(clientDetails) {
-		console.log("ssdd")
 		serverLoginDetails = clientDetails;
 	}
 
@@ -87,7 +86,6 @@ export class WebSocketClient {
 				if (this.currentProgress >= targetProgress) {
 					clearInterval(interval);
 				} else {
-					console.log(this.currentProgress)
 					this.currentProgress = Math.min(this.currentProgress + 1, targetProgress);
 					this.preMessagesSyncCallback(preLoadingMessages, isNaN(this.currentProgress) ? 0 : this.currentProgress);
 				}

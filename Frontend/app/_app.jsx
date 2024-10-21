@@ -1,10 +1,13 @@
+import { MessageProvider } from "@/contexts/MessageContext";
 import { WebSocketProvider } from "@/contexts/WebSocketContext";
 
 function MyApp({ Component, pageProps }) {
 	return (
 		<WebSocketProvider>
-			<Component {...pageProps} />
-		</WebSocketProvider>
+			<MessageProvider>
+				<Component {...pageProps} />
+			</MessageProvider>
+		</WebSocketProvider >
 	);
 }
 
