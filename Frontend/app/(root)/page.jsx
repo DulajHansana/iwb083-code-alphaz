@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useEffect } from 'react';
 import { useWebSocket } from '@/contexts/WebSocketContext';
 import { CircularProgress, LinearProgress, Stack } from '@mui/material';
-
+import { enqueueSnackbar, SnackbarProvider } from 'notistack';
 
 export default function Home() {
     let { messageClient, readyState } = useWebSocket();
@@ -13,8 +13,16 @@ export default function Home() {
     const handleNavigate = async () => {
         if (readyState.client && readyState.server) {
             router.push('/sign-in');
+        } else {
+            enqueueSnackbar('You are not connected. Please wait for the connection to be established.', { variant: "error" });
         }
     };
+
+    useEffect(() => {
+        if (readyState.client && readyState.server) {
+            enqueueSnackbar('You are connected. You can now login.', { variant: "info" });
+        }
+    }, [messageClient, readyState]);
 
     return (
         <div className="flex justify-center items-center h-screen bg-cover bg-center">
@@ -28,6 +36,7 @@ export default function Home() {
                         className="w-32 h-32"
                     />
                 </div>
+
 
                 <div className="text-left">
                     <h1 className="text-4xl font-bold mb-2" style={{ color: '#433878' }}>
@@ -47,9 +56,10 @@ export default function Home() {
                     >
                         <Stack direction="row" alignItems="center">
                             {readyState.client && readyState.server ? 'Get Started ' : 'Connecting... '}
-                            {readyState.client && readyState.server ? null : <CircularProgress sx={{ml: 1} } size={16} color='white' />}
+                            {readyState.client && readyState.server ? null : <CircularProgress sx={{ ml: 1 }} size={16} color='white' />}
                         </Stack>
                     </button>
+                    <SnackbarProvider maxSnack={1} autoHideDuration={3000} anchorOrigin={{ horizontal: 'center', vertical: 'top' }} />
                 </div>
             </div>
         </div>

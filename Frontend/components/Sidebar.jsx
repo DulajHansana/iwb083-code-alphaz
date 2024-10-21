@@ -36,7 +36,6 @@ const Sidebar = ({ profile: myDetails }) => {
 		<div className="w-24 min-w-24 bg-purple-600 h-screen flex flex-col items-center p-4">
 			<Image src="/images/App Logo.png" alt="App Logo" width={40} height={40} className="object-contain" />
 
-			{/* Profile Section */}
 			<button
 				onClick={handleProfileClick}
 				className="bg-purple-400 rounded-full mt-4 flex items-center justify-center w-10 h-10"

@@ -8,6 +8,7 @@ import { useWebSocket } from '@/contexts/WebSocketContext';
 import { useMessages } from '@/contexts/MessageContext';
 import { useUser } from '@/contexts/UserProfile';
 import { CircularProgress, Stack } from '@mui/material';
+import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 
 async function formatMessages(messages) {
 	console.log(messages);
@@ -39,7 +40,7 @@ export default function Home() {
 					if (res.code === 403) {
 						router.push('/');
 					} else if (res.code !== 202) {
-						alert(res.message);
+						enqueueSnackbar(res.message, { variant: "error" });
 					} else if (res.code === 202) {
 						messageClient.setClientDetails(res.user);
 						setLoginUser(res.user);
@@ -47,14 +48,14 @@ export default function Home() {
 						setSyncing(true);
 					}
 				} else {
-					alert('Login failed because ' + res.message);
+					enqueueSnackbar(res.message, { variant: "error" });
 					setIsHandlingLogin(false);
 				}
 			})
 			.catch((e) => {
 				setIsLoading(false);
 				console.log(e);
-				alert('Login failed. Please try again.');
+				enqueueSnackbar('Login failed. Please try again.', { variant: "error" });
 				setIsHandlingLogin(false);
 			});
 	};
@@ -146,6 +147,7 @@ export default function Home() {
 								<span className="ml-2 text-sm text-gray-700">Remember me?</span>
 							</label>
 						</div>
+						<SnackbarProvider maxSnack={1} autoHideDuration={3000} anchorOrigin={{ horizontal: 'center', vertical: 'top' }} />
 
 						<button
 							className="mt-6 min-h-10 w-full rounded-md bg-customPurple text-white hover:bg-customPurple/90"

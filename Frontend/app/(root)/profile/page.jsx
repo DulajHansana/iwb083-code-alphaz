@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Sidebar from '../../../components/Sidebar';
 import { useUser } from '@/contexts/UserProfile';
-import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
+import { enqueueSnackbar, SnackbarProvider } from 'notistack';
 
 const Profile = () => {
     const { user } = useUser();
@@ -137,6 +137,9 @@ const Profile = () => {
                         </button>
                     </div>
                 </div>
+
+                <SnackbarProvider maxSnack={1} autoHideDuration={3000} anchorOrigin={{ horizontal: 'center', vertical: 'top' }} />
+
 
                 <div className="w-1/2 flex flex-col justify-center items-center p-10">
                     <Image
