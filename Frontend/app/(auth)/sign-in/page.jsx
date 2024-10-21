@@ -3,23 +3,36 @@ import { handleServerLogin } from '@/server';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import LoadingScreen from '/components/LoadingScreen';
+import LoadingScreen from '@/components/LoadingScreen';
 import { useWebSocket } from '@/contexts/WebSocketContext';
+import { useMessages } from '@/contexts/MessageContext';
+import { useUser } from '@/contexts/UserProfile';
+import { CircularProgress, Stack } from '@mui/material';
+
+async function formatMessages(messages) {
+	console.log(messages);
+}
 
 export default function Home() {
+	const { setLoginUser } = useUser();
 	const { messageClient, readyState } = useWebSocket();
+	const { syncMessages } = useMessages();
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState(false);
 	const [progress, setProgress] = useState(0);
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	const [syncing, setSyncing] = useState(false); 
+	const [syncing, setSyncing] = useState(false);
+	const [progressState, setProgressState] = useState("formatting");
+	const [loadingUnmounter, setLoadingUnmounter] = useState(false);
+	const [isHandlingLogin, setIsHandlingLogin] = useState(false);
 
 	const handleSignup = () => {
 		router.push('/sign-up');
 	};
 
 	const handleLogin = () => {
+		setIsHandlingLogin(true);
 		handleServerLogin({ email, password })
 			.then(res => {
 				if (res.user) {
@@ -29,47 +42,68 @@ export default function Home() {
 						alert(res.message);
 					} else if (res.code === 202) {
 						messageClient.setClientDetails(res.user);
-						setIsLoading(true);
-						setSyncing(true); 
+						setLoginUser(res.user);
+						setProgress(0);
+						setSyncing(true);
 					}
 				} else {
 					alert('Login failed because ' + res.message);
+					setIsHandlingLogin(false);
 				}
 			})
 			.catch((e) => {
 				setIsLoading(false);
 				console.log(e);
 				alert('Login failed. Please try again.');
+				setIsHandlingLogin(false);
 			});
 	};
 
-	
+
 	useEffect(() => {
 		if (syncing && readyState.client && readyState.server) {
 			messageClient.syncMessages((preMessages, syncProgress) => {
-				setProgress(syncProgress);
-				if (Math.ceil(syncProgress) >= 100) {
-					setIsLoading(false);
-					setProgress(0);
-					setSyncing(false);
-					router.push('/chat');
-				}
+				const interval = setInterval(() => {
+					setProgress(syncProgress);
+					if (Math.ceil(syncProgress) >= 100) {
+						router.push(`/chat`);
+						syncMessages(preMessages);
+						formatMessages(preMessages).then(() => {
+							setLoadingUnmounter(true);
+							clearInterval(interval);
+						})
+					}
+				}, 3000)
+				setProgress(0);
+				setIsLoading(true);
+				setProgressState("formatting");
 			});
+
 		}
 	}, [syncing]);
 
+	useEffect(() => {
+		if (loadingUnmounter) {
+			setTimeout(() => {
+				setProgress(0);
+				setSyncing(false);
+				setIsLoading(false);
+			}, 5000)
+		}
+	}, [loadingUnmounter])
+
 	if (isLoading) {
-		return <LoadingScreen progress={progress} />;
+		return <LoadingScreen progress={progress} state={progressState} />;
 	}
 
 	return (
 		<div
 			className="flex h-screen items-center justify-center bg-cover bg-center"
 			style={{
-				backgroundImage: 'url(/images/bgimage.jpg)',
+				backgroundImage: 'url(https://img.freepik.com/free-vector/black-white-halftone-pattern-texture-background_84443-21906.jpg?w=740&t=st=1729453875~exp=1729454475~hmac=9fc8b45da11b65d3c844fba99dadbcd78bb6e67aae2289a981ec9bc652113af0)',
+				backdropFilter: 'blur(10px)',
 				backgroundSize: 'cover',
-				backgroundPosition: 'center',
-				backgroundRepeat: 'no-repeat',
+				backgroundRepeat: 'no-repeat'
 			}}
 		>
 			<div className="flex w-full max-w-4xl rounded-lg bg-white shadow-lg overflow-hidden">
@@ -85,7 +119,7 @@ export default function Home() {
 							<input
 								type="email"
 								placeholder="Enter Email Here"
-								className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50"
+								className="mt-1 py-2 px-2 w-full rounded-md border-gray-300 border shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50 outline-none"
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
 							/>
@@ -97,8 +131,7 @@ export default function Home() {
 							</label>
 							<input
 								type="password"
-								placeholder="Enter Password Here"
-								className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50"
+								className="mt-1 py-2 px-2 w-full tracking-widest rounded-md border-gray-300 border shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50 outline-none"
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
 							/>
@@ -115,10 +148,13 @@ export default function Home() {
 						</div>
 
 						<button
-							className="mt-6 w-full rounded-md bg-customPurple py-2 text-white hover:bg-purple-700"
+							className="mt-6 min-h-10 w-full rounded-md bg-customPurple text-white hover:bg-customPurple/90"
 							onClick={handleLogin}
+							disabled={isHandlingLogin}
 						>
-							Login
+							<Stack direction="row" alignItems="center" justifyContent="center" sx={{ minWidth: 100 }}>
+								{isHandlingLogin ? <CircularProgress sx={{ ml: 1 }} size={18} color='white' /> : <span>Login</span>}
+							</Stack>
 						</button>
 
 						<div className="mt-4 text-center">

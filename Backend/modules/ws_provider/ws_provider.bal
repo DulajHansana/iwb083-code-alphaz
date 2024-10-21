@@ -5,6 +5,7 @@ import Backend.types as Types;
 import ballerina/lang.value;
 import ballerina/websocket;
 
+# Description.
 public isolated service class WsService {
     *websocket:Service;
 
@@ -36,6 +37,15 @@ public isolated service class WsService {
                     code: 704,
                     message: "New pre-loading message",
                     value: message
+                };
+                check caller->writeTextMessage(newMessage.toString());
+            }
+
+            if (messages.length() == 0) {
+                Types:SystemMessage newMessage = {
+                    code: 704,
+                    message: "New pre-loading message",
+                    value: ()
                 };
                 check caller->writeTextMessage(newMessage.toString());
             }

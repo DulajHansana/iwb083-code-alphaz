@@ -10,14 +10,14 @@ export class WebSocketClient {
 		this.socket.addEventListener("open", (event) => this.onOpen(event));
 		this.socket.addEventListener("message", (event) => this.onMessage(event));
 		this.readyState = this.socket.readyState;
+		this.preLoadingCount = undefined;
 	}
 
 	clientDetails() {
 		return serverLoginDetails;
 	}
-	
+
 	setClientDetails(clientDetails) {
-		console.log("ssdd")
 		serverLoginDetails = clientDetails;
 	}
 
@@ -45,7 +45,7 @@ export class WebSocketClient {
 				messageId: Date.now(),
 				message: message,
 				rxEmail: rxEmail,
-			...serverLoginDetails
+				...serverLoginDetails
 			}
 
 			this.socket.send(JSON.stringify(JSON.parse(JSON.stringify(data))));
@@ -64,7 +64,7 @@ export class WebSocketClient {
 		})
 	}
 
-	close() { 
+	close() {
 		this.socket.close();
 	}
 
@@ -76,27 +76,37 @@ export class WebSocketClient {
 		}
 
 		if (response.code === 704) { // A pre-message is recieved
-			preLoadingMessages[response.value.id] = response.value;
+			let targetProgress = 0;
+			if (this.preLoadingCount && this.preLoadingCount > 0) {
+				preLoadingMessages[response.value.id] = response.value;
 
-			this.preLoadingCount === 0 ? (this.preLoadingCount = 1) : this.preLoadingCount;
-			const progress = (Object.keys(preLoadingMessages).length / this.preLoadingCount) * 100;
+				this.preLoadingCount === 0 ? (this.preLoadingCount = 1) : this.preLoadingCount;
+				const progress = (Object.keys(preLoadingMessages).length / this.preLoadingCount) * 100;
 
-			const currentProgress = this.currentProgress || 0;
-			const targetProgress = progress;
-			let interval = setInterval(() => {
-				if (this.currentProgress >= targetProgress) {
-					clearInterval(interval);
-				} else {
-					console.log(this.currentProgress)
-					this.currentProgress = Math.min(this.currentProgress + 1, targetProgress);
-					this.preMessagesSyncCallback(preLoadingMessages, isNaN(this.currentProgress) ? 0 : this.currentProgress);
-				}
-			}, 100);
+				const currentProgress = this.currentProgress || 0;
+				targetProgress = progress;
+				let interval = setInterval(() => {
+					if (this.currentProgress >= targetProgress) {
+						clearInterval(interval);
+					} else {
+						this.currentProgress = Math.min(this.currentProgress + 1, targetProgress);
+						this.preMessagesSyncCallback(preLoadingMessages, isNaN(this.currentProgress) ? 0 : this.currentProgress);
+					}
+				}, 100);
+			} else {
+				targetProgress = 100;
+				this.preMessagesSyncCallback({}, 100);
+				setTimeout(() => {
+					preLoadingMessages = {};
+					this.preLoadingCount = undefined;
+					this.currentProgress = 0;
+				}, 1000);
+			}
 
 			if (targetProgress === 100) {
 				setTimeout(() => {
 					preLoadingMessages = {};
-					this.preLoadingCount = 0;
+					this.preLoadingCount = undefined;
 					this.currentProgress = 0;
 				}, 1000);
 			}

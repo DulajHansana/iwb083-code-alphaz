@@ -1,10 +1,13 @@
 "use client";
+import { useUser } from '@/contexts/UserProfile';
 import { handleServerSignup } from '@/server';
+import { CircularProgress, Stack } from '@mui/material';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function Signup() {
+	const { setLoginUser } = useUser();
 	const router = useRouter();
 	const [formData, setFormData] = useState({
 		fullname: '',
@@ -13,6 +16,8 @@ export default function Signup() {
 		confirmPassword: ''
 	});
 	const [errors, setErrors] = useState({});
+	const [isHandlingSignup, setIsHandlingSignup] = useState(false);
+
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -24,7 +29,7 @@ export default function Signup() {
 
 	const validate = () => {
 		const newErrors = {};
-		if (!formData.fullname) newErrors.fullname = 'Full Name is required';
+		if (!formData.fullname) newErrors.fullname = 'Full name is required';
 		if (!formData.email) newErrors.email = 'Email is required';
 		if (!formData.password) newErrors.password = 'Password is required';
 		if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
@@ -32,9 +37,11 @@ export default function Signup() {
 	};
 
 	const handleSignup = () => {
+		setIsHandlingSignup(true);
 		const validationErrors = validate();
 		if (Object.keys(validationErrors).length > 0) {
 			setErrors(validationErrors);
+			setIsHandlingSignup(false);
 			return;
 		}
 
@@ -44,26 +51,30 @@ export default function Signup() {
 			password: formData.password
 		}).then(res => {
 			if (res.code === 202) {
+				setLoginUser(res.user);
 				router.push('/chat');
+				setIsHandlingSignup(false);
 			} else if (res.code === 403) {
 				router.push('/');
 			} else {
+				setIsHandlingSignup(false);
 				alert(res.message);
 			}
 		}).catch(err => {
+			setIsHandlingSignup(false);
 			console.error(err);
 		});
 	};
 
 	const handleLogin = () => {
-		//router.push('/sign-in');
+		router.push('/sign-in');
 	};
 
 	return (
 		<div
 			className="flex h-screen items-center justify-center bg-cover bg-center"
 			style={{
-				backgroundImage: 'url(/images/bgimage.jpg)',
+				backgroundImage: 'url(https://img.freepik.com/free-vector/black-white-halftone-pattern-texture-background_84443-21906.jpg?w=740&t=st=1729453875~exp=1729454475~hmac=9fc8b45da11b65d3c844fba99dadbcd78bb6e67aae2289a981ec9bc652113af0)',
 				backgroundSize: 'cover',
 				backgroundPosition: 'center',
 				backgroundRepeat: 'no-repeat',
@@ -86,7 +97,7 @@ export default function Signup() {
 								placeholder="Enter Full Name"
 								value={formData.fullname}
 								onChange={handleChange}
-								className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50"
+								className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50 outline-none py-2 px-2 w-ful border "
 							/>
 							{errors.fullname && <p className="text-red-500 text-sm">{errors.fullname}</p>}
 						</div>
@@ -101,7 +112,7 @@ export default function Signup() {
 								placeholder="Enter Email Here"
 								value={formData.email}
 								onChange={handleChange}
-								className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50"
+								className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50  py-2 px-2 w-ful border outline-none"
 							/>
 							{errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
 						</div>
@@ -113,10 +124,9 @@ export default function Signup() {
 							<input
 								type="password"
 								name="password"
-								placeholder="Enter Password Here"
 								value={formData.password}
 								onChange={handleChange}
-								className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50"
+								className="mt-1 w-full tracking-widest rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50  py-2 px-2 w-ful border outline-none"
 							/>
 							{errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
 						</div>
@@ -128,16 +138,17 @@ export default function Signup() {
 							<input
 								type="password"
 								name="confirmPassword"
-								placeholder="Confirm Password Here"
 								value={formData.confirmPassword}
 								onChange={handleChange}
-								className="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50"
+								className="mt-1 w-full tracking-widest rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50  py-2 px-2 w-ful border outline-none"
 							/>
 							{errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
 						</div>
 
-						<button className="mt-6 w-full rounded-md bg-customPurple py-2 text-white hover:bg-purple-700" onClick={handleSignup}>
-							Sign Up
+						<button className="mt-6 min-h-10 w-full rounded-md bg-customPurple py-2 text-white hover:bg-customPurple/90" onClick={handleSignup}>
+							<Stack direction="row" alignItems="center" justifyContent="center" sx={{ minWidth: 100 }}>
+								{isHandlingSignup ? <CircularProgress sx={{ ml: 1 }} size={18} color='white' /> : <span>Sign up</span>}
+							</Stack>
 						</button>
 
 						<div className="mt-4 text-center">
