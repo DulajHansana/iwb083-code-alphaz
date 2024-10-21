@@ -7,6 +7,10 @@ import LoadingScreen from '@/components/LoadingScreen';
 import { useWebSocket } from '@/contexts/WebSocketContext';
 import { useMessages } from '@/contexts/MessageContext';
 
+async function formatMessages(messages) {
+	console.log(messages);
+}
+
 export default function Home() {
 	const { messageClient, readyState } = useWebSocket();
 	const { syncMessages } = useMessages();
@@ -16,6 +20,8 @@ export default function Home() {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [syncing, setSyncing] = useState(false);
+	const [progressState, setProgressState] = useState("formatting");
+	const [loadingUnmounter, setLoadingUnmounter] = useState(false);
 
 	const handleSignup = () => {
 		router.push('/sign-up');
@@ -31,6 +37,7 @@ export default function Home() {
 						alert(res.message);
 					} else if (res.code === 202) {
 						messageClient.setClientDetails(res.user);
+						setProgress(0);
 						setIsLoading(true);
 						setSyncing(true);
 					}
@@ -49,23 +56,37 @@ export default function Home() {
 	useEffect(() => {
 		if (syncing && readyState.client && readyState.server) {
 			messageClient.syncMessages((preMessages, syncProgress) => {
-				setProgress(syncProgress);
-				if (Math.ceil(syncProgress) >= 100) {
-					syncMessages(preMessages);
-					router.push(`/chat`);
-
-					setTimeout(() => {
-						setProgress(0);
-						setSyncing(false);
-						setIsLoading(false);
-					}, 5000);
-				}
+				const interval = setInterval(() => {
+					setProgress(syncProgress);
+					if (Math.ceil(syncProgress) >= 100) {
+						router.push(`/chat`);
+						setProgressState("formatting");
+						syncMessages(preMessages);
+						formatMessages(preMessages).then(() => {
+							setLoadingUnmounter(true);
+							clearInterval(interval);
+						})
+					}
+				}, 3000)
+				setProgress(0);
+				setProgressState("formatting");
 			});
+
 		}
 	}, [syncing]);
 
+	useEffect(() => {
+		if (loadingUnmounter) {
+			setTimeout(() => {
+				setProgress(0);
+				setSyncing(false);
+				setIsLoading(false);
+			}, 5000)
+		}
+	}, [loadingUnmounter])
+
 	if (isLoading) {
-		return <LoadingScreen progress={progress} />;
+		return <LoadingScreen progress={progress} state={progressState} />;
 	}
 
 	return (

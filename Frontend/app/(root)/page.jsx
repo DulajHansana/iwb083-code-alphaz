@@ -47,7 +47,7 @@ export default function Home() {
                     >
                         <Stack direction="row" alignItems="center">
                             {readyState.client && readyState.server ? 'Get Started ' : 'Connecting... '}
-                            {readyState.client && readyState.server ? null : <CircularProgress sx={{ml: 1} } size={18} color='white' />}
+                            {readyState.client && readyState.server ? null : <CircularProgress sx={{ml: 1} } size={16} color='white' />}
                         </Stack>
                     </button>
                 </div>

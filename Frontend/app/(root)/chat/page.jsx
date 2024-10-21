@@ -18,9 +18,7 @@ const Chat = () => {
   useEffect(() => {    
     if (readyState.client && readyState.server) {
       //messageClient.sendMessage("usermessage", "Hello Ballerina!");
-      messageClient.syncMessages((preMessages, syncingProgress) => { // preMessages has user's old messages, syncingProgress has how much messages are retrieved
-        setUserMessages(preMessages);
-      })
+      
       setMyDetails(messageClient.clientDetails());
 
     } else {

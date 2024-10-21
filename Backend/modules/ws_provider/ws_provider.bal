@@ -40,6 +40,15 @@ public isolated service class WsService {
                 };
                 check caller->writeTextMessage(newMessage.toString());
             }
+
+            if (messages.length() == 0) {
+                Types:SystemMessage newMessage = {
+                    code: 704,
+                    message: "New pre-loading message",
+                    value: ()
+                };
+                check caller->writeTextMessage(newMessage.toString());
+            }
         }
 
     }

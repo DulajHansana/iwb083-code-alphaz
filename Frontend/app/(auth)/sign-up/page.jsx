@@ -56,7 +56,7 @@ export default function Signup() {
 	};
 
 	const handleLogin = () => {
-		//router.push('/sign-in');
+		router.push('/sign-in');
 	};
 
 	return (

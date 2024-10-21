@@ -4,8 +4,9 @@ import React, { useEffect, useState } from 'react';
 import LinearProgress from '@mui/material/LinearProgress';
 import { Box } from '@mui/material';
 
-export default function LoadingScreen({ progress: progressProp }) {
+export default function LoadingScreen({ progress: progressProp, state: loadingState }) {
 	const [progress, setProgress] = useState(0);
+	const [state, setState] = useState(null);
 
 	useEffect(() => {
 		if (progressProp >= 100) {
@@ -16,6 +17,10 @@ export default function LoadingScreen({ progress: progressProp }) {
 			setProgress(progressProp);
 		}
 	}, [progressProp]);
+
+	useEffect(() => {
+		setState(loadingState);
+	}, [loadingState]);
 
 	return (
 		<div className="w-full h-screen bg-white flex flex-col justify-center items-center">
@@ -28,7 +33,12 @@ export default function LoadingScreen({ progress: progressProp }) {
 				<h2 className="mt-4 text-3xl font-bold text-customPurple">SparkChat</h2>
 			</div>
 			<Box sx={{ width: '25%', maxWidth: 500, mt: 5 }}>
-				<LinearProgress variant="determinate" color="secondary" thickness={4} value={progress} />
+				<LinearProgress
+					variant={state === "loading" ? "determinate" : "indeterminate"}
+					color="secondary"
+					thickness={4}
+					value={state === "loading" ? progress : undefined}
+				/>
 			</Box>
 		</div>
 	);
