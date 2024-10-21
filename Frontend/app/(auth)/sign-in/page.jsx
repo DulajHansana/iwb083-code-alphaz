@@ -6,12 +6,14 @@ import { useEffect, useState } from 'react';
 import LoadingScreen from '@/components/LoadingScreen';
 import { useWebSocket } from '@/contexts/WebSocketContext';
 import { useMessages } from '@/contexts/MessageContext';
+import { useUser } from '@/contexts/UserProfile';
 
 async function formatMessages(messages) {
 	console.log(messages);
 }
 
 export default function Home() {
+	const { setLoginUser } = useUser();
 	const { messageClient, readyState } = useWebSocket();
 	const { syncMessages } = useMessages();
 	const router = useRouter();
@@ -37,6 +39,7 @@ export default function Home() {
 						alert(res.message);
 					} else if (res.code === 202) {
 						messageClient.setClientDetails(res.user);
+						setLoginUser(res.user);
 						setProgress(0);
 						setSyncing(true);
 					}

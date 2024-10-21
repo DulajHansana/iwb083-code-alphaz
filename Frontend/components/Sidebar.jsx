@@ -33,7 +33,7 @@ const Sidebar = ({ profile: myDetails }) => {
 	};
 
 	return (
-		<div className="w-24 bg-purple-600 h-screen flex flex-col items-center p-4">
+		<div className="w-24 min-w-24 bg-purple-600 h-screen flex flex-col items-center p-4">
 			<Image src="/images/App Logo.png" alt="App Logo" width={40} height={40} className="object-contain" />
 
 			{/* Profile Section */}

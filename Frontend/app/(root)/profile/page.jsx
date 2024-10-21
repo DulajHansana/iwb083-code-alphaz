@@ -1,25 +1,25 @@
 "use client";
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Sidebar from '../../../components/Sidebar';
+import { useUser } from '@/contexts/UserProfile';
+import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
 
 const Profile = () => {
+    const { user } = useUser();
     const router = useRouter();
     const fileInputRef = useRef(null);
 
-    // Use state for managing input fields and profile image
-    const [displayName, setDisplayName] = useState("Emma");
-    const [email, setEmail] = useState("emma@example.com");
+    
+    const [displayName, setDisplayName] = useState("");
+    const [tagName, setTagName] = useState("");
+    const [email, setEmail] = useState("");
     const [profileImage, setProfileImage] = useState(null);
 
     const handlechat = () => {
-        router.push('/chat'); // Navigate to the chat list after saving profile changes
-    };
-
-    const handleEdit = () => {
-        console.log("Edit action triggered");
+        router.push('/chat'); 
     };
 
     const handleUpload = () => {
@@ -37,19 +37,28 @@ const Profile = () => {
         }
     };
 
-    // Function to handle resetting input fields
+    useEffect(() => {
+        if (user.id) {
+            setDisplayName(user.fullname);
+            setTagName(user.tagname);
+            setEmail(user.email);
+            setProfileImage(user.avatar);
+        }
+    }, [user])
+
     const handleReset = () => {
-        setDisplayName("");
-        setEmail("");
-        setProfileImage(null);
+        setDisplayName(user.fullname);
+        setTagName(user.tagname);
+        setEmail(user.email);
+        setProfileImage(user.avatar);
     };
 
     return (
         <div className="flex h-screen">
-            <Sidebar /> {/* Include the Sidebar in the profile layout */}
+            <Sidebar profile={user} />
 
             <div className="flex-grow flex">
-                <div className="w-1/2 p-10">
+                <div className="w-1/2 p-10 bg-gray-100">
                     <h1 className="text-3xl font-bold text-customPurple mb-6">Profile</h1>
 
                     <div className="relative w-24 h-24 mb-6">
@@ -63,17 +72,12 @@ const Profile = () => {
                             />
                         ) : (
                             <div className="bg-gray-200 w-full h-full rounded-full flex justify-center items-center text-4xl text-blue-500">
-                                E
+                                {displayName.charAt(0).toUpperCase()}
                             </div>
                         )}
-                        <button onClick={handleUpload} className="absolute right-0 bottom-0 bg-white p-1 rounded-full focus:outline-none">
-                            <Image
-                                src="/images/camera.png"
-                                alt="Upload Profile"
-                                width={20}
-                                height={20}
-                            />
-                        </button>
+                        {/* <button onClick={handleUpload} className="absolute flex items-center justify-center border-2 border-gray-100 right-0 bottom-0 w-8 h-8 bg-gray-100 p-1 rounded-full focus:outline-none">
+                            <CameraAltOutlinedIcon sx={{ width: 20, height: 20, opacity: 0.7 }} />
+                        </button> */}
                         <input
                             type="file"
                             ref={fileInputRef}
@@ -88,9 +92,22 @@ const Profile = () => {
                         <div className="relative">
                             <input
                                 type="text"
+                                value={tagName}
+                                onChange={(e) => setTagName(e.target.value)}
+                                placeholder="Enter tag name here"
+                                className="mt-2 w-full p-4 border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:border-purple-500"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block text-lg text-customPurple">Display Name</label>
+                        <div className="relative">
+                            <input
+                                type="text"
                                 value={displayName}
                                 onChange={(e) => setDisplayName(e.target.value)}
-                                placeholder="Enter Name Here"
+                                placeholder="Enter display name here"
                                 className="mt-2 w-full p-4 border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:border-purple-500"
                             />
                         </div>
@@ -102,18 +119,9 @@ const Profile = () => {
                             <input
                                 type="email"
                                 value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="Enter Email Here"
+                                disabled={true}
                                 className="mt-2 w-full p-4 border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 focus:outline-none focus:border-purple-500"
                             />
-                            <button onClick={handleEdit} className="absolute right-4 top-1/2 transform -translate-y-1/2 focus:outline-none">
-                                <Image
-                                    src="/images/editing.png"
-                                    alt="Edit Email"
-                                    width={20}
-                                    height={20}
-                                />
-                            </button>
                         </div>
                     </div>
 
@@ -124,10 +132,13 @@ const Profile = () => {
                         <button onClick={handleReset} className="border border-customPurple text-customPurple px-6 py-2 rounded-lg">
                             Reset Changes
                         </button>
+                        <button onClick={() => { router.push('/chat') }} className="border border-customPurple text-customPurple px-6 py-2 rounded-lg">
+                            Go Back
+                        </button>
                     </div>
                 </div>
 
-                <div className="w-1/2 bg-gray-100 flex flex-col justify-center items-center p-10">
+                <div className="w-1/2 flex flex-col justify-center items-center p-10">
                     <Image
                         src="/images/App Logo.png"
                         alt="SparkChat Logo"
