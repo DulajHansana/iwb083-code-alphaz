@@ -72,7 +72,6 @@ export class WebSocketClient {
 		const response = JSON.parse(event.data);
 
 		if (response.code === 703) { // When server return user's pre-messages
-			console.log(response.value);
 			this.preLoadingCount = response.value;
 		}
 

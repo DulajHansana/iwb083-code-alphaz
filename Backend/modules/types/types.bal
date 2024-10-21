@@ -148,10 +148,10 @@ isolated function getThisTime() returns string|int {
 public isolated function getProfilePicture(string username, int gender = 1) returns string? {
     http:Client|http:ClientError apiFetch = new ("https://avatar.iran.liara.run/");
     if apiFetch is http:Client {
-        string url = string `username?username=${username.toString()}`;
+        string url = string `username?username=${username.toString().trim()}`;
         string|http:ClientError data = apiFetch->get(url);
         if data is string {
-            return "https://avatar.iran.liara.run" + url;
+            return "https://avatar.iran.liara.run/" + url;
         }
     }
 

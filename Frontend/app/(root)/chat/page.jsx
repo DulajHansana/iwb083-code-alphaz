@@ -18,6 +18,7 @@ const Chat = () => {
   useEffect(() => {    
     if (readyState.client && readyState.server) {
       //messageClient.sendMessage("usermessage", "Hello Ballerina!");
+      console.log(messageClient.clientDetails())
       
       setMyDetails(messageClient.clientDetails());
 

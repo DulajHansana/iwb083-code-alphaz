@@ -38,7 +38,6 @@ export default function Home() {
 					} else if (res.code === 202) {
 						messageClient.setClientDetails(res.user);
 						setProgress(0);
-						setIsLoading(true);
 						setSyncing(true);
 					}
 				} else {
@@ -60,7 +59,6 @@ export default function Home() {
 					setProgress(syncProgress);
 					if (Math.ceil(syncProgress) >= 100) {
 						router.push(`/chat`);
-						setProgressState("formatting");
 						syncMessages(preMessages);
 						formatMessages(preMessages).then(() => {
 							setLoadingUnmounter(true);
@@ -69,6 +67,7 @@ export default function Home() {
 					}
 				}, 3000)
 				setProgress(0);
+				setIsLoading(true);
 				setProgressState("formatting");
 			});
 
